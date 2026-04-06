@@ -1,0 +1,31 @@
+kind = "video"
+previewPath = "/shotgun-ninjas-ep1/"
+title = "Shotgun Ninjas - The Signal in the Static"
+version = "1.0.0"
+id = "artifacts/shotgun-ninjas-ep1"
+router = "path"
+
+[[integratedSkills]]
+name = "video-js"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/shotgun-ninjas-ep1/" ]
+localPort = 23306
+
+[services.development]
+run = "pnpm --filter @workspace/shotgun-ninjas-ep1 run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/shotgun-ninjas-ep1", "run", "build" ]
+publicDir = "artifacts/shotgun-ninjas-ep1/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23306"
+BASE_PATH = "/shotgun-ninjas-ep1/"

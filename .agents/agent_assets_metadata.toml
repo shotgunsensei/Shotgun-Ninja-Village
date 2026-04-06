@@ -1,0 +1,44 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "I45q1z5G_CmNRGs4B0jov"
+uri = "file://artifacts/shotgun-ninjas-ep1/public/images/scene1-bg.png"
+type = "image"
+title = "Corrupted futuristic city with static"
+
+[[generated]]
+id = "XkDwiojt5PGGDB252uW4t"
+uri = "file://artifacts/shotgun-ninjas-ep1/public/images/scene2-builder.png"
+type = "image"
+title = "Builder failing diagnostic screens"
+
+[[generated]]
+id = "JVT85mtMLkBlAzghfc1ws"
+uri = "file://artifacts/shotgun-ninjas-ep1/public/images/scene3-kage.png"
+type = "image"
+title = "Kage-9 rooftop silhouette"
+
+[[generated]]
+id = "wYdwWkWAh_07Y-OHZXdrF"
+uri = "file://artifacts/shotgun-ninjas-ep1/public/images/scene4-archive.png"
+type = "image"
+title = "Kage-9 archive scan"
+
+[[generated]]
+id = "E4nOpZ7PUk9ig44WfCkvf"
+uri = "file://artifacts/shotgun-ninjas-ep1/public/images/scene5-beacon.png"
+type = "image"
+title = "Surviving beacon activating"
+
+[[generated]]
+id = "_Wi1h8AllnhaxZeVWyUCo"
+uri = "file://artifacts/shotgun-ninjas-ep1/public/images/scene5-path.png"
+type = "image"
+title = "Kage-9 signal path"
+
+[[generated]]
+id = "t92tVuKaHTtuZrWEHdUPV"
+uri = "file://artifacts/shotgun-ninjas-ep1/public/images/scene5-exit.png"
+type = "image"
+title = "Final wide shot Kage-9"
