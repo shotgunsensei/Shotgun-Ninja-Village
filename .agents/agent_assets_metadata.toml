@@ -60,3 +60,87 @@ id = "lZKK5GnZ8AsDjMGPBSwIk"
 uri = "file://artifacts/shotgun-ninjas-ep1/public/images/scene4-fragments.png"
 type = "image"
 title = "generated_image"
+
+[[generated]]
+id = "dF0PKgG837wIicTE6Sc89"
+uri = "file://artifacts/shotgun-ninja-village/public/images/hero.png"
+type = "image"
+title = "home hero image"
+
+[[generated]]
+id = "oWGMyEJmu-P_1iyKo9t52"
+uri = "file://artifacts/shotgun-ninja-village/public/images/kage-9.png"
+type = "image"
+title = "Kage-9 profile"
+
+[[generated]]
+id = "uppNjuc0vjUPxCYnRt0sm"
+uri = "file://artifacts/shotgun-ninja-village/public/images/zone-forge.png"
+type = "image"
+title = "The Forge Grid"
+
+[[generated]]
+id = "RRppG4vr2TR6Kp9Km4KFY"
+uri = "file://artifacts/shotgun-ninja-village/public/images/zone-noise.png"
+type = "image"
+title = "The Noise Sectors"
+
+[[generated]]
+id = "gJRBHIQAhenP4v9xnIsTf"
+uri = "file://artifacts/shotgun-ninja-village/public/images/zone-archive.png"
+type = "image"
+title = "The Archive Fractures"
+
+[[generated]]
+id = "0muzIQFwAzV3vkLn8FWTW"
+uri = "file://artifacts/shotgun-ninja-village/public/images/zone-haven.png"
+type = "image"
+title = "Operator Havens"
+
+[[generated]]
+id = "YQmCMvOewbCXFWYMPnj34"
+uri = "file://artifacts/shotgun-ninja-village/public/images/gear-shotgun-back.png"
+type = "image"
+title = "Back-Mounted Shotgun"
+
+[[generated]]
+id = "XqAJX8yMmcgWPP7CNVtH5"
+uri = "file://artifacts/shotgun-ninja-village/public/images/gear-shotgun-hip.png"
+type = "image"
+title = "Hip Quickdraw Shotgun"
+
+[[generated]]
+id = "jk1bSn6GwAXeIEp591LfQ"
+uri = "file://artifacts/shotgun-ninja-village/public/images/gear-katana.png"
+type = "image"
+title = "Energy Katana"
+
+[[generated]]
+id = "sDI5nqZWx9BKa5tWkaf1f"
+uri = "file://artifacts/shotgun-ninja-village/public/images/gear-headphones.png"
+type = "image"
+title = "Cyber Headphones"
+
+[[generated]]
+id = "xtE3b4MfhOv_RC7nZvRwl"
+uri = "file://artifacts/shotgun-ninja-village/public/images/gear-armor.png"
+type = "image"
+title = "Red Cybernetic Armor"
+
+[[generated]]
+id = "TXxzOvkYC5sDHhfX2w-Xy"
+uri = "file://artifacts/shotgun-ninja-village/public/images/ep1.png"
+type = "image"
+title = "Episode 1 Thumbnail"
+
+[[generated]]
+id = "c96UqOS6C1xoSbn5nl1bq"
+uri = "file://artifacts/shotgun-ninja-village/public/images/ep2.png"
+type = "image"
+title = "Episode 2 Thumbnail"
+
+[[generated]]
+id = "k6R1ftAJFzi-BF0e7xYRY"
+uri = "file://artifacts/shotgun-ninja-village/public/images/ep3.png"
+type = "image"
+title = "Episode 3 Thumbnail"
