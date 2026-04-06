@@ -40,5 +40,5 @@ See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and pa
   - `src/components/video/VideoTemplate.tsx` — main timeline orchestrator
   - `src/components/video/video_scenes/Scene1-5.tsx` — individual scene components
   - `src/lib/video/hooks.ts` — DO NOT MODIFY (recording/export pipeline)
-  - `public/images/` — 7 AI-generated scene backgrounds
+  - `public/images/` — 10 AI-generated scene backgrounds
   - `src/index.css` — glitch effects, CRT overlay, brand variables
