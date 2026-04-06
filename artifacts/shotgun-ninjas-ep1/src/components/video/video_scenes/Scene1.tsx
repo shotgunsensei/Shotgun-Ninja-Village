@@ -30,9 +30,12 @@ export function Scene1() {
         transition={{ duration: 10, ease: 'easeOut' }}
       />
 
-      {/* Static / Glitch effect overlay */}
       <motion.div 
-        className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none mix-blend-overlay"
+        className="absolute inset-0 opacity-20 pointer-events-none mix-blend-overlay"
+        style={{
+          backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px)',
+          backgroundSize: '4px 4px',
+        }}
         animate={{ backgroundPosition: ['0% 0%', '100% 100%'] }}
         transition={{ repeat: Infinity, duration: 0.5, ease: 'linear' }}
       />

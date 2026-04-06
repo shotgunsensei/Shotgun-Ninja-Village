@@ -10,7 +10,7 @@ export function Scene5() {
       setTimeout(() => setPhase(2), 2000),
       setTimeout(() => setPhase(3), 3500),
       setTimeout(() => setPhase(4), 5000),
-      setTimeout(() => setPhase(5), 6500)
+      setTimeout(() => setPhase(5), 6000)
     ];
     return () => timers.forEach(t => clearTimeout(t));
   }, []);
@@ -20,8 +20,8 @@ export function Scene5() {
       className="absolute inset-0 flex flex-col items-center justify-center overflow-hidden bg-black"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 1 }}
+      exit={{ opacity: 0, filter: 'blur(10px)' }}
+      transition={{ duration: 1.2 }}
     >
       <AnimatePresence mode="popLayout">
         {phase < 3 && (
