@@ -30,6 +30,14 @@ export function Scene2() {
         transition={{ duration: 8, ease: 'linear' }}
       />
 
+      <motion.img 
+        src={`${import.meta.env.BASE_URL}images/scene2-screens.png`}
+        className="absolute inset-0 w-full h-full object-cover mix-blend-screen"
+        initial={{ opacity: 0, scale: 1.05 }}
+        animate={phase >= 2 ? { opacity: 0.4, scale: 1 } : { opacity: 0, scale: 1.05 }}
+        transition={{ duration: 1.5 }}
+      />
+
       <div className="z-10 max-w-3xl space-y-6">
         <motion.p 
           className="text-[2.5vw] font-bold text-white/90 leading-tight uppercase"

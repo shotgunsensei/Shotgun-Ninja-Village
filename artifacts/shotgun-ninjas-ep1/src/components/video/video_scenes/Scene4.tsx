@@ -30,6 +30,14 @@ export function Scene4() {
         transition={{ duration: 10 }}
       />
 
+      <motion.img 
+        src={`${import.meta.env.BASE_URL}images/scene4-fragments.png`}
+        className="absolute inset-0 w-full h-full object-cover mix-blend-screen"
+        initial={{ opacity: 0, scale: 1.1 }}
+        animate={phase >= 3 ? { opacity: 0.5, scale: 1 } : { opacity: 0, scale: 1.1 }}
+        transition={{ duration: 1.5 }}
+      />
+
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,#000_100%)] opacity-80" />
 
       <div className="z-10 grid grid-cols-2 gap-8 w-full max-w-7xl px-12">

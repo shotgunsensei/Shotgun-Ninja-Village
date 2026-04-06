@@ -29,8 +29,15 @@ export function Scene3() {
         animate={{ scale: 1.05, objectPosition: 'center 40%' }}
         transition={{ duration: 10, ease: 'easeOut' }}
       />
+
+      <motion.img 
+        src={`${import.meta.env.BASE_URL}images/scene3-face.png`}
+        className="absolute inset-0 w-full h-full object-cover mix-blend-lighten"
+        initial={{ opacity: 0, scale: 1.1 }}
+        animate={phase >= 3 ? { opacity: 0.5, scale: 1 } : { opacity: 0, scale: 1.1 }}
+        transition={{ duration: 2 }}
+      />
       
-      {/* Blue eye glow enhancement */}
       <motion.div 
         className="absolute w-[20vw] h-[20vw] rounded-full bg-[#3B82F6] mix-blend-screen opacity-20 blur-[100px]"
         animate={{ opacity: [0.1, 0.3, 0.1] }}

@@ -42,3 +42,21 @@ id = "t92tVuKaHTtuZrWEHdUPV"
 uri = "file://artifacts/shotgun-ninjas-ep1/public/images/scene5-exit.png"
 type = "image"
 title = "Final wide shot Kage-9"
+
+[[generated]]
+id = "nPBwX3t5BAYvmcTHMFjhb"
+uri = "file://artifacts/shotgun-ninjas-ep1/public/images/scene2-screens.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "gY0HI-t1LjSz2l2Ktgf5R"
+uri = "file://artifacts/shotgun-ninjas-ep1/public/images/scene3-face.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "lZKK5GnZ8AsDjMGPBSwIk"
+uri = "file://artifacts/shotgun-ninjas-ep1/public/images/scene4-fragments.png"
+type = "image"
+title = "generated_image"
