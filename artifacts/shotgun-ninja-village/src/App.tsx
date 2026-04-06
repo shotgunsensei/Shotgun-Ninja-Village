@@ -1,7 +1,5 @@
-import { Switch, Route, Router as WouterRouter } from "wouter";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { Switch, Route, Router as WouterRouter, useLocation } from "wouter";
+import { AnimatePresence, motion } from "framer-motion";
 import NotFound from "@/pages/not-found";
 
 import { Layout } from "@/components/layout/Layout";
@@ -12,34 +10,45 @@ import Grid from "@/pages/Grid";
 import Arsenal from "@/pages/Arsenal";
 import Intel from "@/pages/Intel";
 
-const queryClient = new QueryClient();
+const pageVariants = {
+  initial: { opacity: 0, y: 12 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.35, ease: "easeOut" as const } },
+  exit: { opacity: 0, y: -8, transition: { duration: 0.2, ease: "easeIn" as const } },
+};
+
+function AnimatedPage({ children }: { children: React.ReactNode }) {
+  return (
+    <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
+      {children}
+    </motion.div>
+  );
+}
 
 function Router() {
+  const [location] = useLocation();
+
   return (
     <Layout>
-      <Switch>
-        <Route path="/" component={Home} />
-        <Route path="/archive" component={Archive} />
-        <Route path="/operators" component={Operators} />
-        <Route path="/grid" component={Grid} />
-        <Route path="/arsenal" component={Arsenal} />
-        <Route path="/intel" component={Intel} />
-        <Route component={NotFound} />
-      </Switch>
+      <AnimatePresence mode="wait">
+        <Switch key={location}>
+          <Route path="/">{() => <AnimatedPage><Home /></AnimatedPage>}</Route>
+          <Route path="/archive">{() => <AnimatedPage><Archive /></AnimatedPage>}</Route>
+          <Route path="/operators">{() => <AnimatedPage><Operators /></AnimatedPage>}</Route>
+          <Route path="/grid">{() => <AnimatedPage><Grid /></AnimatedPage>}</Route>
+          <Route path="/arsenal">{() => <AnimatedPage><Arsenal /></AnimatedPage>}</Route>
+          <Route path="/intel">{() => <AnimatedPage><Intel /></AnimatedPage>}</Route>
+          <Route>{() => <AnimatedPage><NotFound /></AnimatedPage>}</Route>
+        </Switch>
+      </AnimatePresence>
     </Layout>
   );
 }
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-          <Router />
-        </WouterRouter>
-        <Toaster />
-      </TooltipProvider>
-    </QueryClientProvider>
+    <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+      <Router />
+    </WouterRouter>
   );
 }
 
