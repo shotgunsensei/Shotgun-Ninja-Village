@@ -8,25 +8,25 @@ export default function Grid() {
     {
       id: "forge",
       name: "The Forge Grid",
-      desc: "Industrial/digital zones where new tools, apps, systems, and modules are created or recovered.",
+      desc: "Industrial-digital zones where tools, systems, and modules are built or recovered.",
       img: asset("images/zone-forge.png")
     },
     {
       id: "noise",
       name: "The Noise Sectors",
-      desc: "Areas flooded with manipulation, false signals, fraud platforms, surveillance haze, corrupted infrastructure.",
+      desc: "Sectors flooded with false signals, fraud infrastructure, surveillance haze, and corrupted data.",
       img: asset("images/zone-noise.png")
     },
     {
       id: "archive",
       name: "The Archive Fractures",
-      desc: "Lost or hidden nodes containing forgotten methods, blueprints, codebases, creative artifacts.",
+      desc: "Hidden nodes containing forgotten methods, buried blueprints, and lost creative artifacts.",
       img: asset("images/zone-archive.png")
     },
     {
       id: "haven",
       name: "Operator Havens",
-      desc: "Safehouses, labs, garages, studios, and command nodes where creators and operators rebuild.",
+      desc: "Safehouses, labs, and command nodes where operators rebuild what the noise destroyed.",
       img: asset("images/zone-haven.png")
     }
   ];

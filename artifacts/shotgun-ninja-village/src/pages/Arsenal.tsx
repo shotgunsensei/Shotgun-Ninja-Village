@@ -9,35 +9,35 @@ export default function Arsenal() {
       id: "shotgun-back",
       name: "Back-Mounted Shotgun",
       type: "Heavy Ordnance",
-      desc: "Secure tactical mount, balanced silhouette, heavy ordnance for sustained engagements.",
+      desc: "Secure tactical mount. Balanced silhouette. Heavy ordnance for sustained engagements.",
       img: asset("images/gear-shotgun-back.png")
     },
     {
       id: "shotgun-hip",
       name: "Hip Quickdraw Shotgun",
       type: "Tactical Response",
-      desc: "Quickdraw swivel setup, implies speed and immediate deployment, mechanical precision.",
+      desc: "Quickdraw swivel mechanism. Immediate deployment. Mechanical precision at close range.",
       img: asset("images/gear-shotgun-hip.png")
     },
     {
       id: "katana",
       name: "Energy Katana",
       type: "Precision Blade",
-      desc: "Sleek advanced precision blade, mounted opposite the hip shotgun, engineered not medieval.",
+      desc: "Engineered precision blade. Mounted opposite the hip shotgun. Not medieval — mechanical.",
       img: asset("images/gear-katana.png")
     },
     {
       id: "headphones",
       name: "Armored Cyber Headphones",
       type: "Comms & Interface",
-      desc: "Over-ear hybrid of studio gear, comms hardware, and combat interface. Ties to production/sound/signal processing.",
+      desc: "Over-ear hybrid of studio gear, comms hardware, and combat interface. Signal processing meets field awareness.",
       img: asset("images/gear-headphones.png")
     },
     {
       id: "armor",
       name: "Red Cybernetic Armor",
       type: "Defense System",
-      desc: "Matte red with gloss accents, black underlayer for flexibility, gunmetal mechanical sections at joints/mounts.",
+      desc: "Matte red with gloss accents. Black underlayer for flexibility. Gunmetal mechanical joints and weapon mounts.",
       img: asset("images/gear-armor.png")
     }
   ];

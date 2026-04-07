@@ -3,13 +3,28 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>Shotgun Ninja Village</title>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Shotgun Ninjas — Command Hub</title>
+    <meta name="description" content="The Shotgun Ninjas universe portal. Watch transmissions, access operator intel, explore recovered systems." />
+    <meta name="theme-color" content="#B91C1C" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="SN Command" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+    <link rel="apple-touch-icon" href="icon-192.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          const base = document.querySelector('base')?.href || new URL('./', location.href).href;
+          navigator.serviceWorker.register(new URL('sw.js', base).href).catch(() => {});
+        });
+      }
+    </script>
   </body>
 </html>

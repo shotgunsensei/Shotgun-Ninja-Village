@@ -10,7 +10,7 @@ const primarySystems = [
   {
     name: "BrandForge OS",
     role: "Campaign Command Platform",
-    desc: "Recovered in Transmission 02. Build influence architecture, launch narratives, deploy market signals. The first weapon against algorithmic suppression.",
+    desc: "Recovered in Transmission 02. Build influence architecture, deploy market signals, and cut through algorithmic suppression.",
     icon: Terminal,
     color: "text-blue-400",
     borderColor: "border-blue-400/30",
@@ -20,7 +20,7 @@ const primarySystems = [
   {
     name: "TorqueShed",
     role: "Mechanical Intelligence Bay",
-    desc: "Recovered in Transmission 03. Diagnose machine failures, decode stress patterns, reconstruct failure chains. Forensic-grade mechanical analysis.",
+    desc: "Recovered in Transmission 03. Decode stress patterns, reconstruct failure chains, and expose sabotage hiding in infrastructure.",
     icon: Wrench,
     color: "text-orange-500",
     borderColor: "border-orange-500/30",
@@ -33,7 +33,7 @@ const extendedSystems = [
   {
     name: "TechDeck",
     role: "Operations Console",
-    desc: "IT oversight, infrastructure control, diagnostics, and command-layer support.",
+    desc: "Infrastructure control, diagnostics, and command-layer support for field operations.",
     icon: Cpu,
     color: "text-purple-500",
     url: "https://techdeck.app",
@@ -42,7 +42,7 @@ const extendedSystems = [
   {
     name: "TradeFlowKit",
     role: "Commerce Operations",
-    desc: "Trade logistics, supply chain mapping, transaction intelligence, and flow optimization.",
+    desc: "Supply chain mapping, transaction intelligence, and commerce flow optimization.",
     icon: BarChart3,
     color: "text-green-500",
     url: "https://tradeflowkit.com",
@@ -99,7 +99,7 @@ export default function Home() {
               </h1>
 
               <p className="text-lg md:text-xl text-muted-foreground font-mono max-w-xl mb-8 border-l-2 border-primary pl-4 text-left">
-                <TypewriterText text="Kage-9 hunts through a signal war no one else can see. Three transmissions recovered. Two systems online. The network remembers." />
+                <TypewriterText text="Kage-9 moves through a signal war no one else can see. Three transmissions recovered. Two systems online. The network remembers." />
               </p>
 
               <div className="flex flex-wrap items-center gap-4">
@@ -141,7 +141,7 @@ export default function Home() {
               RECOVERED TRANSMISSIONS
             </h2>
             <p className="text-muted-foreground font-mono text-sm border-l-2 border-primary pl-4 max-w-lg">
-              Three field operations. Three recovered signals. Watch in sequence.
+              Three operations. Three recovered signals. Watch in sequence.
             </p>
           </div>
         </motion.div>
@@ -190,7 +190,7 @@ export default function Home() {
                   )}
                 </div>
                 <div className="clip-diagonal bg-primary/20 border border-primary/40 text-primary px-4 py-2 font-display text-sm uppercase tracking-widest inline-flex items-center gap-2 self-start group-hover:bg-primary group-hover:text-white transition-all">
-                  <PlayCircle size={16} /> Initialize Playback
+                  <PlayCircle size={16} /> Watch Transmission
                 </div>
               </div>
             </motion.a>
@@ -223,7 +223,7 @@ export default function Home() {
                   Hayaku Kageru
                 </p>
                 <p className="text-muted-foreground font-mono text-sm leading-relaxed mb-6 max-w-2xl">
-                  Systems warrior, precision builder, covert guardian. Emerged from the collapse of a network that protected creative and technical knowledge systems. Survived because he learned how systems fail. Now recovers and reforges them — one mission at a time.
+                  Systems warrior. Precision builder. Covert guardian. He emerged from the collapse of a network that protected creative and technical knowledge. Survived because he learned how systems fail. Now recovers and reforges them — one mission at a time.
                 </p>
                 <div className="bg-muted/50 border-l-2 border-secondary p-4 font-mono text-sm italic text-white/80 mb-6 max-w-lg">
                   "Noise spreads fastest where no one checks the signal."
@@ -232,7 +232,7 @@ export default function Home() {
                   href="/operators"
                   className="clip-diagonal border border-primary/50 hover:bg-primary/10 text-primary px-6 py-2 font-display text-lg uppercase tracking-widest transition-all inline-flex items-center gap-2"
                 >
-                  <UserSquare size={18} /> Access Operator File <ChevronRight size={18} />
+                  <UserSquare size={18} /> View Operator Dossier <ChevronRight size={18} />
                 </Link>
               </div>
             </div>
@@ -248,7 +248,7 @@ export default function Home() {
               RECOVERED SYSTEMS
             </h2>
             <p className="text-muted-foreground font-mono text-sm border-l-2 border-primary pl-4 max-w-lg">
-              Field-recovered command platforms. Each one pulled from a mission. Each one operational.
+              Command platforms pulled from the field. Each one recovered during a mission. Each one operational.
             </p>
           </div>
         </motion.div>
@@ -343,7 +343,7 @@ export default function Home() {
             </h2>
 
             <p className="text-muted-foreground font-mono text-sm leading-relaxed max-w-xl mx-auto mb-8">
-              New transmissions are incoming. Recovered systems are being deployed. The network is expanding. Enter your signal address to receive mission briefings, early access to new transmissions, and classified drops before they hit the public feed.
+              New transmissions incoming. Recovered systems deploying. Enter your signal address for mission briefings, early access, and classified drops before they reach the public feed.
             </p>
 
             <form

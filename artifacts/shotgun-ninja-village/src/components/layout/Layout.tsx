@@ -1,11 +1,13 @@
 import React from "react";
 import { Link, useLocation } from "wouter";
-import { Shield, Database, UserSquare, Map, Sword, Cpu, Menu, X, ExternalLink } from "lucide-react";
+import { Shield, Database, UserSquare, Map, Sword, Cpu, Menu, X, ExternalLink, Download } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useInstallPrompt } from "@/hooks/useInstallPrompt";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
   const [isOpen, setIsOpen] = React.useState(false);
+  const { canInstall, install } = useInstallPrompt();
 
   const links = [
     { href: "/", label: "Signal Feed", icon: Shield },
@@ -20,17 +22,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
     <div className="min-h-[100dvh] bg-background text-foreground flex flex-col md:flex-row relative">
       <div className="fixed inset-0 scanlines z-50 pointer-events-none mix-blend-overlay opacity-30" />
       
-      {/* Mobile Header */}
       <div className="md:hidden flex items-center justify-between p-4 border-b border-border bg-background/90 backdrop-blur z-40 sticky top-0">
         <Link href="/" className="font-display text-2xl text-primary tracking-wider uppercase font-bold">
           SN_Command
         </Link>
-        <button onClick={() => setIsOpen(!isOpen)} className="p-2 text-primary">
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        <div className="flex items-center gap-2">
+          {canInstall && (
+            <button
+              onClick={install}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-primary/20 border border-primary/40 text-primary font-mono text-xs uppercase tracking-widest hover:bg-primary hover:text-white transition-all"
+            >
+              <Download size={14} /> Install
+            </button>
+          )}
+          <button onClick={() => setIsOpen(!isOpen)} className="p-2 text-primary">
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
-      {/* Sidebar */}
       <aside className={cn(
         "fixed md:sticky top-0 left-0 h-[100dvh] w-64 border-r border-border bg-background/95 backdrop-blur z-40 flex flex-col transition-transform duration-300 ease-in-out md:translate-x-0",
         isOpen ? "translate-x-0" : "-translate-x-full"
@@ -70,6 +80,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </nav>
 
         <div className="p-6 border-t border-border/50 space-y-3">
+          {canInstall && (
+            <button
+              onClick={install}
+              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-primary/20 border border-primary/40 text-primary font-mono text-xs uppercase tracking-widest hover:bg-primary hover:text-white transition-all"
+            >
+              <Download size={14} /> Install App
+            </button>
+          )}
           <a
             href="https://shotgunninjas.com"
             target="_blank"
@@ -85,7 +103,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </div>
       </aside>
 
-      {/* Main Content */}
       <main className="flex-1 relative overflow-x-hidden min-h-[100dvh]">
         {children}
       </main>

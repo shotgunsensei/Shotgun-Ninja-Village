@@ -8,7 +8,7 @@ const recoveredSystems = [
     designation: "SYS-BF-02",
     universeRole: "Campaign Command Platform",
     realRole: "Brand strategy, content deployment, and audience signal management for creators and operators",
-    desc: "Recovered during Transmission 02. BrandForge maps signal distortion, identifies counterfeit amplification, and deploys corrective narratives. The first system Kage-9 brought back online — built for creators who refuse to be buried.",
+    desc: "Recovered during Transmission 02. Maps signal distortion, identifies counterfeit amplification, and deploys corrective narratives. The first system Kage-9 brought back online — built for creators who refuse to be buried.",
     quote: "He opened the BrandForge console. The signal map lit up like a war room.",
     icon: Terminal,
     color: "text-blue-400",
@@ -23,7 +23,7 @@ const recoveredSystems = [
     designation: "SYS-TS-03",
     universeRole: "Mechanical Intelligence Bay",
     realRole: "Forensic diagnostics, failure reconstruction, and mechanical system analysis for operators and technicians",
-    desc: "Recovered during Transmission 03. TorqueShed reconstructs failure chains from raw field data, decodes stress patterns, and exposes sabotage hidden inside infrastructure. The second system Kage-9 pulled from the wreckage.",
+    desc: "Recovered during Transmission 03. Reconstructs failure chains from raw field data, decodes stress patterns, and exposes sabotage hidden in infrastructure. The second system pulled from the wreckage.",
     quote: "The torque archive reconstructed the failure map. Every fracture told a story.",
     icon: Wrench,
     color: "text-orange-500",
@@ -40,7 +40,7 @@ const extendedNetwork = [
     name: "TechDeck",
     universeRole: "Operations Console",
     realRole: "IT oversight and infrastructure control",
-    desc: "Command-layer support, diagnostics, and infrastructure monitoring. The backbone that keeps field operations running.",
+    desc: "Command-layer support, diagnostics, and infrastructure monitoring. The backbone behind every field operation.",
     icon: Cpu,
     color: "text-purple-500",
     url: "https://techdeck.app",
@@ -51,7 +51,7 @@ const extendedNetwork = [
     name: "TradeFlowKit",
     universeRole: "Commerce Operations",
     realRole: "Trade logistics and transaction intelligence",
-    desc: "Supply chain mapping, flow optimization, and transaction intelligence for commerce operators.",
+    desc: "Supply chain mapping, flow optimization, and transaction intelligence for commerce operations.",
     icon: BarChart3,
     color: "text-green-500",
     url: "https://tradeflowkit.com",
@@ -68,7 +68,7 @@ export default function Intel() {
             FORGE INTEL
           </h1>
           <p className="text-muted-foreground font-mono text-sm border-l-2 border-primary pl-4 max-w-lg">
-            Systems recovered from the first operational cycle. Each one pulled from a mission. Each one operational.
+            Field-recovered platforms from the first operational cycle. Each one pulled from a mission. Each one online.
           </p>
         </div>
         <ShieldCheck size={48} className="text-primary/20 hidden md:block" />
@@ -189,7 +189,7 @@ export default function Intel() {
       </div>
 
       <div className="tactical-border bg-card/50 p-6 md:p-8 text-center">
-        <p className="font-mono text-sm text-muted-foreground mb-4">All systems connected to the Shotgun Ninjas tactical network</p>
+        <p className="font-mono text-sm text-muted-foreground mb-4">All systems on the Shotgun Ninjas tactical network</p>
         <a
           href="https://shotgunninjas.com"
           target="_blank"

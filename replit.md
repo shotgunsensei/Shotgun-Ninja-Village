@@ -59,12 +59,17 @@ See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and pa
 - **Routing**: wouter with BASE_URL support; image paths use `asset()` helper for subpath deployment safety
 - **Fonts**: Space Grotesk (body) + Teko (display)
 - **Palette**: deep red (#B91C1C/#DC2626), electric blue (#3B82F6/#60A5FA), near-black (#0A0A0F)
+- **PWA**: Installable on mobile/desktop via manifest.json + service worker; install button in sidebar + mobile header (auto-hides when installed)
 - **Key files**:
   - `src/App.tsx` — wouter router with 6 routes
-  - `src/components/layout/Layout.tsx` — tactical sidebar layout
+  - `src/components/layout/Layout.tsx` — tactical sidebar layout with install button
+  - `src/hooks/useInstallPrompt.ts` — PWA install prompt hook (beforeinstallprompt/display-mode detection)
   - `src/pages/Home.tsx`, `Archive.tsx`, `Operators.tsx`, `Grid.tsx`, `Arsenal.tsx`, `Intel.tsx`
+  - `src/data/transmissions.ts` — shared trilogy config (single source of truth)
   - `src/index.css` — cyber-noir theme with glitch effects, scanlines, tactical borders
-  - `public/images/` — 14 AI-generated images (hero, character, zones, arsenal, episodes)
+  - `public/manifest.json` — PWA manifest (standalone, theme #B91C1C)
+  - `public/sw.js` — minimal service worker for installability
+  - `public/images/` — 14+ AI-generated images (hero, character, zones, arsenal, episodes, icons)
 
 ### Shotgun Ninjas - Episode 2: Forge Protocol
 - **Path**: `artifacts/shotgun-ninjas-ep2/`

@@ -53,7 +53,7 @@ export default function Operators() {
               <div className="space-y-6">
                 <div>
                   <h3 className="text-sm font-mono text-primary mb-2 uppercase">Role</h3>
-                  <p className="text-white font-mono text-sm">Systems warrior, precision builder, covert guardian, field tactician</p>
+                  <p className="text-white font-mono text-sm">Systems warrior. Precision builder. Covert guardian.</p>
                 </div>
                 <div>
                   <h3 className="text-sm font-mono text-primary mb-2 uppercase">Tactical Designations</h3>
@@ -65,14 +65,14 @@ export default function Operators() {
                 </div>
                 <div>
                   <h3 className="text-sm font-mono text-primary mb-2 uppercase">Personality</h3>
-                  <p className="text-muted-foreground font-mono text-sm">Calm under pressure, highly observant, speaks with precision, protective of skilled people, quiet disdain for frauds.</p>
+                  <p className="text-muted-foreground font-mono text-sm">Calm under pressure. Highly observant. Speaks with precision. Protective of the skilled. Quiet disdain for frauds.</p>
                 </div>
               </div>
 
               <div className="space-y-6">
                 <div>
                   <h3 className="text-sm font-mono text-primary mb-2 uppercase">Physical Specs</h3>
-                  <p className="text-muted-foreground font-mono text-sm">Tan skin, brown short textured hair with blonde-highlighted tips, glowing blue eyes, athletic agile build.</p>
+                  <p className="text-muted-foreground font-mono text-sm">Tan skin. Short textured hair with blonde-tipped highlights. Glowing blue eyes. Athletic, agile build.</p>
                 </div>
                 <div>
                   <h3 className="text-sm font-mono text-primary mb-2 uppercase">Gear Loadout</h3>
@@ -90,7 +90,7 @@ export default function Operators() {
             <div className="border-t border-border pt-6">
               <h3 className="text-sm font-mono text-primary mb-3 uppercase">Origin Record</h3>
               <p className="text-muted-foreground font-mono text-sm leading-relaxed mb-6">
-                Emerged from the collapse of a network that protected creative/technical knowledge systems. Survived because he learned how systems fail. Now recovers and reforges systems one mission at a time.
+                Emerged from the collapse of a network that once protected creative and technical knowledge. Survived because he learned how systems fail. Now recovers and reforges them — one mission at a time.
               </p>
               
               <div className="bg-muted/50 border-l-2 border-secondary p-4 font-mono text-sm italic text-white/90">

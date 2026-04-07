@@ -1,0 +1,162 @@
+Apply a final polish pass to Shotgun Ninja Village.
+
+Important:
+Do not perform another structural redesign.
+Assume the major alignment work is already complete:
+
+* homepage centered more clearly around Kage-9
+* trilogy/transmission structure exists
+* BrandForge and TorqueShed are prioritized as recovered systems
+* Join the Archive already exists
+* overall cyber-noir identity is in place
+
+This pass is for refinement only:
+
+* copy polish
+* visual consistency
+* spacing and hierarchy
+* CTA refinement
+* mobile smoothing
+* micro-interactions
+* premium finish
+
+Primary objective:
+Make the site feel fully launch-ready, cohesive, premium, and intentional across desktop and mobile, with no weak sections, no uneven copy, and no “template leftovers.”
+
+Focus areas:
+
+1. Copy polish
+
+* Review all homepage, archive, systems, and dossier copy for consistency of tone
+* Tighten any text that feels:
+
+  * generic
+  * repetitive
+  * slightly vague
+  * too wordy
+  * too “app marketing” instead of tactical narrative
+* Keep the voice:
+
+  * disciplined
+  * mythic
+  * premium
+  * concise
+  * cyber-noir
+  * commercially useful
+* Eliminate any copy that feels filler-like
+* Make sure headlines, subheads, and CTA labels feel like they belong to the same universe
+
+2. Homepage visual consistency
+
+* Ensure the hero, trilogy section, dossier preview, recovered systems, and Join the Archive all feel like parts of one premium command interface
+* Normalize card spacing, heading rhythm, border treatments, glow intensity, and panel depth
+* Make sure no section looks under-designed or over-designed compared to the others
+* Check that the homepage tells a clean visual story from top to bottom
+
+3. Trilogy transmission polish
+
+* Audit the three transmission cards/panels for consistency:
+
+  * equal visual weight
+  * aligned spacing
+  * consistent metadata placement
+  * consistent button style
+  * strong mobile stacking
+* Make sure progression from Transmission 01 to 02 to 03 feels obvious and elegant
+* Add or refine subtle visual cues showing progression through the first arc
+* Ensure quote lines and system relevance lines are visually distinct but not noisy
+
+4. Systems section finish
+
+* Make BrandForge and TorqueShed feel premium, mission-critical, and first-arc important
+* Make sure their cards are stronger than the secondary systems
+* Keep TechDeck and TradeFlowKit visually subordinate without making them look neglected
+* Improve clarity between:
+
+  * in-universe role
+  * real-world function
+  * CTA to learn more
+* Remove any sense that these are just random software boxes on a dark page
+
+5. Kage-9 presentation polish
+
+* Strengthen Kage-9’s visual and narrative presence where helpful without overloading the page
+* Make sure dossier language, character references, and related calls to action all feel consistent
+* Improve any part of the dossier preview that feels too flat, too generic, or too expository
+* Kage-9 should feel like the flagship identity, not just one section among many
+
+6. Join the Archive refinement
+
+* Keep the current section, but polish its visual finish and microcopy if needed
+* Make sure it feels conversion-ready and premium
+* Improve spacing, input/button sizing, and supporting microcopy if any of it feels rough on mobile
+* Ensure the section feels like a classified enrollment point, not a standard newsletter box
+
+7. Mobile-first refinement
+
+* Audit the homepage and main content sections at phone widths first
+* Fix:
+
+  * cramped spacing
+  * oversized text blocks
+  * awkward card stacking
+  * inconsistent button widths
+  * unnecessary vertical dead space
+  * weak visual hierarchy on smaller screens
+* Make the trilogy and systems sections especially clean on mobile
+
+8. UI and micro-interaction pass
+
+* Add or refine subtle hover states, glow transitions, scroll reveals, divider animations, or transmission-style micro-effects where they improve quality
+* Keep motion tasteful and restrained
+* Avoid flashy gimmicks
+* Every effect should reinforce a premium tactical interface feel
+
+9. CTA polish
+
+* Audit all CTA labels across the site
+* Make sure they are consistent in tone and hierarchy
+* Use strong labels such as:
+
+  * Watch Transmission
+  * Access Operator File
+  * Explore System
+  * Enter the Archive
+  * View Mission Details
+* Remove weak or generic CTA wording if present
+
+10. Final QA cleanup
+
+* Look for any remaining rough edges:
+
+  * inconsistent typography sizes
+  * uneven paddings
+  * duplicate concepts
+  * weak section transitions
+  * inconsistent capitalization
+  * mismatched button styles
+  * awkward mobile wrapping
+  * old copy that no longer fits the current structure
+* Make everything feel intentionally finished
+
+Design rule:
+The final result should feel like a polished universe portal for a premium narrative-tech brand, not just a cool themed website.
+
+Do not:
+
+* restructure the whole site again
+* add bloated new sections
+* overcomplicate the interface
+* weaken the current cyber-noir look
+* introduce cheesy sci-fi gimmicks
+
+Do:
+
+* refine
+* tighten
+* normalize
+* sharpen
+* finish
+
+Success state:
+The site should feel like a cohesive launch-ready command hub where the story trilogy, Kage-9 identity, recovered systems, and archive signup all work together seamlessly with premium mobile-friendly polish.
