@@ -2,38 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Link } from "wouter";
 import { ChevronRight, PlayCircle, UserSquare, ExternalLink, Terminal, Wrench, Cpu, BarChart3, Mail, Radio } from "lucide-react";
 import { motion } from "framer-motion";
+import { transmissions } from "@/data/transmissions";
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
-
-const transmissions = [
-  {
-    num: "01",
-    title: "The Signal in the Static",
-    brief: "A fractured city drowns in manipulated signals. Kage-9 traces an impossible signal through the ruins of a collapsed archive sector and discovers the old protection network was intentionally dismantled.",
-    system: "Discovery of the corrupted signal layer",
-    href: "/shotgun-ninjas-ep1/",
-    img: "images/ep1.png",
-    next: "Leads to: Forge Protocol"
-  },
-  {
-    num: "02",
-    title: "Forge Protocol",
-    brief: "Independent creators are being buried under algorithmic suppression. Kage-9 infiltrates a signal distortion hub and deploys BrandForge OS to restore signal integrity and reclaim stolen visibility.",
-    system: "BrandForge OS recovered",
-    href: "/shotgun-ninjas-ep2/",
-    img: "images/ep2.png",
-    next: "Leads to: Fracture Scan"
-  },
-  {
-    num: "03",
-    title: "Fracture Scan",
-    brief: "A transport unit fails in a dead industrial zone. Kage-9 discovers TorqueShed — a forensic mechanical intelligence console — and exposes a sabotage pattern threatening the entire infrastructure network.",
-    system: "TorqueShed recovered",
-    href: "/shotgun-ninjas-ep3/",
-    img: "images/ep3.png",
-    next: "Next transmission incoming"
-  }
-];
 
 const primarySystems = [
   {
@@ -202,18 +173,23 @@ export default function Home() {
                 <h3 className="text-3xl md:text-4xl font-display text-white uppercase tracking-widest mb-3 group-hover:text-primary transition-colors">
                   {tx.title}
                 </h3>
-                <p className="text-muted-foreground font-mono text-sm leading-relaxed mb-4 max-w-xl">
+                <p className="text-muted-foreground font-mono text-sm leading-relaxed mb-3 max-w-xl">
                   {tx.brief}
                 </p>
-                <div className="flex flex-wrap items-center gap-4">
+                <div className="border-l-2 border-border pl-3 mb-4">
+                  <p className="font-mono text-sm italic text-white/70">"{tx.quote}"</p>
+                </div>
+                <div className="flex flex-wrap items-center gap-4 mb-4">
                   <span className="text-xs font-mono uppercase tracking-widest text-secondary bg-secondary/10 px-2 py-1 border border-secondary/20">
                     {tx.system}
                   </span>
-                  <span className="text-xs font-mono text-muted-foreground">
-                    {tx.next}
-                  </span>
+                  {tx.next && (
+                    <span className="text-xs font-mono text-muted-foreground">
+                      {tx.next}
+                    </span>
+                  )}
                 </div>
-                <div className="clip-diagonal bg-primary/20 border border-primary/40 text-primary px-4 py-2 font-display text-sm uppercase tracking-widest inline-flex items-center gap-2 self-start mt-4 group-hover:bg-primary group-hover:text-white transition-all">
+                <div className="clip-diagonal bg-primary/20 border border-primary/40 text-primary px-4 py-2 font-display text-sm uppercase tracking-widest inline-flex items-center gap-2 self-start group-hover:bg-primary group-hover:text-white transition-all">
                   <PlayCircle size={16} /> Initialize Playback
                 </div>
               </div>
@@ -286,7 +262,7 @@ export default function Home() {
                 href={sys.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`tactical-border bg-card p-6 md:p-8 group hover:border-primary transition-all block relative overflow-hidden`}
+                className="tactical-border bg-card p-6 md:p-8 group hover:border-primary transition-all block relative overflow-hidden"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
