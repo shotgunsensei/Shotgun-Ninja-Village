@@ -11,8 +11,8 @@ export default function Intel() {
       quote: "He opened the BrandForge console. The signal map lit up like a war room.",
       icon: Terminal,
       color: "text-blue-400",
-      url: "https://shotgunninjas.com",
-      urlLabel: "ShotgunNinjas.com",
+      url: "https://bf-os.com",
+      urlLabel: "bf-os.com",
       episode: "Featured in EP2: Forge Protocol"
     },
     {
