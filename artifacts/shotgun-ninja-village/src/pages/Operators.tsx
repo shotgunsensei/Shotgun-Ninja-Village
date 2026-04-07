@@ -24,7 +24,7 @@ export default function Operators() {
             </div>
             <div className="aspect-[3/4] relative bg-muted flex items-center justify-center overflow-hidden">
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/20 via-background to-background" />
-              <img src={asset("images/kage-9.png")} alt="Kage-9" className="w-full h-full object-cover object-top relative z-10 drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]" />
+              <img src={asset("images/kage-9-operator.png")} alt="Kage-9" className="w-full h-full object-cover object-top relative z-10 drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]" />
               <div className="absolute inset-0 scanlines z-20" />
             </div>
           </div>

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "wouter";
-import { Shield, Database, UserSquare, Map, Sword, Cpu, Menu, X } from "lucide-react";
+import { Shield, Database, UserSquare, Map, Sword, Cpu, Menu, X, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -69,7 +69,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
           })}
         </nav>
 
-        <div className="p-6 border-t border-border/50">
+        <div className="p-6 border-t border-border/50 space-y-3">
+          <a
+            href="https://shotgunninjas.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 text-xs font-mono text-secondary hover:text-white transition-colors"
+          >
+            <ExternalLink size={12} /> ShotgunNinjas.com
+          </a>
           <div className="flex items-center justify-between text-xs font-mono text-muted-foreground">
             <span>STATUS: SECURE</span>
             <span className="text-secondary animate-pulse">●</span>

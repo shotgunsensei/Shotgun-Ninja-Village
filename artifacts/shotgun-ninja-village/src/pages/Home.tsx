@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "wouter";
-import { ChevronRight, PlayCircle, Archive, UserSquare, Map, Crosshair, ShieldCheck, Activity } from "lucide-react";
+import { ChevronRight, PlayCircle, Archive, UserSquare, Map, Crosshair, ShieldCheck, Activity, ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
@@ -187,6 +187,31 @@ export default function Home() {
             />
           </div>
         </motion.div>
+      </section>
+
+      <section className="container mx-auto px-4 py-12 border-t border-border">
+        <div className="flex flex-col items-center text-center space-y-4">
+          <p className="font-mono text-sm text-muted-foreground">Full universe access at</p>
+          <a
+            href="https://shotgunninjas.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-secondary hover:text-white font-display text-3xl uppercase tracking-widest transition-colors"
+          >
+            ShotgunNinjas.com <ExternalLink size={24} />
+          </a>
+          <div className="flex flex-wrap items-center justify-center gap-6 mt-4">
+            <a href="https://tradeflowkit.com" target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-muted-foreground hover:text-secondary transition-colors inline-flex items-center gap-1">
+              TradeFlowKit.com <ExternalLink size={10} />
+            </a>
+            <a href="https://techdeck.app" target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-muted-foreground hover:text-secondary transition-colors inline-flex items-center gap-1">
+              TechDeck.app <ExternalLink size={10} />
+            </a>
+            <a href="https://TorqueShed.pro" target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-muted-foreground hover:text-secondary transition-colors inline-flex items-center gap-1">
+              TorqueShed.pro <ExternalLink size={10} />
+            </a>
+          </div>
+        </div>
       </section>
     </div>
   );

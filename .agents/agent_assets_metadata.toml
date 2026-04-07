@@ -300,3 +300,9 @@ id = "oJsBrbwrL6fM6-nF0mjsp"
 uri = "file://artifacts/shotgun-ninjas-ep3/public/images/scene18-ending.png"
 type = "image"
 title = "ninja silhouetted against core"
+
+[[generated]]
+id = "9iM8pKHcGHpVNz4lA0Rf4"
+uri = "file://artifacts/shotgun-ninja-village/public/images/kage-9-operator.png"
+type = "image"
+title = "generated_image"
