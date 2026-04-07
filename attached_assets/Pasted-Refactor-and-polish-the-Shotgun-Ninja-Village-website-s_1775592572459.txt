@@ -1,0 +1,82 @@
+Refactor and polish the Shotgun Ninja Village website so it becomes a launch-ready narrative hub that fully aligns with the Shotgun Ninjas bible, Kage-9 character system, and Episodes 1–3 trilogy structure.
+
+Current status:
+
+* The site already has strong cyber-noir visuals, a Kage-9 dossier, Archive, Grid Map, Arsenal, and Intel sections.
+* It already contains the three episode pages:
+
+  * The Signal in the Static
+  * Forge Protocol
+  * Fracture Scan
+* It already references BrandForge and TorqueShed.
+
+Main objective:
+Do not rebuild the brand from scratch. Instead, tighten the structure, sharpen the hierarchy, and make the site feel like a premium command hub where story, systems, and monetization all work together.
+
+Priority goals:
+
+1. Make the homepage the primary narrative command center
+2. Present Episodes 1–3 as a unified trilogy, not isolated content
+3. Make Kage-9 the clear flagship identity on the homepage
+4. Position BrandForge and TorqueShed as the first recovered systems
+5. Add a strong “Join the Archive” lead capture path
+6. Keep the existing cyber-noir aesthetic but improve clarity, hierarchy, and conversion flow
+
+Required homepage structure:
+
+* Hero section
+
+  * Strong headline centered on Kage-9 / the Signal War / the waking network
+  * Subheadline that explains the world clearly and elegantly
+  * Primary CTA: Watch Transmission 01
+  * Secondary CTA: Join the Archive
+* Trilogy section
+
+  * Three transmission cards for Episodes 1–3
+  * Each card must show:
+
+    * transmission number
+    * title
+    * mission brief
+    * system relevance
+    * watch CTA
+    * progression to next transmission
+* Kage-9 spotlight section
+
+  * concise dossier summary
+  * visual anchor
+  * “Access Operator File” CTA
+* Recovered systems section
+
+  * BrandForge first
+  * TorqueShed second
+  * TechDeck and TradeFlowKit separated into a secondary “Extended Network” or “Additional Systems” tier
+* Join the Archive section
+
+  * email capture or signup CTA
+  * copy should feel like joining a mission network, not a normal newsletter
+
+Content requirements:
+
+* Tighten homepage copy to match the established tactical, mythic, premium tone
+* Replace vague or generic headings if better canon-aligned alternatives improve clarity
+* Make sure the site feels like story first, product second, monetization-ready underneath
+* Avoid generic startup wording and avoid corny anime phrasing
+
+Design requirements:
+
+* Preserve the existing dark cyber-noir look
+* Improve mobile layout and content hierarchy
+* Keep the visuals clean and elite, not cluttered
+* Use clear section sequencing and stronger CTA consistency
+* Keep Kage-9 visually dominant where appropriate
+
+Technical requirements:
+
+* Reuse existing components where possible
+* Create reusable data structures for transmissions and systems
+* Avoid breaking current routes and episode links
+* Keep code organized and production-friendly
+
+Final result should feel like:
+a premium universe portal where users can watch the first three transmissions, understand Kage-9, explore the first recovered systems, and join the archive for future drops.

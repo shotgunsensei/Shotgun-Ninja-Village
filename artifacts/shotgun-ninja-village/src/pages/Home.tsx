@@ -1,247 +1,437 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "wouter";
-import { ChevronRight, PlayCircle, Archive, UserSquare, Map, Crosshair, ShieldCheck, Activity, ExternalLink } from "lucide-react";
+import { ChevronRight, PlayCircle, UserSquare, ExternalLink, Terminal, Wrench, Cpu, BarChart3, Mail, Radio } from "lucide-react";
 import { motion } from "framer-motion";
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
-function AnimatedTagline() {
-  const text = "In a fractured near-future where truth is manipulated, systems are corrupted, and creators are exploited... tools decide who survives.";
-  const [displayedChars, setDisplayedChars] = useState(0);
+const transmissions = [
+  {
+    num: "01",
+    title: "The Signal in the Static",
+    brief: "A fractured city drowns in manipulated signals. Kage-9 traces an impossible signal through the ruins of a collapsed archive sector and discovers the old protection network was intentionally dismantled.",
+    system: "Discovery of the corrupted signal layer",
+    href: "/shotgun-ninjas-ep1/",
+    img: "images/ep1.png",
+    next: "Leads to: Forge Protocol"
+  },
+  {
+    num: "02",
+    title: "Forge Protocol",
+    brief: "Independent creators are being buried under algorithmic suppression. Kage-9 infiltrates a signal distortion hub and deploys BrandForge OS to restore signal integrity and reclaim stolen visibility.",
+    system: "BrandForge OS recovered",
+    href: "/shotgun-ninjas-ep2/",
+    img: "images/ep2.png",
+    next: "Leads to: Fracture Scan"
+  },
+  {
+    num: "03",
+    title: "Fracture Scan",
+    brief: "A transport unit fails in a dead industrial zone. Kage-9 discovers TorqueShed — a forensic mechanical intelligence console — and exposes a sabotage pattern threatening the entire infrastructure network.",
+    system: "TorqueShed recovered",
+    href: "/shotgun-ninjas-ep3/",
+    img: "images/ep3.png",
+    next: "Next transmission incoming"
+  }
+];
 
+const primarySystems = [
+  {
+    name: "BrandForge OS",
+    role: "Campaign Command Platform",
+    desc: "Recovered in Transmission 02. Build influence architecture, launch narratives, deploy market signals. The first weapon against algorithmic suppression.",
+    icon: Terminal,
+    color: "text-blue-400",
+    borderColor: "border-blue-400/30",
+    url: "https://bf-os.com",
+    label: "bf-os.com"
+  },
+  {
+    name: "TorqueShed",
+    role: "Mechanical Intelligence Bay",
+    desc: "Recovered in Transmission 03. Diagnose machine failures, decode stress patterns, reconstruct failure chains. Forensic-grade mechanical analysis.",
+    icon: Wrench,
+    color: "text-orange-500",
+    borderColor: "border-orange-500/30",
+    url: "https://TorqueShed.pro",
+    label: "TorqueShed.pro"
+  }
+];
+
+const extendedSystems = [
+  {
+    name: "TechDeck",
+    role: "Operations Console",
+    desc: "IT oversight, infrastructure control, diagnostics, and command-layer support.",
+    icon: Cpu,
+    color: "text-purple-500",
+    url: "https://techdeck.app",
+    label: "TechDeck.app"
+  },
+  {
+    name: "TradeFlowKit",
+    role: "Commerce Operations",
+    desc: "Trade logistics, supply chain mapping, transaction intelligence, and flow optimization.",
+    icon: BarChart3,
+    color: "text-green-500",
+    url: "https://tradeflowkit.com",
+    label: "TradeFlowKit.com"
+  }
+];
+
+function TypewriterText({ text }: { text: string }) {
+  const [count, setCount] = useState(0);
   useEffect(() => {
-    if (displayedChars >= text.length) return;
-    const timeout = setTimeout(() => setDisplayedChars((c) => c + 1), 18);
-    return () => clearTimeout(timeout);
-  }, [displayedChars, text.length]);
-
+    if (count >= text.length) return;
+    const t = setTimeout(() => setCount(c => c + 1), 20);
+    return () => clearTimeout(t);
+  }, [count, text.length]);
   return (
-    <p className="text-lg md:text-xl text-muted-foreground font-mono max-w-2xl mx-auto mb-8 border-l-2 border-primary pl-4 text-left">
-      {text.slice(0, displayedChars)}
-      {displayedChars < text.length && <span className="inline-block w-2 h-5 bg-primary animate-pulse ml-0.5 align-middle" />}
-    </p>
+    <span>
+      {text.slice(0, count)}
+      {count < text.length && <span className="inline-block w-2 h-5 bg-primary animate-pulse ml-0.5 align-middle" />}
+    </span>
   );
 }
 
-export default function Home() {
-  const sections = [
-    { title: "Archive", desc: "Episode logs", link: "/archive", icon: Archive },
-    { title: "Operator Files", desc: "Kage-9 dossier", link: "/operators", icon: UserSquare },
-    { title: "Grid Map", desc: "World sectors", link: "/grid", icon: Map },
-    { title: "Arsenal", desc: "Gear loadout", link: "/arsenal", icon: Crosshair },
-    { title: "Forge Intel", desc: "Tactical systems", link: "/intel", icon: ShieldCheck },
-  ];
+const fadeUp = {
+  initial: { opacity: 0, y: 24 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true },
+  transition: { duration: 0.5 }
+};
 
+export default function Home() {
   return (
     <div className="relative w-full min-h-[100dvh] flex flex-col">
-      <section className="relative w-full h-[60vh] md:h-[80vh] flex items-center justify-center overflow-hidden border-b border-primary/20">
+
+      {/* ── HERO ── */}
+      <section className="relative w-full min-h-[70vh] md:min-h-[85vh] flex items-center justify-center overflow-hidden border-b border-primary/20">
         <div className="absolute inset-0 z-0">
-          <img
-            src={asset("images/hero.png")}
-            alt="Command Center Hero"
-            className="w-full h-full object-cover opacity-40 mix-blend-luminosity"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-background" />
+          <img src={asset("images/hero.png")} alt="" className="w-full h-full object-cover opacity-30 mix-blend-luminosity" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/40" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-transparent to-background/80" />
         </div>
 
-        <div className="relative z-10 container px-4 md:px-6 mx-auto flex flex-col items-center text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 mb-6 border border-secondary/30 bg-secondary/10 text-secondary text-xs font-mono uppercase tracking-widest backdrop-blur-sm">
-            <Activity size={14} className="animate-pulse" />
-            Signal Intercepted
-          </div>
-          <h1
-            className="text-6xl md:text-8xl lg:text-9xl font-display font-bold text-white uppercase tracking-tighter mb-4 drop-shadow-lg glitch-text"
-            data-text="THE SIGNAL FEED"
-          >
-            THE SIGNAL FEED
-          </h1>
-          <AnimatedTagline />
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            <Link
-              href="/archive"
-              className="clip-diagonal bg-primary hover:bg-primary/90 text-white px-8 py-3 font-display text-xl uppercase tracking-widest transition-all inline-flex items-center gap-2"
-            >
-              Access Archive <ChevronRight size={20} />
-            </Link>
-            <Link
-              href="/operators"
-              className="clip-diagonal border border-primary/50 hover:bg-primary/10 text-primary px-8 py-3 font-display text-xl uppercase tracking-widest transition-all inline-flex items-center gap-2 bg-background/50 backdrop-blur"
-            >
-              View Intel <ChevronRight size={20} />
-            </Link>
-          </div>
-        </div>
-      </section>
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
 
-      <section className="container mx-auto px-4 py-12">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className="flex items-center justify-between mb-6 border-b border-border pb-4">
-            <h2 className="text-3xl font-display text-white uppercase tracking-widest">Now Playing</h2>
-            <span className="text-xs font-mono text-primary uppercase animate-pulse">Live Signal</span>
-          </div>
+        <div className="relative z-10 container px-4 md:px-6 mx-auto max-w-5xl">
+          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+            <div className="flex-1 text-center md:text-left">
+              <div className="inline-flex items-center gap-2 px-3 py-1 mb-6 border border-secondary/30 bg-secondary/10 text-secondary text-xs font-mono uppercase tracking-widest backdrop-blur-sm">
+                <Radio size={14} className="animate-pulse" />
+                Network Waking
+              </div>
 
-          <a
-            href="/shotgun-ninjas-ep1/"
-            className="group tactical-border bg-card overflow-hidden flex flex-col md:flex-row transition-all hover:border-primary"
-          >
-            <div className="w-full md:w-2/5 aspect-video relative overflow-hidden">
-              <img
-                src={asset("images/ep1.png")}
-                alt="Episode 1: The Signal in the Static"
-                className="w-full h-full object-cover filter brightness-75 contrast-125 group-hover:scale-105 transition-transform duration-700"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent to-background/60" />
-              <div className="absolute bottom-3 left-3 px-2 py-1 bg-primary/90 text-white font-mono text-[10px] uppercase tracking-widest">
-                Now Playing
-              </div>
-            </div>
-            <div className="w-full md:w-3/5 p-6 md:p-8 flex flex-col justify-center">
-              <div className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest mb-2">
-                Episode 01
-              </div>
-              <h3 className="text-3xl md:text-4xl font-display text-white uppercase tracking-widest mb-3 group-hover:text-primary transition-colors">
-                The Signal in the Static
-              </h3>
-              <p className="text-muted-foreground font-mono text-sm leading-relaxed mb-4 max-w-xl">
-                A fractured city drowns in manipulated signals. Kage-9 traces an impossible signal through the ruins
-                of a collapsed archive sector and discovers evidence that the old protection network was intentionally
-                dismantled.
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-bold text-white uppercase tracking-tighter mb-4 leading-[0.9] glitch-text" data-text="THE NETWORK IS WAKING">
+                THE NETWORK IS WAKING
+              </h1>
+
+              <p className="text-lg md:text-xl text-muted-foreground font-mono max-w-xl mb-8 border-l-2 border-primary pl-4 text-left">
+                <TypewriterText text="Kage-9 hunts through a signal war no one else can see. Three transmissions recovered. Two systems online. The network remembers." />
               </p>
-              <div className="clip-diagonal bg-primary/20 border border-primary/40 text-primary px-4 py-2 font-display text-sm uppercase tracking-widest inline-flex items-center gap-2 self-start group-hover:bg-primary group-hover:text-white transition-all">
-                <PlayCircle size={16} /> Initialize Playback
+
+              <div className="flex flex-wrap items-center gap-4">
+                <a
+                  href="/shotgun-ninjas-ep1/"
+                  className="clip-diagonal bg-primary hover:bg-primary/90 text-white px-8 py-3 font-display text-xl uppercase tracking-widest transition-all inline-flex items-center gap-2"
+                >
+                  <PlayCircle size={20} /> Watch Transmission 01
+                </a>
+                <a
+                  href="#join-archive"
+                  className="clip-diagonal border border-primary/50 hover:bg-primary/10 text-primary px-8 py-3 font-display text-xl uppercase tracking-widest transition-all inline-flex items-center gap-2 bg-background/50 backdrop-blur"
+                >
+                  Join the Archive <ChevronRight size={20} />
+                </a>
               </div>
             </div>
-          </a>
-        </motion.div>
+
+            <div className="hidden md:block w-64 lg:w-72 flex-shrink-0">
+              <div className="relative">
+                <div className="absolute -inset-4 bg-gradient-to-b from-primary/20 via-transparent to-secondary/20 blur-2xl" />
+                <img
+                  src={asset("images/kage-9-operator.png")}
+                  alt="Kage-9"
+                  className="relative w-full aspect-[3/4] object-cover object-top drop-shadow-[0_0_20px_rgba(220,38,38,0.4)]"
+                />
+                <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-background to-transparent" />
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <section className="container mx-auto px-4 py-12">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-        >
-          <div className="flex items-center justify-between mb-6 border-b border-border pb-4">
-            <h2 className="text-3xl font-display text-white uppercase tracking-widest">Command Nodes</h2>
-            <span className="text-xs font-mono text-muted-foreground uppercase">All Sectors</span>
+      {/* ── TRILOGY: RECOVERED TRANSMISSIONS ── */}
+      <section className="container mx-auto px-4 py-16 md:py-20 max-w-6xl">
+        <motion.div {...fadeUp}>
+          <div className="mb-10">
+            <h2 className="text-4xl md:text-5xl font-display text-white uppercase tracking-widest mb-2 glitch-text" data-text="RECOVERED TRANSMISSIONS">
+              RECOVERED TRANSMISSIONS
+            </h2>
+            <p className="text-muted-foreground font-mono text-sm border-l-2 border-primary pl-4 max-w-lg">
+              Three field operations. Three recovered signals. Watch in sequence.
+            </p>
           </div>
+        </motion.div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {sections.map((section) => {
-              const Icon = section.icon;
-              return (
+        <div className="space-y-6">
+          {transmissions.map((tx, i) => (
+            <motion.a
+              key={tx.num}
+              href={tx.href}
+              className="group tactical-border bg-card overflow-hidden flex flex-col md:flex-row transition-all hover:border-primary block"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: i * 0.1 }}
+            >
+              <div className="w-full md:w-2/5 aspect-video relative overflow-hidden">
+                <img
+                  src={asset(tx.img)}
+                  alt={tx.title}
+                  className="w-full h-full object-cover filter brightness-75 contrast-125 group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent to-background/60" />
+                <div className="absolute top-3 left-3 px-2 py-1 bg-background/80 backdrop-blur border border-primary/40 font-mono text-[10px] text-primary uppercase tracking-widest">
+                  Transmission {tx.num}
+                </div>
+              </div>
+
+              <div className="w-full md:w-3/5 p-6 md:p-8 flex flex-col justify-center">
+                <h3 className="text-3xl md:text-4xl font-display text-white uppercase tracking-widest mb-3 group-hover:text-primary transition-colors">
+                  {tx.title}
+                </h3>
+                <p className="text-muted-foreground font-mono text-sm leading-relaxed mb-4 max-w-xl">
+                  {tx.brief}
+                </p>
+                <div className="flex flex-wrap items-center gap-4">
+                  <span className="text-xs font-mono uppercase tracking-widest text-secondary bg-secondary/10 px-2 py-1 border border-secondary/20">
+                    {tx.system}
+                  </span>
+                  <span className="text-xs font-mono text-muted-foreground">
+                    {tx.next}
+                  </span>
+                </div>
+                <div className="clip-diagonal bg-primary/20 border border-primary/40 text-primary px-4 py-2 font-display text-sm uppercase tracking-widest inline-flex items-center gap-2 self-start mt-4 group-hover:bg-primary group-hover:text-white transition-all">
+                  <PlayCircle size={16} /> Initialize Playback
+                </div>
+              </div>
+            </motion.a>
+          ))}
+        </div>
+      </section>
+
+      {/* ── KAGE-9 SPOTLIGHT ── */}
+      <section className="border-y border-border bg-card/30">
+        <div className="container mx-auto px-4 py-16 md:py-20 max-w-6xl">
+          <motion.div {...fadeUp}>
+            <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+              <div className="w-48 md:w-56 flex-shrink-0">
+                <div className="tactical-border bg-card p-1 relative overflow-hidden">
+                  <img
+                    src={asset("images/kage-9-operator.png")}
+                    alt="Kage-9"
+                    className="w-full aspect-[3/4] object-cover object-top drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]"
+                  />
+                  <div className="absolute inset-0 scanlines opacity-30" />
+                </div>
+              </div>
+
+              <div className="flex-1 text-center md:text-left">
+                <div className="text-xs font-mono text-primary uppercase tracking-widest mb-2">Operator Dossier</div>
+                <h2 className="text-4xl md:text-5xl font-display text-white uppercase tracking-widest mb-1">
+                  Kage-9
+                </h2>
+                <p className="text-lg font-display text-muted-foreground uppercase tracking-wider mb-4">
+                  Hayaku Kageru
+                </p>
+                <p className="text-muted-foreground font-mono text-sm leading-relaxed mb-6 max-w-2xl">
+                  Systems warrior, precision builder, covert guardian. Emerged from the collapse of a network that protected creative and technical knowledge systems. Survived because he learned how systems fail. Now recovers and reforges them — one mission at a time.
+                </p>
+                <div className="bg-muted/50 border-l-2 border-secondary p-4 font-mono text-sm italic text-white/80 mb-6 max-w-lg">
+                  "Noise spreads fastest where no one checks the signal."
+                </div>
                 <Link
-                  key={section.link}
-                  href={section.link}
-                  className="group tactical-border bg-card p-5 flex flex-col items-center text-center transition-all hover:border-primary hover:bg-primary/5"
+                  href="/operators"
+                  className="clip-diagonal border border-primary/50 hover:bg-primary/10 text-primary px-6 py-2 font-display text-lg uppercase tracking-widest transition-all inline-flex items-center gap-2"
                 >
-                  <Icon size={28} className="text-muted-foreground group-hover:text-primary transition-colors mb-3" />
-                  <h3 className="font-display text-lg text-white uppercase tracking-widest mb-1 group-hover:text-primary transition-colors">
-                    {section.title}
-                  </h3>
-                  <p className="text-[11px] font-mono text-muted-foreground">{section.desc}</p>
+                  <UserSquare size={18} /> Access Operator File <ChevronRight size={18} />
                 </Link>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ── RECOVERED SYSTEMS ── */}
+      <section className="container mx-auto px-4 py-16 md:py-20 max-w-6xl">
+        <motion.div {...fadeUp}>
+          <div className="mb-10">
+            <h2 className="text-4xl md:text-5xl font-display text-white uppercase tracking-widest mb-2">
+              RECOVERED SYSTEMS
+            </h2>
+            <p className="text-muted-foreground font-mono text-sm border-l-2 border-primary pl-4 max-w-lg">
+              Field-recovered command platforms. Each one pulled from a mission. Each one operational.
+            </p>
+          </div>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+          {primarySystems.map((sys, i) => {
+            const Icon = sys.icon;
+            return (
+              <motion.a
+                key={sys.name}
+                href={sys.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`tactical-border bg-card p-6 md:p-8 group hover:border-primary transition-all block relative overflow-hidden`}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.1 }}
+              >
+                <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="flex items-start gap-4 mb-4">
+                  <div className={`p-3 border ${sys.borderColor} bg-background flex-shrink-0`}>
+                    <Icon size={28} className={sys.color} />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-display text-white uppercase tracking-widest group-hover:text-primary transition-colors">
+                      {sys.name}
+                    </h3>
+                    <span className="text-xs font-mono uppercase tracking-widest text-primary">
+                      {sys.role}
+                    </span>
+                  </div>
+                </div>
+                <p className="text-muted-foreground font-mono text-sm leading-relaxed mb-4">
+                  {sys.desc}
+                </p>
+                <span className="inline-flex items-center gap-2 text-secondary font-mono text-sm group-hover:text-white transition-colors">
+                  {sys.label} <ExternalLink size={14} />
+                </span>
+              </motion.a>
+            );
+          })}
+        </div>
+
+        <motion.div {...fadeUp}>
+          <div className="mb-6">
+            <h3 className="text-2xl font-display text-muted-foreground uppercase tracking-widest">
+              Extended Network
+            </h3>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {extendedSystems.map((sys) => {
+              const Icon = sys.icon;
+              return (
+                <a
+                  key={sys.name}
+                  href={sys.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group border border-border bg-card/50 p-5 flex items-start gap-4 hover:border-primary/50 transition-all"
+                >
+                  <Icon size={22} className={`${sys.color} flex-shrink-0 mt-0.5`} />
+                  <div>
+                    <div className="flex items-baseline gap-3 mb-1">
+                      <h4 className="text-xl font-display text-white uppercase tracking-widest group-hover:text-primary transition-colors">
+                        {sys.name}
+                      </h4>
+                      <span className="text-[10px] font-mono text-muted-foreground uppercase">{sys.role}</span>
+                    </div>
+                    <p className="text-muted-foreground font-mono text-xs leading-relaxed mb-2">{sys.desc}</p>
+                    <span className="inline-flex items-center gap-1 text-secondary font-mono text-xs group-hover:text-white transition-colors">
+                      {sys.label} <ExternalLink size={10} />
+                    </span>
+                  </div>
+                </a>
               );
             })}
           </div>
         </motion.div>
       </section>
 
-      <section className="container mx-auto px-4 py-12">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <div className="flex items-center justify-between mb-8 border-b border-border pb-4">
-            <h2 className="text-3xl font-display text-white uppercase tracking-widest">Priority Nodes</h2>
-            <span className="text-xs font-mono text-muted-foreground uppercase">Classified</span>
-          </div>
+      {/* ── JOIN THE ARCHIVE ── */}
+      <section id="join-archive" className="border-t border-border bg-card/30">
+        <div className="container mx-auto px-4 py-16 md:py-20 max-w-3xl text-center">
+          <motion.div {...fadeUp}>
+            <div className="inline-flex items-center gap-2 px-3 py-1 mb-6 border border-primary/30 bg-primary/10 text-primary text-xs font-mono uppercase tracking-widest">
+              <Mail size={14} /> Classified Channel
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card
-              title="The Operator"
-              desc="Dossier: Hayaku Kageru (Kage-9). Systems warrior, precision builder, covert guardian."
-              link="/operators"
-              img={asset("images/kage-9.png")}
-            />
-            <Card
-              title="The Forge Grid"
-              desc="Industrial digital zones where new tools and systems are created or recovered."
-              link="/grid"
-              img={asset("images/zone-forge.png")}
-            />
-            <Card
-              title="Arsenal Specs"
-              desc="Triple-threat loadout. Secure tactical mounts, engineered precision."
-              link="/arsenal"
-              img={asset("images/gear-shotgun-back.png")}
-            />
-          </div>
-        </motion.div>
+            <h2 className="text-4xl md:text-5xl font-display text-white uppercase tracking-widest mb-4 glitch-text" data-text="JOIN THE ARCHIVE">
+              JOIN THE ARCHIVE
+            </h2>
+
+            <p className="text-muted-foreground font-mono text-sm leading-relaxed max-w-xl mx-auto mb-8">
+              New transmissions are incoming. Recovered systems are being deployed. The network is expanding. Enter your signal address to receive mission briefings, early access to new transmissions, and classified drops before they hit the public feed.
+            </p>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const form = e.currentTarget;
+                const email = (form.elements.namedItem("email") as HTMLInputElement)?.value;
+                if (email) {
+                  window.open(`https://shotgunninjas.com?email=${encodeURIComponent(email)}`, "_blank");
+                }
+              }}
+              className="flex flex-col sm:flex-row items-stretch gap-3 max-w-lg mx-auto mb-6"
+            >
+              <input
+                type="email"
+                name="email"
+                required
+                placeholder="signal@address.com"
+                className="flex-1 px-4 py-3 bg-background border border-border text-white font-mono text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
+              />
+              <button
+                type="submit"
+                className="clip-diagonal bg-primary hover:bg-primary/90 text-white px-6 py-3 font-display text-lg uppercase tracking-widest transition-all inline-flex items-center justify-center gap-2 whitespace-nowrap"
+              >
+                Lock In <ChevronRight size={18} />
+              </button>
+            </form>
+
+            <p className="font-mono text-xs text-muted-foreground">
+              No spam. No noise. Only signal.
+            </p>
+          </motion.div>
+        </div>
       </section>
 
-      <section className="container mx-auto px-4 py-12 border-t border-border">
-        <div className="flex flex-col items-center text-center space-y-4">
-          <p className="font-mono text-sm text-muted-foreground">Full universe access at</p>
-          <a
-            href="https://shotgunninjas.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-secondary hover:text-white font-display text-3xl uppercase tracking-widest transition-colors"
-          >
-            ShotgunNinjas.com <ExternalLink size={24} />
-          </a>
-          <div className="flex flex-wrap items-center justify-center gap-6 mt-4">
-            <a href="https://tradeflowkit.com" target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-muted-foreground hover:text-secondary transition-colors inline-flex items-center gap-1">
-              TradeFlowKit.com <ExternalLink size={10} />
+      {/* ── FOOTER LINKS ── */}
+      <section className="border-t border-border">
+        <div className="container mx-auto px-4 py-8 max-w-6xl">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <a
+              href="https://shotgunninjas.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-secondary hover:text-white font-display text-xl uppercase tracking-widest transition-colors"
+            >
+              ShotgunNinjas.com <ExternalLink size={16} />
             </a>
-            <a href="https://techdeck.app" target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-muted-foreground hover:text-secondary transition-colors inline-flex items-center gap-1">
-              TechDeck.app <ExternalLink size={10} />
-            </a>
-            <a href="https://TorqueShed.pro" target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-muted-foreground hover:text-secondary transition-colors inline-flex items-center gap-1">
-              TorqueShed.pro <ExternalLink size={10} />
-            </a>
+            <div className="flex flex-wrap items-center justify-center gap-6">
+              <a href="https://bf-os.com" target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-muted-foreground hover:text-secondary transition-colors inline-flex items-center gap-1">
+                bf-os.com <ExternalLink size={10} />
+              </a>
+              <a href="https://TorqueShed.pro" target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-muted-foreground hover:text-secondary transition-colors inline-flex items-center gap-1">
+                TorqueShed.pro <ExternalLink size={10} />
+              </a>
+              <a href="https://techdeck.app" target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-muted-foreground hover:text-secondary transition-colors inline-flex items-center gap-1">
+                TechDeck.app <ExternalLink size={10} />
+              </a>
+              <a href="https://tradeflowkit.com" target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-muted-foreground hover:text-secondary transition-colors inline-flex items-center gap-1">
+                TradeFlowKit.com <ExternalLink size={10} />
+              </a>
+            </div>
           </div>
         </div>
       </section>
     </div>
-  );
-}
-
-function Card({ title, desc, link, img }: { title: string; desc: string; link: string; img: string }) {
-  return (
-    <Link
-      href={link}
-      className="group relative block tactical-border bg-card overflow-hidden transition-all hover:border-primary"
-    >
-      <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity z-10" />
-      <div className="aspect-video w-full overflow-hidden border-b border-border relative">
-        <div className="absolute inset-0 bg-background/20 group-hover:bg-transparent transition-colors z-10" />
-        <img
-          src={img}
-          alt={title}
-          className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-500 scale-105 group-hover:scale-100"
-        />
-      </div>
-      <div className="p-5 relative z-20">
-        <h3 className="text-2xl font-display text-white uppercase tracking-widest mb-2 group-hover:text-primary transition-colors flex items-center justify-between">
-          {title}
-          <ChevronRight
-            size={20}
-            className="text-primary opacity-0 group-hover:opacity-100 transform -translate-x-4 group-hover:translate-x-0 transition-all"
-          />
-        </h3>
-        <p className="text-sm font-mono text-muted-foreground line-clamp-2">{desc}</p>
-      </div>
-    </Link>
   );
 }
