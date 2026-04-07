@@ -1,0 +1,146 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Teko:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+:root {
+  --color-primary: #DC2626;
+  --color-secondary: #0A0A0F;
+  --color-accent: #3B82F6;
+
+  --color-bg-light: #1A1A24;
+  --color-bg-dark: #0A0A0F;
+  --color-bg-muted: #11111A;
+
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #9CA3AF;
+  --color-text-muted: #6B7280;
+  --color-text-inverse: #0A0A0F;
+
+  --color-red-deep: #B91C1C;
+  --color-red-bright: #DC2626;
+  --color-blue-deep: #3B82F6;
+  --color-blue-bright: #60A5FA;
+
+  --font-display: 'Teko', sans-serif;
+  --font-body: 'Space Grotesk', sans-serif;
+  --font-mono: 'Space Grotesk', monospace;
+}
+
+@theme inline {
+  --color-primary: var(--color-primary);
+  --color-secondary: var(--color-secondary);
+  --color-accent: var(--color-accent);
+  --color-bg-light: var(--color-bg-light);
+  --color-bg-dark: var(--color-bg-dark);
+  --color-bg-muted: var(--color-bg-muted);
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-muted: var(--color-text-muted);
+  --color-text-inverse: var(--color-text-inverse);
+  --color-red-deep: var(--color-red-deep);
+  --color-red-bright: var(--color-red-bright);
+  --color-blue-deep: var(--color-blue-deep);
+  --color-blue-bright: var(--color-blue-bright);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+}
+
+body {
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-bg-dark);
+  color: var(--color-text-primary);
+}
+
+h1, h2, h3, h4, h5, h6, .font-display {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+}
+
+.glitch-effect {
+  position: relative;
+}
+
+.glitch-effect::before,
+.glitch-effect::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch-effect::before {
+  left: 2px;
+  text-shadow: -2px 0 #DC2626;
+  clip: rect(24px, 550px, 90px, 0);
+  animation: glitch-anim-2 3s infinite linear alternate-reverse;
+}
+
+.glitch-effect::after {
+  left: -2px;
+  text-shadow: -2px 0 #3B82F6;
+  clip: rect(85px, 550px, 140px, 0);
+  animation: glitch-anim 2.5s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-anim {
+  0% { clip: rect(13px, 9999px, 84px, 0); }
+  5% { clip: rect(72px, 9999px, 16px, 0); }
+  10% { clip: rect(28px, 9999px, 47px, 0); }
+  15% { clip: rect(98px, 9999px, 96px, 0); }
+  20% { clip: rect(54px, 9999px, 32px, 0); }
+  25% { clip: rect(15px, 9999px, 63px, 0); }
+  30% { clip: rect(87px, 9999px, 20px, 0); }
+  35% { clip: rect(4px, 9999px, 54px, 0); }
+  40% { clip: rect(69px, 9999px, 89px, 0); }
+  45% { clip: rect(31px, 9999px, 11px, 0); }
+  50% { clip: rect(78px, 9999px, 35px, 0); }
+  55% { clip: rect(2px, 9999px, 67px, 0); }
+  60% { clip: rect(45px, 9999px, 92px, 0); }
+  65% { clip: rect(18px, 9999px, 7px, 0); }
+  70% { clip: rect(92px, 9999px, 43px, 0); }
+  75% { clip: rect(37px, 9999px, 81px, 0); }
+  80% { clip: rect(61px, 9999px, 25px, 0); }
+  85% { clip: rect(11px, 9999px, 73px, 0); }
+  90% { clip: rect(84px, 9999px, 14px, 0); }
+  95% { clip: rect(49px, 9999px, 97px, 0); }
+  100% { clip: rect(26px, 9999px, 58px, 0); }
+}
+
+@keyframes glitch-anim-2 {
+  0% { clip: rect(65px, 9999px, 100px, 0); }
+  5% { clip: rect(52px, 9999px, 74px, 0); }
+  10% { clip: rect(79px, 9999px, 85px, 0); }
+  15% { clip: rect(75px, 9999px, 5px, 0); }
+  20% { clip: rect(67px, 9999px, 61px, 0); }
+  25% { clip: rect(14px, 9999px, 79px, 0); }
+  30% { clip: rect(1px, 9999px, 66px, 0); }
+  35% { clip: rect(86px, 9999px, 30px, 0); }
+  40% { clip: rect(77px, 9999px, 64px, 0); }
+  45% { clip: rect(8px, 9999px, 39px, 0); }
+  50% { clip: rect(50px, 9999px, 3px, 0); }
+  55% { clip: rect(100px, 9999px, 99px, 0); }
+  60% { clip: rect(61px, 9999px, 12px, 0); }
+  65% { clip: rect(71px, 9999px, 54px, 0); }
+  70% { clip: rect(3px, 9999px, 91px, 0); }
+  75% { clip: rect(29px, 9999px, 16px, 0); }
+  80% { clip: rect(15px, 9999px, 62px, 0); }
+  85% { clip: rect(55px, 9999px, 47px, 0); }
+  90% { clip: rect(93px, 9999px, 33px, 0); }
+  95% { clip: rect(38px, 9999px, 80px, 0); }
+  100% { clip: rect(12px, 9999px, 2px, 0); }
+}
+
+.scanlines {
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0),
+    rgba(255,255,255,0) 50%,
+    rgba(0,0,0,0.2) 50%,
+    rgba(0,0,0,0.2)
+  );
+  background-size: 100% 4px;
+}

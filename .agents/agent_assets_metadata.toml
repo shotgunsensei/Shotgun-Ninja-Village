@@ -144,3 +144,57 @@ id = "k6R1ftAJFzi-BF0e7xYRY"
 uri = "file://artifacts/shotgun-ninja-village/public/images/ep3.png"
 type = "image"
 title = "Episode 3 Thumbnail"
+
+[[generated]]
+id = "07ZH23cI04IQn8HXUMS8b"
+uri = "file://artifacts/shotgun-ninjas-ep2/public/images/scene2-wasteland.png"
+type = "image"
+title = "Cyber ninja in red wasteland"
+
+[[generated]]
+id = "ljZssutwsA6ji9GNEFiw-"
+uri = "file://artifacts/shotgun-ninjas-ep2/public/images/scene4-cell.png"
+type = "image"
+title = "Buried creator cell entrance"
+
+[[generated]]
+id = "rTDG2r0N10OaZPVOZ2pLg"
+uri = "file://artifacts/shotgun-ninjas-ep2/public/images/scene5-corridor.png"
+type = "image"
+title = "Dark safehouse corridor"
+
+[[generated]]
+id = "AGaGbEDwLBN2wNH_tbxGz"
+uri = "file://artifacts/shotgun-ninjas-ep2/public/images/scene6-forge.png"
+type = "image"
+title = "Forge chamber awakening"
+
+[[generated]]
+id = "r8IZXXMQO9nuRTTxs845j"
+uri = "file://artifacts/shotgun-ninjas-ep2/public/images/scene8-ui.png"
+type = "image"
+title = "BrandForge OS Tactical UI"
+
+[[generated]]
+id = "JXn_GXpmH594O1QCVFo3V"
+uri = "file://artifacts/shotgun-ninjas-ep2/public/images/scene10-katana.png"
+type = "image"
+title = "Energy katana igniting"
+
+[[generated]]
+id = "rAouH54gSnWmPkGmWK6To"
+uri = "file://artifacts/shotgun-ninjas-ep2/public/images/scene11-wall.png"
+type = "image"
+title = "Massive noise wall barrier"
+
+[[generated]]
+id = "uRHPryDp5sMyOWCMUA7jX"
+uri = "file://artifacts/shotgun-ninjas-ep2/public/images/scene13-machinery.png"
+type = "image"
+title = "Counterfeit signal machinery"
+
+[[generated]]
+id = "Nd14DKfBAK24egz407MiN"
+uri = "file://artifacts/shotgun-ninjas-ep2/public/images/scene15-lattice.png"
+type = "image"
+title = "Vast network lattice"
