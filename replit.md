@@ -65,3 +65,30 @@ See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and pa
   - `src/pages/Home.tsx`, `Archive.tsx`, `Operators.tsx`, `Grid.tsx`, `Arsenal.tsx`, `Intel.tsx`
   - `src/index.css` — cyber-noir theme with glitch effects, scanlines, tactical borders
   - `public/images/` — 14 AI-generated images (hero, character, zones, arsenal, episodes)
+
+### Shotgun Ninjas - Episode 2: Forge Protocol
+- **Path**: `artifacts/shotgun-ninjas-ep2/`
+- **Type**: video-js (animated video, not deployable — export from preview pane)
+- **Stack**: React + Vite + Framer Motion + Tailwind CSS
+- **Description**: 16-scene motion-manga where Kage-9 discovers BrandForge OS, infiltrates a counterfeit signal hub, reclaims stolen signal
+- **Port**: 23317 (previewPath: `/shotgun-ninjas-ep2/`)
+- **Color arc**: corrupted reds → intensifying blue as BrandForge awakens → clean blue-white signal reclamation
+- **Key files**:
+  - `src/components/video/VideoTemplate.tsx` — 16-scene timeline orchestrator
+  - `src/components/video/video_scenes/Scene1-16.tsx` — individual scene components
+  - `src/lib/video/hooks.ts` — DO NOT MODIFY (recording/export pipeline)
+  - `public/images/` — 9 AI-generated anime-style scene images
+
+### Shotgun Ninjas - Episode 3: Fracture Scan
+- **Path**: `artifacts/shotgun-ninjas-ep3/`
+- **Type**: video-js (animated video, not deployable — export from preview pane)
+- **Stack**: React + Vite + Framer Motion + Tailwind CSS
+- **Description**: 18-scene industrial cyber-noir motion-manga — Kage-9 discovers TorqueShed mechanical intelligence console, exposes sabotaged transport, reveals the counterfeit lattice has moved into infrastructure
+- **Port**: 20118 (previewPath: `/shotgun-ninjas-ep3/`)
+- **Color arc**: dead steel grays/ember red → intensifying blue as TorqueShed activates → combined blues with hard industrial whites
+- **Fonts**: Teko (display) + Space Grotesk (body)
+- **Key files**:
+  - `src/components/video/VideoTemplate.tsx` — 18-scene timeline with persistent background layers
+  - `src/components/video/video_scenes/Scene1-18.tsx` — individual scene components
+  - `src/lib/video/hooks.ts` — DO NOT MODIFY (recording/export pipeline)
+  - `public/images/` — 18 AI-generated industrial/mechanical scene images

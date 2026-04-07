@@ -198,3 +198,105 @@ id = "Nd14DKfBAK24egz407MiN"
 uri = "file://artifacts/shotgun-ninjas-ep2/public/images/scene15-lattice.png"
 type = "image"
 title = "Vast network lattice"
+
+[[generated]]
+id = "pm0XEXf7U_d4pGNef1Hzx"
+uri = "file://artifacts/shotgun-ninjas-ep3/public/images/scene1-industrial.png"
+type = "image"
+title = "Dead industrial sector"
+
+[[generated]]
+id = "UZ6ktX0FE2yQiLTiwtnGx"
+uri = "file://artifacts/shotgun-ninjas-ep3/public/images/scene2-wreck.png"
+type = "image"
+title = "Crippled transport unit"
+
+[[generated]]
+id = "uYl4yVmHnXRxZptIIn7gn"
+uri = "file://artifacts/shotgun-ninjas-ep3/public/images/scene4-shard.png"
+type = "image"
+title = "Fractured data shard"
+
+[[generated]]
+id = "O5bkHt_ogPLah_r6uKl4c"
+uri = "file://artifacts/shotgun-ninjas-ep3/public/images/scene6-torqueshed.png"
+type = "image"
+title = "TorqueShed console"
+
+[[generated]]
+id = "GrlaeWPOrKhN541W7N_ex"
+uri = "file://artifacts/shotgun-ninjas-ep3/public/images/scene8-autopsy.png"
+type = "image"
+title = "Holographic reconstruction"
+
+[[generated]]
+id = "ATfXy6lFUbXWbPmWzsIuW"
+uri = "file://artifacts/shotgun-ninjas-ep3/public/images/scene10-lattice.png"
+type = "image"
+title = "Mechanical lattice"
+
+[[generated]]
+id = "07XtuXJNytpuGBQkbivAM"
+uri = "file://artifacts/shotgun-ninjas-ep3/public/images/scene13-kage-action.png"
+type = "image"
+title = "Kage-9 action"
+
+[[generated]]
+id = "eyYrseKpnCVRnPNH36G8Q"
+uri = "file://artifacts/shotgun-ninjas-ep3/public/images/scene17-module.png"
+type = "image"
+title = "Module emergence"
+
+[[generated]]
+id = "qhztr0Ff_ehyuEcQruoSm"
+uri = "file://artifacts/shotgun-ninjas-ep3/public/images/scene3-yard.png"
+type = "image"
+title = "silent cyber scrapyard"
+
+[[generated]]
+id = "GTH2pyob--Q9AiOCYOKF8"
+uri = "file://artifacts/shotgun-ninjas-ep3/public/images/scene5-bay.png"
+type = "image"
+title = "hidden service bay"
+
+[[generated]]
+id = "lQH6zT_thTiPYhoNujyII"
+uri = "file://artifacts/shotgun-ninjas-ep3/public/images/scene9-trajectory.png"
+type = "image"
+title = "holographic trajectory map"
+
+[[generated]]
+id = "OayL8JGZOD2CJAtCAeiKu"
+uri = "file://artifacts/shotgun-ninjas-ep3/public/images/scene11-echo.png"
+type = "image"
+title = "ghostly digital saboteur"
+
+[[generated]]
+id = "PXXjwPYQyEmcT3YW1nLlg"
+uri = "file://artifacts/shotgun-ninjas-ep3/public/images/scene12-ambush.png"
+type = "image"
+title = "glowing eyes in shadows"
+
+[[generated]]
+id = "lxc0ufivcNpk4vFRGoAa5"
+uri = "file://artifacts/shotgun-ninjas-ep3/public/images/scene14-blade.png"
+type = "image"
+title = "katana slicing mech arm"
+
+[[generated]]
+id = "chd6l9wyWb_YbKk4QGyyZ"
+uri = "file://artifacts/shotgun-ninjas-ep3/public/images/scene15-trace.png"
+type = "image"
+title = "massive industrial scanner"
+
+[[generated]]
+id = "g3i30aGX-WqQZKO2CiQQo"
+uri = "file://artifacts/shotgun-ninjas-ep3/public/images/scene16-realization.png"
+type = "image"
+title = "ninja looking at blueprint"
+
+[[generated]]
+id = "oJsBrbwrL6fM6-nF0mjsp"
+uri = "file://artifacts/shotgun-ninjas-ep3/public/images/scene18-ending.png"
+type = "image"
+title = "ninja silhouetted against core"
