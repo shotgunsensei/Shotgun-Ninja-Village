@@ -1,11 +1,13 @@
 import React from "react";
 import { UserSquare, Target, Activity } from "lucide-react";
+import { UniverseFooter } from "@/components/shared/UniverseFooter";
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
 export default function Operators() {
   return (
-    <div className="container mx-auto px-4 py-12 max-w-6xl">
+    <div className="flex flex-col min-h-[100dvh]">
+    <div className="container mx-auto px-4 py-12 max-w-6xl flex-1">
       <div className="mb-12 border-b border-primary/30 pb-6">
         <h1 className="text-5xl md:text-7xl font-display font-bold text-white uppercase tracking-widest mb-2 glitch-text" data-text="OPERATOR FILES">
           OPERATOR FILES
@@ -102,6 +104,8 @@ export default function Operators() {
           </div>
         </div>
       </div>
+    </div>
+    <UniverseFooter />
     </div>
   );
 }

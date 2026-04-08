@@ -1,5 +1,6 @@
 import React from "react";
 import { Cpu, Wrench, ShieldCheck, Terminal, BarChart3, ExternalLink, ChevronRight } from "lucide-react";
+import { UniverseFooter } from "@/components/shared/UniverseFooter";
 
 const recoveredSystems = [
   {
@@ -61,7 +62,8 @@ const extendedNetwork = [
 
 export default function Intel() {
   return (
-    <div className="container mx-auto px-4 py-12 max-w-6xl">
+    <div className="flex flex-col min-h-[100dvh]">
+    <div className="container mx-auto px-4 py-12 max-w-6xl flex-1">
       <div className="mb-12 border-b border-primary/30 pb-6 flex items-center justify-between">
         <div>
           <h1 className="text-5xl md:text-7xl font-display font-bold text-white uppercase tracking-widest mb-2 glitch-text" data-text="FORGE INTEL">
@@ -188,18 +190,8 @@ export default function Intel() {
         })}
       </div>
 
-      <div className="tactical-border bg-card/50 p-6 md:p-8 text-center">
-        <p className="font-mono text-xs text-muted-foreground uppercase tracking-widest mb-3">Part of the Shotgun Ninjas Universe</p>
-        <a
-          href="https://shotgunninjas.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-secondary hover:text-white font-display text-2xl uppercase tracking-widest transition-colors"
-        >
-          ShotgunNinjas.com <ExternalLink size={20} />
-        </a>
-        <p className="font-mono text-xs text-muted-foreground mt-3">The full universe — transmissions, lore, operator intel, and all recovered systems</p>
-      </div>
+    </div>
+    <UniverseFooter />
     </div>
   );
 }

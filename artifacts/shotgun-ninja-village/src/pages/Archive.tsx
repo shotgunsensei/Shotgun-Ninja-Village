@@ -1,118 +1,75 @@
 import React from "react";
-import { Link } from "wouter";
-import { PlayCircle, ExternalLink, ChevronRight, Radio, Users, ShoppingBag } from "lucide-react";
+import { PlayCircle, ChevronRight, Radio } from "lucide-react";
 import { transmissions } from "@/data/transmissions";
+import { UniverseFooter } from "@/components/shared/UniverseFooter";
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
 export default function Archive() {
   return (
-    <div className="container mx-auto px-4 py-12 max-w-6xl">
-      <div className="mb-12 border-b border-primary/30 pb-6 relative">
-        <div className="absolute top-0 right-0 w-24 h-24 bg-primary/10 rounded-full blur-3xl" />
-        <div className="inline-flex items-center gap-2 px-3 py-1 mb-4 border border-secondary/30 bg-secondary/10 text-secondary text-xs font-mono uppercase tracking-widest">
-          <Radio size={12} className="animate-pulse" />
-          Trilogy One — Complete
+    <div className="flex flex-col min-h-[100dvh]">
+      <div className="container mx-auto px-4 py-12 max-w-6xl flex-1">
+        <div className="mb-12 border-b border-primary/30 pb-6 relative">
+          <div className="inline-flex items-center gap-2 px-3 py-1 mb-4 border border-secondary/30 bg-secondary/10 text-secondary text-xs font-mono uppercase tracking-widest">
+            <Radio size={14} /> Signal Archive
+          </div>
+          <h1 className="text-5xl md:text-7xl font-display font-bold text-white uppercase tracking-widest mb-2 glitch-text" data-text="THE ARCHIVE">
+            THE ARCHIVE
+          </h1>
+          <p className="text-muted-foreground font-mono text-sm border-l-2 border-primary pl-4 max-w-lg">
+            Three operations. Three recovered signals. Watch in sequence.
+          </p>
         </div>
-        <h1 className="text-5xl md:text-7xl font-display font-bold text-white uppercase tracking-widest mb-2 glitch-text" data-text="MISSION ARCHIVE">
-          MISSION ARCHIVE
-        </h1>
-        <p className="text-muted-foreground font-mono text-sm md:text-base border-l-2 border-primary pl-4 max-w-2xl">
-          Recovered field transmissions from Kage-9's first operational cycle. Three missions. Three recovered systems. Watch in order.
-        </p>
-      </div>
 
-      <div className="space-y-8">
-        {transmissions.map((tx, i) => (
-          <div key={tx.num} className="tactical-border bg-card p-1 md:p-2 transition-all hover:border-primary group">
-            <div className="flex flex-col md:flex-row gap-0">
-              <div className="w-full md:w-2/5 aspect-video relative overflow-hidden bg-muted">
+        <div className="space-y-6">
+          {transmissions.map((tx) => (
+            <a
+              key={tx.num}
+              href={tx.href}
+              className="group tactical-border bg-card overflow-hidden flex flex-col md:flex-row transition-all hover:border-primary block"
+            >
+              <div className="w-full md:w-2/5 aspect-video relative overflow-hidden">
                 <img
                   src={asset(tx.img)}
                   alt={tx.title}
                   className="w-full h-full object-cover filter brightness-75 contrast-125 group-hover:scale-105 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent" />
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent to-background/40" />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent to-background/60" />
                 <div className="absolute top-3 left-3 px-2 py-1 bg-background/80 backdrop-blur border border-primary/40 font-mono text-[10px] text-primary uppercase tracking-widest">
                   Transmission {tx.num}
                 </div>
-                <div className="absolute bottom-3 left-3 px-2 py-1 bg-primary/90 text-white font-mono text-[10px] uppercase tracking-widest">
-                  Decrypted
-                </div>
               </div>
 
-              <div className="w-full md:w-3/5 p-5 md:py-6 md:px-8 flex flex-col justify-center">
-                <h2 className="text-3xl md:text-4xl font-display text-white uppercase tracking-wider mb-3 group-hover:text-primary transition-colors">
+              <div className="w-full md:w-3/5 p-6 md:p-8 flex flex-col justify-center">
+                <h2 className="text-3xl md:text-4xl font-display text-white uppercase tracking-widest mb-3 group-hover:text-primary transition-colors">
                   {tx.title}
                 </h2>
-
-                <p className="text-muted-foreground font-mono text-sm leading-relaxed mb-3">
+                <p className="text-muted-foreground font-mono text-sm leading-relaxed mb-3 max-w-xl">
                   {tx.brief}
                 </p>
-
                 <div className="border-l-2 border-border pl-3 mb-4">
                   <p className="font-mono text-sm italic text-white/70">"{tx.quote}"</p>
                 </div>
-
-                <div className="flex flex-wrap items-center gap-3 mb-5">
+                <div className="flex flex-wrap items-center gap-4 mb-4">
                   <span className="text-xs font-mono uppercase tracking-widest text-secondary bg-secondary/10 px-2 py-1 border border-secondary/20">
                     {tx.system}
                   </span>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-3">
-                  <a
-                    href={tx.href}
-                    className="clip-diagonal bg-primary hover:bg-primary/90 text-white px-6 py-2 font-display text-lg uppercase tracking-widest transition-all inline-flex items-center gap-2"
-                  >
-                    <PlayCircle size={18} /> Watch Transmission
-                  </a>
-
                   {tx.next && (
-                    <span className="text-xs font-mono text-muted-foreground inline-flex items-center gap-1">
-                      <ChevronRight size={12} /> {tx.next}
+                    <span className="text-xs font-mono text-muted-foreground">
+                      {tx.next}
                     </span>
                   )}
                 </div>
+                <div className="clip-diagonal bg-primary/20 border border-primary/40 text-primary px-4 py-2 font-display text-sm uppercase tracking-widest inline-flex items-center gap-2 self-start group-hover:bg-primary group-hover:text-white transition-all">
+                  <PlayCircle size={16} /> Watch Transmission
+                </div>
               </div>
-            </div>
-          </div>
-        ))}
+            </a>
+          ))}
+        </div>
       </div>
 
-      <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Link href="/community" className="tactical-border bg-card p-5 group hover:border-secondary transition-all flex items-center gap-4">
-          <div className="p-2 border border-secondary/30 bg-background">
-            <Users size={20} className="text-secondary" />
-          </div>
-          <div>
-            <h4 className="font-display text-lg text-white uppercase tracking-widest group-hover:text-secondary transition-colors">Discuss the Trilogy</h4>
-            <p className="font-mono text-xs text-muted-foreground">Join the Lore & Episodes channel in the village.</p>
-          </div>
-        </Link>
-        <Link href="/merch" className="tactical-border bg-card p-5 group hover:border-orange-500 transition-all flex items-center gap-4">
-          <div className="p-2 border border-orange-500/30 bg-background">
-            <ShoppingBag size={20} className="text-orange-500" />
-          </div>
-          <div>
-            <h4 className="font-display text-lg text-white uppercase tracking-widest group-hover:text-orange-500 transition-colors">Episode Drop Merch</h4>
-            <p className="font-mono text-xs text-muted-foreground">Exclusive tees and gear from each transmission.</p>
-          </div>
-        </Link>
-      </div>
-
-      <div className="mt-8 tactical-border bg-card/50 p-6 md:p-8 text-center">
-        <p className="font-mono text-xs text-muted-foreground uppercase tracking-widest mb-3">Part of the Shotgun Ninjas Universe</p>
-        <a
-          href="https://shotgunninjas.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-secondary hover:text-white font-display text-2xl uppercase tracking-widest transition-colors"
-        >
-          ShotgunNinjas.com <ExternalLink size={20} />
-        </a>
-      </div>
+      <UniverseFooter exclude={["archive"]} />
     </div>
   );
 }

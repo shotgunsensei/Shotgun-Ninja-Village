@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import { ChevronRight, PlayCircle, UserSquare, ExternalLink, Terminal, Wrench, Cpu, BarChart3, Mail, Radio, Globe, ArrowUpRight, Users, ShoppingBag, Database } from "lucide-react";
 import { motion } from "framer-motion";
 import { transmissions } from "@/data/transmissions";
+import { UniverseFooter } from "@/components/shared/UniverseFooter";
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
@@ -332,75 +333,66 @@ export default function Home() {
 
       {/* ── ECOSYSTEM TRIAD ── */}
       <section className="border-t border-border">
-        <div className="container mx-auto px-4 py-16 md:py-20 max-w-6xl">
+        <div className="container mx-auto px-4 py-14 md:py-18 max-w-6xl">
           <motion.div {...fadeUp}>
-            <div className="mb-10 text-center">
+            <div className="mb-8 text-center">
               <h2 className="text-4xl md:text-5xl font-display text-white uppercase tracking-widest mb-2">
                 ENTER THE VILLAGE
               </h2>
-              <p className="text-muted-foreground font-mono text-sm max-w-xl mx-auto">
-                Watch the story. Join the community. Support the mission.
+              <p className="text-muted-foreground font-mono text-sm max-w-md mx-auto">
+                Watch. Connect. Support. Three paths into the network.
               </p>
             </div>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <motion.div {...fadeUp}>
-              <Link
-                href="/archive"
-                className="tactical-border bg-card p-6 group hover:border-primary transition-all block h-full"
-              >
-                <div className="p-3 border border-primary/30 bg-background inline-block mb-4">
-                  <Database size={24} className="text-primary" />
+              <Link href="/archive" className="tactical-border bg-card p-5 group hover:border-primary transition-all block h-full">
+                <div className="p-2.5 border border-primary/30 bg-background inline-block mb-3">
+                  <Database size={20} className="text-primary" />
                 </div>
-                <h3 className="text-2xl font-display text-white uppercase tracking-widest mb-2 group-hover:text-primary transition-colors">
+                <h3 className="text-xl font-display text-white uppercase tracking-widest mb-1.5 group-hover:text-primary transition-colors">
                   Mission Archive
                 </h3>
-                <p className="text-muted-foreground font-mono text-xs leading-relaxed mb-4">
-                  Three recovered transmissions. The complete first trilogy. Watch Kage-9's journey from signal hunter to system recovery.
+                <p className="text-muted-foreground font-mono text-xs leading-relaxed mb-3">
+                  Three recovered transmissions. The full trilogy — from signal breach to system recovery.
                 </p>
-                <span className="clip-diagonal bg-primary/20 border border-primary/40 text-primary px-4 py-1.5 font-display text-sm uppercase tracking-widest inline-flex items-center gap-1.5 group-hover:bg-primary group-hover:text-white transition-all">
-                  Watch Now <ChevronRight size={14} />
+                <span className="clip-diagonal bg-primary/20 border border-primary/40 text-primary px-3 py-1 font-display text-sm uppercase tracking-widest inline-flex items-center gap-1.5 group-hover:bg-primary group-hover:text-white transition-all">
+                  Watch Now <ChevronRight size={12} />
                 </span>
               </Link>
             </motion.div>
 
             <motion.div {...fadeUp}>
-              <Link
-                href="/community"
-                className="tactical-border bg-card p-6 group hover:border-secondary transition-all block h-full"
-              >
-                <div className="p-3 border border-secondary/30 bg-background inline-block mb-4">
-                  <Users size={24} className="text-secondary" />
+              <Link href="/community" className="tactical-border bg-card p-5 group hover:border-secondary transition-all block h-full">
+                <div className="p-2.5 border border-secondary/30 bg-background inline-block mb-3">
+                  <Users size={20} className="text-secondary" />
                 </div>
-                <h3 className="text-2xl font-display text-white uppercase tracking-widest mb-2 group-hover:text-secondary transition-colors">
+                <h3 className="text-xl font-display text-white uppercase tracking-widest mb-1.5 group-hover:text-secondary transition-colors">
                   The Village
                 </h3>
-                <p className="text-muted-foreground font-mono text-xs leading-relaxed mb-4">
-                  Connect with operators, discuss lore, share builds, and help shape the future of the Shotgun Ninjas network.
+                <p className="text-muted-foreground font-mono text-xs leading-relaxed mb-3">
+                  Discuss lore, share builds, and shape the future of the Shotgun Ninjas network.
                 </p>
-                <span className="clip-diagonal bg-secondary/20 border border-secondary/40 text-secondary px-4 py-1.5 font-display text-sm uppercase tracking-widest inline-flex items-center gap-1.5 group-hover:bg-secondary group-hover:text-white transition-all">
-                  Enter Community <ChevronRight size={14} />
+                <span className="clip-diagonal bg-secondary/20 border border-secondary/40 text-secondary px-3 py-1 font-display text-sm uppercase tracking-widest inline-flex items-center gap-1.5 group-hover:bg-secondary group-hover:text-white transition-all">
+                  Enter Community <ChevronRight size={12} />
                 </span>
               </Link>
             </motion.div>
 
             <motion.div {...fadeUp}>
-              <Link
-                href="/merch"
-                className="tactical-border bg-card p-6 group hover:border-orange-500 transition-all block h-full"
-              >
-                <div className="p-3 border border-orange-500/30 bg-background inline-block mb-4">
-                  <ShoppingBag size={24} className="text-orange-500" />
+              <Link href="/merch" className="tactical-border bg-card p-5 group hover:border-orange-500 transition-all block h-full">
+                <div className="p-2.5 border border-orange-500/30 bg-background inline-block mb-3">
+                  <ShoppingBag size={20} className="text-orange-500" />
                 </div>
-                <h3 className="text-2xl font-display text-white uppercase tracking-widest mb-2 group-hover:text-orange-500 transition-colors">
+                <h3 className="text-xl font-display text-white uppercase tracking-widest mb-1.5 group-hover:text-orange-500 transition-colors">
                   Ronin Supply
                 </h3>
-                <p className="text-muted-foreground font-mono text-xs leading-relaxed mb-4">
-                  Premium merch from the universe. Every purchase supports the village and fuels future transmissions.
+                <p className="text-muted-foreground font-mono text-xs leading-relaxed mb-3">
+                  Operator-grade gear. Every purchase directly funds the next transmission.
                 </p>
-                <span className="clip-diagonal bg-orange-500/20 border border-orange-500/40 text-orange-500 px-4 py-1.5 font-display text-sm uppercase tracking-widest inline-flex items-center gap-1.5 group-hover:bg-orange-500 group-hover:text-white transition-all">
-                  Browse Merch <ChevronRight size={14} />
+                <span className="clip-diagonal bg-orange-500/20 border border-orange-500/40 text-orange-500 px-3 py-1 font-display text-sm uppercase tracking-widest inline-flex items-center gap-1.5 group-hover:bg-orange-500 group-hover:text-white transition-all">
+                  Browse Merch <ChevronRight size={12} />
                 </span>
               </Link>
             </motion.div>
@@ -508,29 +500,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── FOOTER ── */}
-      <footer className="border-t border-border bg-card/20">
-        <div className="container mx-auto px-4 py-10 max-w-6xl">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="text-center md:text-left">
-              <p className="font-display text-lg text-white uppercase tracking-widest mb-1">
-                Shotgun Ninja Village
-              </p>
-              <p className="font-mono text-xs text-muted-foreground">
-                Part of the <a href="https://shotgunninjas.com" target="_blank" rel="noopener noreferrer" className="text-secondary hover:text-white transition-colors">Shotgun Ninjas</a> universe
-              </p>
-            </div>
-            <a
-              href="https://shotgunninjas.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-secondary hover:text-white font-mono text-sm uppercase tracking-widest transition-colors"
-            >
-              ShotgunNinjas.com <ExternalLink size={14} />
-            </a>
-          </div>
-        </div>
-      </footer>
+      <UniverseFooter />
     </div>
   );
 }
