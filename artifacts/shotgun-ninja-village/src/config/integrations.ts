@@ -13,8 +13,23 @@ export const communityConfig = {
   mode: (import.meta.env.VITE_COMMUNITY_MODE as string) || "mock",
   discourse: {
     url: import.meta.env.VITE_DISCOURSE_URL as string || "",
-    apiKey: import.meta.env.VITE_DISCOURSE_API_KEY as string || "",
+    embedEnabled: (import.meta.env.VITE_DISCOURSE_EMBED as string) === "true",
   },
+  sso: {
+    enabled: (import.meta.env.VITE_DISCOURSE_SSO as string) === "true",
+    loginUrl: import.meta.env.VITE_DISCOURSE_SSO_LOGIN_URL as string || "",
+    logoutUrl: import.meta.env.VITE_DISCOURSE_SSO_LOGOUT_URL as string || "",
+    callbackPath: "/auth/discourse/callback",
+  },
+  signup: {
+    url: import.meta.env.VITE_DISCOURSE_SIGNUP_URL as string || "",
+    fallbackUrl: "https://shotgunninjas.com/join",
+  },
+  groups: {
+    supporter: "ronin-supporters",
+    founder: "founding-ninjas",
+  },
+  gatedCategories: ["ronin-lounge", "founders-chamber"] as string[],
   recommendedSubdomain: "community.shotgunninjavillage.com",
 };
 
@@ -29,4 +44,12 @@ export function isLiveStore(): boolean {
 
 export function isLiveCommunity(): boolean {
   return communityConfig.mode === "live" && !!communityConfig.discourse.url;
+}
+
+export function isSsoEnabled(): boolean {
+  return communityConfig.sso.enabled && !!communityConfig.sso.loginUrl;
+}
+
+export function isEmbedEnabled(): boolean {
+  return isLiveCommunity() && communityConfig.discourse.embedEnabled;
 }

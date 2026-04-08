@@ -59,8 +59,8 @@ See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and pa
   - `/community` — The Village: community hub with 7 category channels, trending topics feed, 3-tier member perks
   - `/merch` — Ronin Supply: premium merch storefront with 8 mock products, 6 collections, limited drops section, collection filtering
 - **Commerce Architecture**: Shopify-ready service layer (`src/services/store.ts`) with mock mode default; goes live via VITE_SHOPIFY_DOMAIN + VITE_SHOPIFY_STOREFRONT_TOKEN env vars
-- **Community Architecture**: Discourse-ready service layer (`src/services/community.ts`) with mock mode default; goes live via VITE_DISCOURSE_URL env var
-- **Integration Config**: `src/config/integrations.ts` — provider config stubs for Shopify, Discourse, and future auth
+- **Community Architecture**: Discourse-ready service layer (`src/services/community.ts`) with async data loading; mock mode default; goes live via VITE_DISCOURSE_URL + VITE_COMMUNITY_MODE=live env vars. SSO via VITE_DISCOURSE_SSO=true + VITE_DISCOURSE_SSO_LOGIN_URL. Embed via VITE_DISCOURSE_EMBED=true. Signup via VITE_DISCOURSE_SIGNUP_URL (fallback: shotgunninjas.com/join). Gated categories: ronin-lounge, founders-chamber. Discourse group mapping: ronin-supporters, founding-ninjas.
+- **Integration Config**: `src/config/integrations.ts` — provider config for Shopify, Discourse (URL, SSO, embed, signup, groups, gated categories), and auth. No API keys in client code.
 - **Routing**: wouter with BASE_URL support; image paths use `asset()` helper for subpath deployment safety
 - **Fonts**: Space Grotesk (body) + Teko (display)
 - **Palette**: deep red (#B91C1C/#DC2626), electric blue (#3B82F6/#60A5FA), near-black (#0A0A0F)
@@ -72,7 +72,7 @@ See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and pa
   - `src/pages/Home.tsx`, `Archive.tsx`, `Operators.tsx`, `Grid.tsx`, `Arsenal.tsx`, `Intel.tsx`, `Community.tsx`, `Merch.tsx`
   - `src/data/transmissions.ts` — shared trilogy config (single source of truth)
   - `src/data/products.ts` — 8 mock products, 6 collections with full variant/SKU data model (Printful-ready)
-  - `src/data/community.ts` — 7 forum categories, 5 featured topics, 6 member perks across 3 tiers
+  - `src/data/community.ts` — 8 forum categories (7 open + 1 gated) with Discourse IDs, 6 featured topics with excerpts/avatars, 9 member perks across 3 tiers, community stats
   - `src/services/store.ts` — store service abstraction (mock → Shopify transition)
   - `src/services/community.ts` — community service abstraction (mock → Discourse transition)
   - `src/config/integrations.ts` — env-based config for Shopify, Discourse, auth
