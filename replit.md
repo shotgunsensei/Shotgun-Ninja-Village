@@ -49,23 +49,33 @@ See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and pa
 - **Stack**: React + Vite + Tailwind CSS + Framer Motion + wouter
 - **Description**: Immersive cyber-noir hub for the Shotgun Ninjas universe — tactical command interface aesthetic
 - **Port**: 24938 (previewPath: `/`)
-- **Pages**: 6 sections
-  - `/` — Signal Feed (Home): cinematic hero, priority nodes grid
-  - `/archive` — The Archive: 3 episodes (EP1 playable, EP2-3 coming soon)
+- **Pages**: 8 sections
+  - `/` — Signal Feed (Home): cinematic hero, priority nodes grid, ecosystem triad (Archive/Community/Merch), universe links
+  - `/archive` — The Archive: 3 episodes (EP1 playable, EP2-3 coming soon) + cross-links to Community & Merch
   - `/operators` — Operator Files: Kage-9 classified dossier with character image
   - `/grid` — The Grid Map: 4 world zones with AI images + threat archetypes
   - `/arsenal` — The Arsenal: 5 gear items with AI-generated images
   - `/intel` — Forge Intel: 4 products mapped to in-universe tactical platforms
+  - `/community` — The Village: community hub with 7 category channels, trending topics feed, 3-tier member perks
+  - `/merch` — Ronin Supply: premium merch storefront with 8 mock products, 6 collections, limited drops section, collection filtering
+- **Commerce Architecture**: Shopify-ready service layer (`src/services/store.ts`) with mock mode default; goes live via VITE_SHOPIFY_DOMAIN + VITE_SHOPIFY_STOREFRONT_TOKEN env vars
+- **Community Architecture**: Discourse-ready service layer (`src/services/community.ts`) with mock mode default; goes live via VITE_DISCOURSE_URL env var
+- **Integration Config**: `src/config/integrations.ts` — provider config stubs for Shopify, Discourse, and future auth
 - **Routing**: wouter with BASE_URL support; image paths use `asset()` helper for subpath deployment safety
 - **Fonts**: Space Grotesk (body) + Teko (display)
 - **Palette**: deep red (#B91C1C/#DC2626), electric blue (#3B82F6/#60A5FA), near-black (#0A0A0F)
 - **PWA**: Installable on mobile/desktop via manifest.json + service worker; install button in sidebar + mobile header (auto-hides when installed)
 - **Key files**:
-  - `src/App.tsx` — wouter router with 6 routes
-  - `src/components/layout/Layout.tsx` — tactical sidebar layout with install button
+  - `src/App.tsx` — wouter router with 8 routes
+  - `src/components/layout/Layout.tsx` — tactical sidebar layout with install button, Community + Ronin Supply nav, Main Site link
   - `src/hooks/useInstallPrompt.ts` — PWA install prompt hook (beforeinstallprompt/display-mode detection)
-  - `src/pages/Home.tsx`, `Archive.tsx`, `Operators.tsx`, `Grid.tsx`, `Arsenal.tsx`, `Intel.tsx`
+  - `src/pages/Home.tsx`, `Archive.tsx`, `Operators.tsx`, `Grid.tsx`, `Arsenal.tsx`, `Intel.tsx`, `Community.tsx`, `Merch.tsx`
   - `src/data/transmissions.ts` — shared trilogy config (single source of truth)
+  - `src/data/products.ts` — 8 mock products, 6 collections with full variant/SKU data model (Printful-ready)
+  - `src/data/community.ts` — 7 forum categories, 5 featured topics, 6 member perks across 3 tiers
+  - `src/services/store.ts` — store service abstraction (mock → Shopify transition)
+  - `src/services/community.ts` — community service abstraction (mock → Discourse transition)
+  - `src/config/integrations.ts` — env-based config for Shopify, Discourse, auth
   - `src/index.css` — cyber-noir theme with glitch effects, scanlines, tactical borders
   - `public/manifest.json` — PWA manifest (standalone, theme #B91C1C)
   - `public/sw.js` — minimal service worker for installability

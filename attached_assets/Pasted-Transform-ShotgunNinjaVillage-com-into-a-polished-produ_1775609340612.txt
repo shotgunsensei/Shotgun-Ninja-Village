@@ -1,0 +1,264 @@
+Transform ShotgunNinjaVillage.com into a polished, production-minded community and commerce platform that expands the Shotgun Ninjas universe while creating a fast, low-friction path to monetization.
+
+CORE OBJECTIVE
+Evolve the site from a brand/lore destination into a living ecosystem with:
+1. a premium merch storefront
+2. a branded community forum hub
+3. future-ready account/member perks architecture
+4. strong internal pathways between content, community, and commerce
+
+This should feel like a premium cyber-ninja village experience, not a generic website with bolted-on store/forum pages.
+
+PRIMARY BUSINESS GOALS
+- monetize quickly through branded merch
+- increase repeat visits with community engagement
+- build an owned audience around the Shotgun Ninjas universe
+- create future upsell paths into supporter perks, gated content, digital drops, and memberships
+- preserve strong design consistency and premium brand perception
+
+BRAND / CREATIVE DIRECTION
+- visual identity should remain aligned with Shotgun Ninjas branding
+- premium, dark, cinematic, futuristic cyber-ninja aesthetic
+- red-accented identity with sharp clean UI
+- should feel immersive and intentional, not cluttered
+- strong UX hierarchy, clean spacing, modern cards, polished CTAs
+- mobile responsive and production-ready
+
+SITE ARCHITECTURE TO ADD
+Build or refine the site so it has these major sections:
+- Home
+- Lore / Episodes / Story World (if already present, preserve and enhance)
+- Community
+- Merch
+- About / Universe / Brand
+- optional future Account entry point
+
+TOP-LEVEL IMPLEMENTATION GOALS
+
+1. COMMUNITY HUB
+Add a new first-class Community section to the site.
+
+Community requirements:
+- Add header navigation entry for Community
+- Create a branded Community landing page
+- Position it as the central gathering place for fans, supporters, creators, and followers of the Shotgun Ninjas universe
+- The page should include:
+  - cinematic hero section
+  - supporting description text
+  - featured categories
+  - latest/trending discussions preview
+  - member perks teaser
+  - CTA buttons to join or explore the community
+
+Use these starter category concepts:
+- Dojo Announcements
+- Village Gate
+- Lore & Episodes
+- Arsenal Builds
+- The Forge
+- Merch Flex
+- Support / Suggestions
+
+Community architecture guidance:
+- Design the site to be ready for Discourse integration
+- Recommend best implementation path between:
+  1. forum.shotgunninjavillage.com
+  2. community.shotgunninjavillage.com
+  3. linked or embedded community experience
+- Create a clean configuration layer for future Discourse integration
+- Use mock data or placeholder topic previews if no live forum is connected yet
+- Add future-ready placeholders for:
+  - login/signup
+  - badges
+  - profile flair
+  - supporter-only/private chambers
+  - SSO/account sync later
+
+Community UX requirements:
+- must feel native to the site
+- no generic forum styling
+- create reusable sections/components for:
+  - community hero
+  - category cards
+  - featured topics list
+  - join-community CTA
+  - supporter perks teaser
+  - latest discussions preview
+
+2. MERCH / STORE HUB
+Add a premium merch experience to the site.
+
+Store requirements:
+- Add header navigation entry for Merch
+- Create a branded merch landing page that can be called one of:
+  - Village Market
+  - Ronin Supply
+  - The Arsenal Store
+Choose whichever best matches current tone and layout
+
+Merch page should include:
+- hero/banner section
+- featured collections
+- bestseller or highlighted products section
+- limited drop section
+- category filter or collection filter UI
+- product grid
+- trust/conversion messaging
+- story-driven copy tied into the Shotgun Ninjas universe
+
+Starter product collection concepts:
+- Core Brand
+- Kage-9
+- Episode Drops
+- Stickers & Small Goods
+- Limited Edition
+- Founders / Supporter Gear
+
+Build reusable storefront components:
+- collection cards
+- product cards
+- product grid
+- product detail page template or modal
+- price display
+- compare-at price support
+- badge support (new, bestseller, limited drop, supporters only)
+- add-to-cart / buy now CTA
+- cart drawer or cart page structure if feasible
+
+Store architecture guidance:
+- architect the merch system for future Shopify integration
+- code should support two possible paths:
+  1. simple external Shopify checkout / buy button path
+  2. headless Shopify Storefront API path
+- Prefer architecture that starts simple but scales well
+- Use a service layer and product model abstraction
+- Use mock product data if live store integration is not yet connected
+- Do not hardcode secrets
+- Use environment variable placeholders for any commerce integration
+
+Merch data model should support:
+- id
+- handle
+- title
+- description
+- images
+- variants
+- sizes/colors
+- SKU
+- price
+- compare-at price
+- collections
+- tags
+- availability
+- limited drop flag
+- featured flag
+
+Make it Printful-friendly:
+- support variant-heavy products
+- support size/color product options
+- support SKU-based mapping
+- include “made to order” messaging
+- add shipping/fulfillment expectation copy
+- prepare for future Shopify + Printful synced catalog flow
+
+3. SHARED ECOSYSTEM / MONETIZATION PATH
+Create a visible connection between story, community, and commerce.
+
+Add a shared ecosystem section somewhere prominent that explains:
+- explore the universe
+- join the community
+- support the village through merch
+- unlock future perks and supporter status
+
+Add strategic CTAs across the site:
+- on lore/episode pages: point users toward community discussion and themed merch
+- on merch pages: point buyers toward community and future supporter perks
+- on community pages: point users toward merch and limited drops
+- in footer: reinforce the larger Shotgun Ninjas ecosystem
+
+Future member perk concepts to plan for:
+- Founding Ninja badge
+- Ronin Supporter role
+- merch buyer flair
+- private chambers / members-only area
+- early access drops
+- behind-the-scenes lore content
+- digital collectibles / downloadable content
+- supporter-only announcements
+
+4. ACCOUNT / IDENTITY PREPARATION
+Do not fully build auth unless it is already part of the stack, but prepare the architecture and UX.
+
+Prepare future-ready account pathways for:
+- user profile entry point
+- sign in / sign up placeholders
+- supporter badge concept
+- buyer perks concept
+- future SSO path between site and forum
+- future commerce-to-community sync path
+
+Design future event-driven logic conceptually so that later:
+- a Shopify purchase can trigger a welcome flow
+- a purchase can unlock profile flair
+- a supporter purchase can unlock a gated community chamber
+- an order can trigger email onboarding into the village
+Create clean architecture notes and service stubs for this flow if appropriate
+
+5. DESIGN / UX STANDARDS
+- preserve and extend the site’s current design language
+- do not make anything feel generic or templated
+- do not use cheesy fantasy copy or overblown text
+- keep it premium, cinematic, sleek, and modern
+- responsive on desktop and mobile
+- use strong CTA hierarchy
+- avoid clutter and repetition
+- keep navigation clean and obvious
+- use reusable components where practical
+
+6. TECHNICAL STANDARDS
+- production-minded code only
+- modular, maintainable structure
+- create or improve reusable components
+- add comments where important architectural choices are made
+- avoid hardcoding platform secrets
+- use environment variables and config files where appropriate
+- support mock data mode when third-party integrations are not connected
+- include clean fallback states, loading states, and error states for dynamic sections
+
+7. IF THE SITE STACK SUPPORTS IT
+If this is a React / Next / Vite / similar modern web app:
+- create clean component organization
+- create service layers for community/store data
+- add page-level routes cleanly
+- create mock JSON/data modules if needed
+- create config modules for future Discourse and Shopify integration
+
+If this is a simpler static site:
+- still create the pages/sections and structure cleanly
+- make integration points obvious and documented
+- simulate dynamic sections with mock data
+
+8. REQUIRED OUTPUT AFTER IMPLEMENTATION
+After making changes, provide:
+- exact files changed
+- routes/pages added
+- components created
+- any mock data structures added
+- any config/env variables needed
+- suggested Shopify integration path:
+  - MVP path
+  - headless future path
+- suggested Printful integration path
+- suggested Discourse integration path
+- recommended DNS/subdomain approach
+- future SSO/account sync path
+- webhook/event-sync plan for purchase-based perks
+- what is completed now vs what still must be done outside Replit
+
+IMPORTANT CONSTRAINTS
+- preserve canonical identity of ShotgunNinjaVillage.com
+- do not convert this into a redirect site
+- do not make community and merch feel disconnected from the world/lore of the brand
+- prioritize launch speed, monetization, and long-term scalability
+- think like a product architect, brand strategist, and frontend engineer all at once
+- final result should feel like a premium branded universe hub with monetization built in

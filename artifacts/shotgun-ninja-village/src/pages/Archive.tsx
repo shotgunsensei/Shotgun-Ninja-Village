@@ -1,5 +1,6 @@
 import React from "react";
-import { PlayCircle, ExternalLink, ChevronRight, Radio } from "lucide-react";
+import { Link } from "wouter";
+import { PlayCircle, ExternalLink, ChevronRight, Radio, Users, ShoppingBag } from "lucide-react";
 import { transmissions } from "@/data/transmissions";
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
@@ -80,7 +81,28 @@ export default function Archive() {
         ))}
       </div>
 
-      <div className="mt-16 tactical-border bg-card/50 p-6 md:p-8 text-center">
+      <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Link href="/community" className="tactical-border bg-card p-5 group hover:border-secondary transition-all flex items-center gap-4">
+          <div className="p-2 border border-secondary/30 bg-background">
+            <Users size={20} className="text-secondary" />
+          </div>
+          <div>
+            <h4 className="font-display text-lg text-white uppercase tracking-widest group-hover:text-secondary transition-colors">Discuss the Trilogy</h4>
+            <p className="font-mono text-xs text-muted-foreground">Join the Lore & Episodes channel in the village.</p>
+          </div>
+        </Link>
+        <Link href="/merch" className="tactical-border bg-card p-5 group hover:border-orange-500 transition-all flex items-center gap-4">
+          <div className="p-2 border border-orange-500/30 bg-background">
+            <ShoppingBag size={20} className="text-orange-500" />
+          </div>
+          <div>
+            <h4 className="font-display text-lg text-white uppercase tracking-widest group-hover:text-orange-500 transition-colors">Episode Drop Merch</h4>
+            <p className="font-mono text-xs text-muted-foreground">Exclusive tees and gear from each transmission.</p>
+          </div>
+        </Link>
+      </div>
+
+      <div className="mt-8 tactical-border bg-card/50 p-6 md:p-8 text-center">
         <p className="font-mono text-xs text-muted-foreground uppercase tracking-widest mb-3">Part of the Shotgun Ninjas Universe</p>
         <a
           href="https://shotgunninjas.com"
@@ -90,7 +112,6 @@ export default function Archive() {
         >
           ShotgunNinjas.com <ExternalLink size={20} />
         </a>
-        <p className="font-mono text-xs text-muted-foreground mt-3">Future transmissions, expanded lore, and classified field reports</p>
       </div>
     </div>
   );

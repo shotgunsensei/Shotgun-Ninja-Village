@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "wouter";
-import { ChevronRight, PlayCircle, UserSquare, ExternalLink, Terminal, Wrench, Cpu, BarChart3, Mail, Radio, Globe, ArrowUpRight } from "lucide-react";
+import { ChevronRight, PlayCircle, UserSquare, ExternalLink, Terminal, Wrench, Cpu, BarChart3, Mail, Radio, Globe, ArrowUpRight, Users, ShoppingBag, Database } from "lucide-react";
 import { motion } from "framer-motion";
 import { transmissions } from "@/data/transmissions";
 
@@ -328,6 +328,84 @@ export default function Home() {
             })}
           </div>
         </motion.div>
+      </section>
+
+      {/* ── ECOSYSTEM TRIAD ── */}
+      <section className="border-t border-border">
+        <div className="container mx-auto px-4 py-16 md:py-20 max-w-6xl">
+          <motion.div {...fadeUp}>
+            <div className="mb-10 text-center">
+              <h2 className="text-4xl md:text-5xl font-display text-white uppercase tracking-widest mb-2">
+                ENTER THE VILLAGE
+              </h2>
+              <p className="text-muted-foreground font-mono text-sm max-w-xl mx-auto">
+                Watch the story. Join the community. Support the mission.
+              </p>
+            </div>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <motion.div {...fadeUp}>
+              <Link
+                href="/archive"
+                className="tactical-border bg-card p-6 group hover:border-primary transition-all block h-full"
+              >
+                <div className="p-3 border border-primary/30 bg-background inline-block mb-4">
+                  <Database size={24} className="text-primary" />
+                </div>
+                <h3 className="text-2xl font-display text-white uppercase tracking-widest mb-2 group-hover:text-primary transition-colors">
+                  Mission Archive
+                </h3>
+                <p className="text-muted-foreground font-mono text-xs leading-relaxed mb-4">
+                  Three recovered transmissions. The complete first trilogy. Watch Kage-9's journey from signal hunter to system recovery.
+                </p>
+                <span className="clip-diagonal bg-primary/20 border border-primary/40 text-primary px-4 py-1.5 font-display text-sm uppercase tracking-widest inline-flex items-center gap-1.5 group-hover:bg-primary group-hover:text-white transition-all">
+                  Watch Now <ChevronRight size={14} />
+                </span>
+              </Link>
+            </motion.div>
+
+            <motion.div {...fadeUp}>
+              <Link
+                href="/community"
+                className="tactical-border bg-card p-6 group hover:border-secondary transition-all block h-full"
+              >
+                <div className="p-3 border border-secondary/30 bg-background inline-block mb-4">
+                  <Users size={24} className="text-secondary" />
+                </div>
+                <h3 className="text-2xl font-display text-white uppercase tracking-widest mb-2 group-hover:text-secondary transition-colors">
+                  The Village
+                </h3>
+                <p className="text-muted-foreground font-mono text-xs leading-relaxed mb-4">
+                  Connect with operators, discuss lore, share builds, and help shape the future of the Shotgun Ninjas network.
+                </p>
+                <span className="clip-diagonal bg-secondary/20 border border-secondary/40 text-secondary px-4 py-1.5 font-display text-sm uppercase tracking-widest inline-flex items-center gap-1.5 group-hover:bg-secondary group-hover:text-white transition-all">
+                  Enter Community <ChevronRight size={14} />
+                </span>
+              </Link>
+            </motion.div>
+
+            <motion.div {...fadeUp}>
+              <Link
+                href="/merch"
+                className="tactical-border bg-card p-6 group hover:border-orange-500 transition-all block h-full"
+              >
+                <div className="p-3 border border-orange-500/30 bg-background inline-block mb-4">
+                  <ShoppingBag size={24} className="text-orange-500" />
+                </div>
+                <h3 className="text-2xl font-display text-white uppercase tracking-widest mb-2 group-hover:text-orange-500 transition-colors">
+                  Ronin Supply
+                </h3>
+                <p className="text-muted-foreground font-mono text-xs leading-relaxed mb-4">
+                  Premium merch from the universe. Every purchase supports the village and fuels future transmissions.
+                </p>
+                <span className="clip-diagonal bg-orange-500/20 border border-orange-500/40 text-orange-500 px-4 py-1.5 font-display text-sm uppercase tracking-widest inline-flex items-center gap-1.5 group-hover:bg-orange-500 group-hover:text-white transition-all">
+                  Browse Merch <ChevronRight size={14} />
+                </span>
+              </Link>
+            </motion.div>
+          </div>
+        </div>
       </section>
 
       {/* ── JOIN THE ARCHIVE ── */}

@@ -9,6 +9,8 @@ import Operators from "@/pages/Operators";
 import Grid from "@/pages/Grid";
 import Arsenal from "@/pages/Arsenal";
 import Intel from "@/pages/Intel";
+import Community from "@/pages/Community";
+import Merch from "@/pages/Merch";
 
 const pageVariants = {
   initial: { opacity: 0, y: 12 },
@@ -37,6 +39,8 @@ function Router() {
           <Route path="/grid">{() => <AnimatedPage><Grid /></AnimatedPage>}</Route>
           <Route path="/arsenal">{() => <AnimatedPage><Arsenal /></AnimatedPage>}</Route>
           <Route path="/intel">{() => <AnimatedPage><Intel /></AnimatedPage>}</Route>
+          <Route path="/community">{() => <AnimatedPage><Community /></AnimatedPage>}</Route>
+          <Route path="/merch">{() => <AnimatedPage><Merch /></AnimatedPage>}</Route>
           <Route>{() => <AnimatedPage><NotFound /></AnimatedPage>}</Route>
         </Switch>
       </AnimatePresence>
