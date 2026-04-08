@@ -1,0 +1,61 @@
+Update this project so shotgunninjavillage.com clearly connects users to shotgunninjas.com as its parent brand and broader ecosystem.
+
+Goal:
+Create strong, tasteful, brand-consistent internal linking from Shotgun Ninja Village to ShotgunNinjas.com without making it feel spammy or cluttered.
+
+What I want added:
+1. Header / Navigation
+- Add a visible nav item linking to https://shotgunninjas.com
+- Suggested labels:
+  - Shotgun Ninjas
+  - Main Site
+  - Explore the Arsenal
+- Choose the label that best matches the current site tone and layout
+
+2. Footer
+- Add a footer section called something like:
+  - Part of the Shotgun Ninjas Universe
+  - Explore More from Shotgun Ninjas
+  - Visit the Main Shotgun Ninjas Site
+- Include a short 1-2 sentence brand connection blurb
+- Add a prominent link/button to https://shotgunninjas.com
+
+3. Homepage section
+- Add a polished section somewhere on the homepage that introduces ShotgunNinjas.com as the main ecosystem / broader brand destination
+- Include:
+  - short headline
+  - short descriptive paragraph
+  - CTA button linking to https://shotgunninjas.com
+- Tone should be cinematic, futuristic, ninja-tech, and premium
+
+4. Optional contextual links
+- Where natural, add 1-3 contextual text links or CTA cards that reference the broader Shotgun Ninjas ecosystem
+- Do not overdo it
+- Keep it elegant and useful
+
+5. SEO / metadata
+- Add or improve structured internal linking signals where appropriate
+- If metadata/canonical/social tags exist, improve Open Graph or descriptive text to reflect relationship to Shotgun Ninjas brand family
+- Do NOT change canonical domain away from shotgunninjavillage.com
+
+6. Visual consistency
+- Match the current design language exactly
+- Reuse existing button styles, spacing, typography, and theme tokens
+- Do not introduce random colors or mismatched components
+- Keep it polished and production-ready
+
+7. Mobile responsiveness
+- Ensure any new nav links, buttons, cards, and sections render cleanly on mobile
+
+8. Output requirements
+After making changes, provide:
+- exact files changed
+- summary of what was added
+- any reusable components created
+- suggested anchor text used for the links
+- any future ideas for deeper cross-brand integration
+
+Important:
+- Do not convert this into a redirect
+- Do not replace the core identity of Shotgun Ninja Village
+- This is cross-brand navigation and ecosystem awareness only

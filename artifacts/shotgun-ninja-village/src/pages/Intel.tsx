@@ -189,7 +189,7 @@ export default function Intel() {
       </div>
 
       <div className="tactical-border bg-card/50 p-6 md:p-8 text-center">
-        <p className="font-mono text-sm text-muted-foreground mb-4">All systems on the Shotgun Ninjas tactical network</p>
+        <p className="font-mono text-xs text-muted-foreground uppercase tracking-widest mb-3">Part of the Shotgun Ninjas Universe</p>
         <a
           href="https://shotgunninjas.com"
           target="_blank"
@@ -198,7 +198,7 @@ export default function Intel() {
         >
           ShotgunNinjas.com <ExternalLink size={20} />
         </a>
-        <p className="font-mono text-xs text-muted-foreground mt-3">Universe hub — episodes, lore, operator intel, and platform access</p>
+        <p className="font-mono text-xs text-muted-foreground mt-3">The full universe — transmissions, lore, operator intel, and all recovered systems</p>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "wouter";
-import { Shield, Database, UserSquare, Map, Sword, Cpu, Menu, X, ExternalLink, Download } from "lucide-react";
+import { Shield, Database, UserSquare, Map, Sword, Cpu, Menu, X, ExternalLink, Download, Globe } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useInstallPrompt } from "@/hooks/useInstallPrompt";
 
@@ -35,6 +35,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <Download size={14} /> Install
             </button>
           )}
+          <a
+            href="https://shotgunninjas.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-2 text-secondary hover:text-white transition-colors"
+            aria-label="Shotgun Ninjas Main Site"
+          >
+            <Globe size={20} />
+          </a>
           <button onClick={() => setIsOpen(!isOpen)} className="p-2 text-primary">
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -77,6 +86,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
               </Link>
             );
           })}
+
+          <div className="pt-2 mt-2 border-t border-border/30">
+            <a
+              href="https://shotgunninjas.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 px-4 py-3 rounded-none font-display text-xl uppercase tracking-wider transition-all border-l-2 text-secondary border-transparent hover:bg-white/5 hover:text-white hover:border-secondary/40"
+            >
+              <Globe size={18} className="text-secondary" />
+              Main Site
+            </a>
+          </div>
         </nav>
 
         <div className="p-6 border-t border-border/50 space-y-3">

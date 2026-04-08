@@ -81,7 +81,7 @@ export default function Archive() {
       </div>
 
       <div className="mt-16 tactical-border bg-card/50 p-6 md:p-8 text-center">
-        <p className="font-mono text-sm text-muted-foreground mb-3">Full mission archive maintained at</p>
+        <p className="font-mono text-xs text-muted-foreground uppercase tracking-widest mb-3">Part of the Shotgun Ninjas Universe</p>
         <a
           href="https://shotgunninjas.com"
           target="_blank"
@@ -90,7 +90,7 @@ export default function Archive() {
         >
           ShotgunNinjas.com <ExternalLink size={20} />
         </a>
-        <p className="font-mono text-xs text-muted-foreground mt-3">New transmissions, extended lore, and classified field reports</p>
+        <p className="font-mono text-xs text-muted-foreground mt-3">Future transmissions, expanded lore, and classified field reports</p>
       </div>
     </div>
   );

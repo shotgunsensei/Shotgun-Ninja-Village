@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "wouter";
-import { ChevronRight, PlayCircle, UserSquare, ExternalLink, Terminal, Wrench, Cpu, BarChart3, Mail, Radio } from "lucide-react";
+import { ChevronRight, PlayCircle, UserSquare, ExternalLink, Terminal, Wrench, Cpu, BarChart3, Mail, Radio, Globe, ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { transmissions } from "@/data/transmissions";
 
@@ -379,35 +379,80 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── FOOTER LINKS ── */}
-      <section className="border-t border-border">
-        <div className="container mx-auto px-4 py-8 max-w-6xl">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+      {/* ── SHOTGUN NINJAS UNIVERSE ── */}
+      <section className="border-t border-border relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="container mx-auto px-4 py-16 md:py-20 max-w-4xl relative z-10">
+          <motion.div {...fadeUp}>
+            <div className="text-center">
+              <div className="inline-flex items-center gap-2 px-3 py-1 mb-6 border border-secondary/30 bg-secondary/10 text-secondary text-xs font-mono uppercase tracking-widest">
+                <Globe size={14} /> Network Hub
+              </div>
+
+              <h2 className="text-4xl md:text-5xl font-display text-white uppercase tracking-widest mb-4 glitch-text" data-text="THE SHOTGUN NINJAS UNIVERSE">
+                THE SHOTGUN NINJAS UNIVERSE
+              </h2>
+
+              <p className="text-muted-foreground font-mono text-sm leading-relaxed max-w-2xl mx-auto mb-8">
+                This command hub is one node in a larger network. The full Shotgun Ninjas universe — expanded lore, future transmissions, operator briefings, and platform access — lives at the main site. Everything connects back to one signal.
+              </p>
+
+              <a
+                href="https://shotgunninjas.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="clip-diagonal bg-primary hover:bg-primary/90 text-white px-8 py-3 font-display text-xl uppercase tracking-widest transition-all inline-flex items-center gap-2 mb-8"
+              >
+                <Globe size={20} /> Enter ShotgunNinjas.com <ArrowUpRight size={18} />
+              </a>
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-2xl mx-auto">
+                <a href="https://bf-os.com" target="_blank" rel="noopener noreferrer" className="group border border-border bg-card/50 p-3 text-center hover:border-blue-400/50 transition-all">
+                  <span className="block font-display text-sm text-white uppercase tracking-widest group-hover:text-blue-400 transition-colors">BrandForge</span>
+                  <span className="block font-mono text-[10px] text-muted-foreground mt-1">bf-os.com</span>
+                </a>
+                <a href="https://TorqueShed.pro" target="_blank" rel="noopener noreferrer" className="group border border-border bg-card/50 p-3 text-center hover:border-orange-500/50 transition-all">
+                  <span className="block font-display text-sm text-white uppercase tracking-widest group-hover:text-orange-500 transition-colors">TorqueShed</span>
+                  <span className="block font-mono text-[10px] text-muted-foreground mt-1">TorqueShed.pro</span>
+                </a>
+                <a href="https://techdeck.app" target="_blank" rel="noopener noreferrer" className="group border border-border bg-card/50 p-3 text-center hover:border-purple-500/50 transition-all">
+                  <span className="block font-display text-sm text-white uppercase tracking-widest group-hover:text-purple-500 transition-colors">TechDeck</span>
+                  <span className="block font-mono text-[10px] text-muted-foreground mt-1">TechDeck.app</span>
+                </a>
+                <a href="https://tradeflowkit.com" target="_blank" rel="noopener noreferrer" className="group border border-border bg-card/50 p-3 text-center hover:border-green-500/50 transition-all">
+                  <span className="block font-display text-sm text-white uppercase tracking-widest group-hover:text-green-500 transition-colors">TradeFlowKit</span>
+                  <span className="block font-mono text-[10px] text-muted-foreground mt-1">TradeFlowKit.com</span>
+                </a>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ── FOOTER ── */}
+      <footer className="border-t border-border bg-card/20">
+        <div className="container mx-auto px-4 py-10 max-w-6xl">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="text-center md:text-left">
+              <p className="font-display text-lg text-white uppercase tracking-widest mb-1">
+                Shotgun Ninja Village
+              </p>
+              <p className="font-mono text-xs text-muted-foreground">
+                Part of the <a href="https://shotgunninjas.com" target="_blank" rel="noopener noreferrer" className="text-secondary hover:text-white transition-colors">Shotgun Ninjas</a> universe
+              </p>
+            </div>
             <a
               href="https://shotgunninjas.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-secondary hover:text-white font-display text-xl uppercase tracking-widest transition-colors"
+              className="inline-flex items-center gap-2 text-secondary hover:text-white font-mono text-sm uppercase tracking-widest transition-colors"
             >
-              ShotgunNinjas.com <ExternalLink size={16} />
+              ShotgunNinjas.com <ExternalLink size={14} />
             </a>
-            <div className="flex flex-wrap items-center justify-center gap-6">
-              <a href="https://bf-os.com" target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-muted-foreground hover:text-secondary transition-colors inline-flex items-center gap-1">
-                bf-os.com <ExternalLink size={10} />
-              </a>
-              <a href="https://TorqueShed.pro" target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-muted-foreground hover:text-secondary transition-colors inline-flex items-center gap-1">
-                TorqueShed.pro <ExternalLink size={10} />
-              </a>
-              <a href="https://techdeck.app" target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-muted-foreground hover:text-secondary transition-colors inline-flex items-center gap-1">
-                TechDeck.app <ExternalLink size={10} />
-              </a>
-              <a href="https://tradeflowkit.com" target="_blank" rel="noopener noreferrer" className="font-mono text-xs text-muted-foreground hover:text-secondary transition-colors inline-flex items-center gap-1">
-                TradeFlowKit.com <ExternalLink size={10} />
-              </a>
-            </div>
           </div>
         </div>
-      </section>
+      </footer>
     </div>
   );
 }
