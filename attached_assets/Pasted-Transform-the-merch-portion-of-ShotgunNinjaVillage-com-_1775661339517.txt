@@ -1,0 +1,183 @@
+Transform the merch portion of ShotgunNinjaVillage.com into a premium, production-minded storefront experience built for fast monetization and future Shopify + Printful integration.
+
+PRIMARY GOAL
+Build a polished branded merch destination inside ShotgunNinjaVillage.com that feels native to the Shotgun Ninjas universe and is ready for a low-friction launch path.
+
+This is not a generic e-commerce page. It should feel like an immersive extension of the brand world.
+
+BUSINESS PRIORITIES
+1. Fastest realistic path to monetization
+2. Low operational overhead
+3. Easy future integration with Shopify
+4. Easy future sync with a print-on-demand provider like Printful
+5. Strong branded presentation that increases trust and conversion
+
+CREATIVE / BRAND DIRECTION
+- premium cyber-ninja aesthetic
+- dark, cinematic, sleek, modern
+- red-accented visual identity consistent with Shotgun Ninjas branding
+- sharp copy, clean UI, strong CTA hierarchy
+- no generic template feeling
+- mobile responsive
+- production-ready visuals and structure
+
+WHAT TO BUILD
+
+1. ADD A FIRST-CLASS MERCH DESTINATION
+Add a primary navigation item for merch.
+Choose the best label based on the site’s tone and existing structure:
+- Village Market
+- Ronin Supply
+- The Arsenal Store
+- Merch
+
+Create a dedicated merch landing page that includes:
+- a premium hero section
+- featured collections
+- bestselling items section
+- limited drop section
+- product grid
+- category or collection filtering UI
+- trust/conversion messaging
+- branded supporting copy tied to the Shotgun Ninjas universe
+
+2. COLLECTION ARCHITECTURE
+Create starter collection structure for the storefront:
+- Core Brand
+- Kage-9
+- Episode Drops
+- Stickers & Small Goods
+- Limited Edition
+- Founders / Supporter Gear
+
+Each collection should feel intentional and marketable.
+Use collection cards or sections that can scale later when real products are connected.
+
+3. PRODUCT SYSTEM
+Create a reusable product model and reusable storefront UI components.
+
+Support product fields such as:
+- id
+- handle
+- title
+- short description
+- full description
+- images
+- price
+- compare-at price
+- collections
+- tags
+- variants
+- sizes
+- colors
+- SKU
+- availability
+- featured flag
+- bestseller flag
+- limited drop flag
+
+Build reusable components for:
+- product cards
+- product grid
+- collection cards
+- featured product section
+- product detail page or modal
+- price/discount display
+- badge display (new, bestseller, limited drop, supporter gear)
+- CTA buttons
+- optional cart drawer or cart page structure if the site stack supports it cleanly
+
+4. STORE UX / CONVERSION LAYER
+Add trust and conversion sections that make the site more likely to sell:
+- made-to-order explanation
+- shipping expectations
+- quality / fulfillment expectations
+- secure checkout messaging
+- return/exchange placeholder
+- why support the village / support the brand messaging
+
+Product and store pages should naturally encourage action without feeling spammy.
+
+5. SHOPIFY-READY ARCHITECTURE
+Architect the merch system so it is ready for future Shopify integration.
+
+Support two possible future paths:
+1. simple MVP path:
+   - external Shopify product links
+   - Shopify Buy Button or external checkout approach
+2. scalable path:
+   - headless Shopify Storefront API integration
+
+Requirements:
+- create a clean service layer or abstraction for commerce data
+- use environment variable placeholders for any Shopify configuration
+- do not hardcode secrets
+- if no live integration exists yet, use mock data cleanly
+- structure mock data so it resembles likely Shopify product and variant data
+- create graceful fallback behavior if integrations are missing
+
+6. PRINTFUL / DROPSHIP READINESS
+Design the merch architecture so it will be easy to connect to Printful or a similar print-on-demand provider later.
+
+Requirements:
+- support variant-heavy products like shirt size/color combinations
+- support SKU-based product mapping
+- include “made to order” messaging in appropriate places
+- structure collections and products in a way that would map cleanly to Shopify products synced from Printful
+- include architecture notes for future Printful sync
+
+7. SHOTGUN NINJAS WORLD INTEGRATION
+Make merch feel like part of the universe, not a separate shop.
+
+Add tasteful ecosystem links:
+- from merch to lore/episodes where relevant
+- from merch to community placeholder if a forum exists or will exist
+- from the homepage into the merch area
+- in the footer, reinforce the broader Shotgun Ninjas ecosystem
+
+Add story-aware but still conversion-friendly sections such as:
+- drop-inspired collections
+- supporter gear
+- character-based merch lines
+- “gear from the village” style framing if appropriate
+
+Keep it premium and controlled, not cheesy.
+
+8. DESIGN AND RESPONSIVENESS
+All new merch components and pages must:
+- match the site’s existing design language
+- reuse styles, spacing, button systems, typography, and theme tokens where possible
+- look polished on desktop and mobile
+- avoid placeholder layout artifacts
+- feel launch-ready
+
+9. TECHNICAL QUALITY
+- modular code
+- maintainable structure
+- reusable components
+- clean comments where architectural decisions matter
+- loading states
+- empty states
+- error states
+- no sloppy hardcoded values where config should exist
+
+10. OUTPUT REQUIREMENTS
+After implementation, provide:
+- exact files changed
+- routes/pages added
+- components created
+- product data model used
+- mock data files created
+- any config/env variables needed
+- recommended MVP launch path
+- recommended future headless Shopify path
+- recommended Printful integration path
+- what is working now
+- what still needs to be done outside Replit
+
+IMPORTANT CONSTRAINTS
+- preserve ShotgunNinjaVillage.com as the branded destination
+- do not convert this into a redirect or generic storefront shell
+- prioritize fast monetization first, then scalability
+- keep everything brand-consistent and premium
+- think like a product architect and conversion-minded frontend engineer

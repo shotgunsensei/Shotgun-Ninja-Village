@@ -9,7 +9,12 @@ const badgeStyles: Record<string, { label: string; color: string }> = {
   "supporters-only": { label: "Supporters Only", color: "bg-orange-600 text-white" },
 };
 
-export function ProductCard({ product }: { product: Product }) {
+interface ProductCardProps {
+  product: Product;
+  onSelect?: (product: Product) => void;
+}
+
+export function ProductCard({ product, onSelect }: ProductCardProps) {
   const basePrice = product.variants[0]?.price || 0;
   const compareAt = product.variants[0]?.compareAtPrice;
   const badge = product.badge ? badgeStyles[product.badge] : null;
@@ -17,7 +22,13 @@ export function ProductCard({ product }: { product: Product }) {
   const colors = [...new Set(product.variants.map((v) => v.options.color).filter(Boolean))];
 
   return (
-    <div className="tactical-border bg-card group hover:border-primary transition-all flex flex-col h-full">
+    <div
+      className="tactical-border bg-card group hover:border-primary transition-all flex flex-col h-full cursor-pointer"
+      onClick={() => onSelect?.(product)}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onSelect?.(product); } }}
+    >
       <div className="aspect-[4/3] bg-muted/20 relative flex items-center justify-center overflow-hidden border-b border-border">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary/8 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         <div className="text-muted-foreground/20 font-display text-5xl uppercase tracking-[0.3em] select-none">
@@ -65,14 +76,14 @@ export function ProductCard({ product }: { product: Product }) {
               <span className="ml-2 text-sm font-mono text-muted-foreground line-through">{formatPrice(compareAt)}</span>
             )}
           </div>
-          <button className="clip-diagonal bg-primary/20 border border-primary/40 text-primary px-3 py-1 font-display text-sm uppercase tracking-widest hover:bg-primary hover:text-white transition-all inline-flex items-center gap-1.5 cursor-pointer">
-            <ShoppingBag size={12} /> Buy
-          </button>
+          <span className="clip-diagonal bg-primary/20 border border-primary/40 text-primary px-3 py-1 font-display text-sm uppercase tracking-widest group-hover:bg-primary group-hover:text-white transition-all inline-flex items-center gap-1.5">
+            <ShoppingBag size={12} /> View
+          </span>
         </div>
 
         {product.madeToOrder && (
           <p className="text-[9px] font-mono text-muted-foreground mt-2 flex items-center gap-1 opacity-70">
-            <Clock size={9} /> Made to order. Ships in 5–10 business days.
+            <Clock size={9} /> Made to order &middot; 5–10 business days
           </p>
         )}
       </div>

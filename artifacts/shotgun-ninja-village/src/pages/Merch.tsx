@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { motion } from "framer-motion";
 import {
   ShoppingBag, Tag, ChevronRight, Shield, User, Zap,
-  Award, Package, Truck, Star, Users, Play
+  Award, Package, Truck, Star, Users, Play, Clock,
+  RefreshCw, CreditCard, ArrowRight, Flame
 } from "lucide-react";
-import { products, collections } from "@/data/products";
+import type { Product, Collection } from "@/data/products";
+import { getProducts, getCollections, getFeaturedProducts, formatPrice } from "@/services/store";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { ProductCard } from "@/components/shared/ProductCard";
+import { ProductModal } from "@/components/shared/ProductModal";
 import { UniverseFooter } from "@/components/shared/UniverseFooter";
 
 const collectionIcons: Record<string, React.ElementType> = {
@@ -27,13 +30,40 @@ const fadeUp = {
 };
 
 export default function Merch() {
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [allCollections, setAllCollections] = useState<Collection[]>([]);
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   const [activeCollection, setActiveCollection] = useState<string | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    Promise.all([getProducts(), getCollections(), getFeaturedProducts()])
+      .then(([prods, cols, feat]) => {
+        setAllProducts(prods);
+        setAllCollections(cols);
+        setFeaturedProducts(feat);
+        setLoaded(true);
+      });
+  }, []);
 
   const filteredProducts = activeCollection
-    ? products.filter((p) => p.collections.includes(activeCollection))
-    : products;
+    ? allProducts.filter((p) => p.collections.includes(activeCollection))
+    : allProducts;
 
-  const limitedProducts = products.filter((p) => p.limitedDrop);
+  const limitedProducts = allProducts.filter((p) => p.limitedDrop);
+  const bestsellers = allProducts.filter((p) => p.badge === "bestseller");
+
+  if (!loaded) {
+    return (
+      <div className="relative w-full min-h-[100dvh] flex flex-col items-center justify-center">
+        <div className="text-center">
+          <ShoppingBag size={32} className="mx-auto text-primary/40 mb-3 animate-pulse" />
+          <p className="font-mono text-sm text-muted-foreground uppercase tracking-widest">Loading supply cache...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative w-full min-h-[100dvh] flex flex-col">
@@ -56,6 +86,23 @@ export default function Merch() {
             Operator-grade apparel and accessories from the Shotgun Ninjas universe. Every purchase fuels the next transmission.
           </p>
 
+          <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
+            <a
+              href="#shop"
+              className="clip-diagonal bg-primary hover:bg-primary/90 text-white px-6 py-2.5 font-display text-lg uppercase tracking-widest transition-all inline-flex items-center gap-2"
+            >
+              <ShoppingBag size={18} /> Shop Now
+            </a>
+            {limitedProducts.length > 0 && (
+              <a
+                href="#drops"
+                className="clip-diagonal border border-primary/50 hover:bg-primary/10 text-primary px-6 py-2.5 font-display text-lg uppercase tracking-widest transition-all inline-flex items-center gap-2 bg-background/50 backdrop-blur"
+              >
+                <Zap size={18} /> Limited Drops
+              </a>
+            )}
+          </div>
+
           <div className="flex flex-wrap items-center justify-center gap-5 text-[11px] font-mono text-muted-foreground">
             <span className="inline-flex items-center gap-1.5"><Package size={13} /> Premium Materials</span>
             <span className="inline-flex items-center gap-1.5"><Truck size={13} /> Worldwide Shipping</span>
@@ -64,18 +111,18 @@ export default function Merch() {
         </div>
       </section>
 
-      {limitedProducts.length > 0 && (
-        <section className="border-b border-border bg-primary/[0.03]">
+      {featuredProducts.length > 0 && (
+        <section className="border-b border-border bg-card/20">
           <div className="container mx-auto px-4 py-10 md:py-14 max-w-6xl">
             <motion.div {...fadeUp}>
               <div className="flex items-center gap-3 mb-6">
-                <Zap size={18} className="text-primary" />
-                <h2 className="text-2xl font-display text-white uppercase tracking-widest">Limited Drops</h2>
-                <div className="flex-1 h-px bg-gradient-to-r from-primary/30 to-transparent" />
+                <Star size={18} className="text-secondary" />
+                <h2 className="text-2xl font-display text-white uppercase tracking-widest">Featured Gear</h2>
+                <div className="flex-1 h-px bg-gradient-to-r from-secondary/30 to-transparent" />
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {limitedProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {featuredProducts.slice(0, 4).map((product) => (
+                  <ProductCard key={product.id} product={product} onSelect={setSelectedProduct} />
                 ))}
               </div>
             </motion.div>
@@ -83,26 +130,69 @@ export default function Merch() {
         </section>
       )}
 
-      <section className="container mx-auto px-4 py-14 md:py-18 max-w-6xl">
+      {bestsellers.length > 0 && (
+        <section className="border-b border-border">
+          <div className="container mx-auto px-4 py-10 md:py-14 max-w-6xl">
+            <motion.div {...fadeUp}>
+              <div className="flex items-center gap-3 mb-6">
+                <Flame size={18} className="text-green-500" />
+                <h2 className="text-2xl font-display text-white uppercase tracking-widest">Bestsellers</h2>
+                <div className="flex-1 h-px bg-gradient-to-r from-green-500/30 to-transparent" />
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {bestsellers.map((product) => (
+                  <ProductCard key={product.id} product={product} onSelect={setSelectedProduct} />
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </section>
+      )}
+
+      {limitedProducts.length > 0 && (
+        <section id="drops" className="border-b border-border bg-primary/[0.03]">
+          <div className="container mx-auto px-4 py-10 md:py-14 max-w-6xl">
+            <motion.div {...fadeUp}>
+              <div className="flex items-center gap-3 mb-2">
+                <Zap size={18} className="text-primary" />
+                <h2 className="text-2xl font-display text-white uppercase tracking-widest">Limited Drops</h2>
+                <div className="flex-1 h-px bg-gradient-to-r from-primary/30 to-transparent" />
+              </div>
+              <p className="text-muted-foreground font-mono text-xs mb-6 pl-8">
+                One-run releases. Once sold out, they won't be restocked.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {limitedProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} onSelect={setSelectedProduct} />
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </section>
+      )}
+
+      <section id="shop" className="container mx-auto px-4 py-14 md:py-18 max-w-6xl">
         <SectionHeading title="COLLECTIONS" subtitle="Browse by collection. Click again to clear." />
 
-        <div className="flex flex-wrap gap-2 mb-10">
-          {collections.map((col) => {
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 mb-10">
+          {allCollections.map((col) => {
             const Icon = collectionIcons[col.icon] || Tag;
             const isActive = activeCollection === col.handle;
             return (
               <button
                 key={col.id}
                 onClick={() => setActiveCollection(isActive ? null : col.handle)}
-                className={`group border px-3 py-2 inline-flex items-center gap-2 transition-all text-left ${
+                className={`group border p-3 transition-all text-center ${
                   isActive
-                    ? "border-primary bg-primary/10 text-primary"
-                    : "border-border bg-card/50 text-muted-foreground hover:border-primary/50 hover:text-white"
+                    ? "border-primary bg-primary/10"
+                    : "border-border bg-card/50 hover:border-primary/50"
                 }`}
               >
-                <Icon size={14} className="flex-shrink-0" />
-                <span className="font-display text-xs uppercase tracking-widest">{col.title}</span>
-                <span className="font-mono text-[9px] opacity-40">{col.productCount}</span>
+                <Icon size={18} className={`mx-auto mb-1.5 ${isActive ? "text-primary" : "text-muted-foreground group-hover:text-white"}`} />
+                <span className={`block font-display text-[10px] uppercase tracking-widest leading-tight ${isActive ? "text-primary" : "text-muted-foreground group-hover:text-white"}`}>
+                  {col.title}
+                </span>
+                <span className="block font-mono text-[8px] text-muted-foreground/50 mt-0.5">{col.productCount} items</span>
               </button>
             );
           })}
@@ -111,7 +201,7 @@ export default function Merch() {
         <div className="flex items-center gap-3 mb-5">
           <h3 className="text-xl font-display text-white uppercase tracking-widest">
             {activeCollection
-              ? collections.find((c) => c.handle === activeCollection)?.title || "Products"
+              ? allCollections.find((c) => c.handle === activeCollection)?.title || "Products"
               : "All Products"}
           </h3>
           {activeCollection && (
@@ -135,7 +225,7 @@ export default function Merch() {
               viewport={{ once: true }}
               transition={{ duration: 0.25, delay: i * 0.04 }}
             >
-              <ProductCard product={product} />
+              <ProductCard product={product} onSelect={setSelectedProduct} />
             </motion.div>
           ))}
         </div>
@@ -155,28 +245,73 @@ export default function Merch() {
       </section>
 
       <section className="border-t border-border bg-card/20">
-        <div className="container mx-auto px-4 py-10 max-w-4xl">
-          <div className="grid grid-cols-3 gap-4 text-center">
-            <div className="p-3">
-              <Package size={20} className="text-primary mx-auto mb-2" />
-              <h4 className="text-sm font-display text-white uppercase tracking-widest mb-1">Premium Quality</h4>
-              <p className="text-[10px] font-mono text-muted-foreground leading-relaxed">Premium materials. Print-on-demand precision.</p>
+        <div className="container mx-auto px-4 py-12 md:py-16 max-w-5xl">
+          <motion.div {...fadeUp}>
+            <h3 className="text-2xl font-display text-white uppercase tracking-widest text-center mb-8">
+              The Ronin Supply Standard
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="tactical-border bg-card p-4 text-center">
+                <Package size={22} className="text-primary mx-auto mb-2.5" />
+                <h4 className="text-sm font-display text-white uppercase tracking-widest mb-1">Premium Quality</h4>
+                <p className="text-[10px] font-mono text-muted-foreground leading-relaxed">
+                  Heavyweight fabrics, precision printing, and hand-inspected finishing on every piece.
+                </p>
+              </div>
+              <div className="tactical-border bg-card p-4 text-center">
+                <Clock size={22} className="text-primary mx-auto mb-2.5" />
+                <h4 className="text-sm font-display text-white uppercase tracking-widest mb-1">Made to Order</h4>
+                <p className="text-[10px] font-mono text-muted-foreground leading-relaxed">
+                  Each item is produced when you order. Zero waste. 5–10 business days production.
+                </p>
+              </div>
+              <div className="tactical-border bg-card p-4 text-center">
+                <Truck size={22} className="text-primary mx-auto mb-2.5" />
+                <h4 className="text-sm font-display text-white uppercase tracking-widest mb-1">Global Shipping</h4>
+                <p className="text-[10px] font-mono text-muted-foreground leading-relaxed">
+                  Produced and shipped worldwide via tracked carriers. Delivery within 2–4 weeks.
+                </p>
+              </div>
+              <div className="tactical-border bg-card p-4 text-center">
+                <CreditCard size={22} className="text-primary mx-auto mb-2.5" />
+                <h4 className="text-sm font-display text-white uppercase tracking-widest mb-1">Secure Checkout</h4>
+                <p className="text-[10px] font-mono text-muted-foreground leading-relaxed">
+                  Industry-standard encryption. Powered by Shopify. Your payment info is never stored.
+                </p>
+              </div>
             </div>
-            <div className="p-3">
-              <Truck size={20} className="text-primary mx-auto mb-2" />
-              <h4 className="text-sm font-display text-white uppercase tracking-widest mb-1">Global Shipping</h4>
-              <p className="text-[10px] font-mono text-muted-foreground leading-relaxed">Produced and shipped worldwide. Made to order.</p>
-            </div>
-            <div className="p-3">
-              <Star size={20} className="text-primary mx-auto mb-2" />
-              <h4 className="text-sm font-display text-white uppercase tracking-widest mb-1">Fund the Mission</h4>
-              <p className="text-[10px] font-mono text-muted-foreground leading-relaxed">Every purchase directly funds future transmissions.</p>
-            </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
       <section className="border-t border-border">
+        <div className="container mx-auto px-4 py-10 max-w-5xl">
+          <motion.div {...fadeUp}>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="border-l-2 border-primary pl-4">
+                <h4 className="text-sm font-display text-white uppercase tracking-widest mb-1">Returns & Exchanges</h4>
+                <p className="text-[11px] font-mono text-muted-foreground leading-relaxed">
+                  Not the right fit? Contact us within 30 days for exchanges on unworn items. Made-to-order items are final sale.
+                </p>
+              </div>
+              <div className="border-l-2 border-secondary pl-4">
+                <h4 className="text-sm font-display text-white uppercase tracking-widest mb-1">Support the Mission</h4>
+                <p className="text-[11px] font-mono text-muted-foreground leading-relaxed">
+                  Every purchase directly funds future transmissions, new systems, and community tools. You're not buying merch — you're funding the network.
+                </p>
+              </div>
+              <div className="border-l-2 border-orange-500 pl-4">
+                <h4 className="text-sm font-display text-white uppercase tracking-widest mb-1">Supporter Perks</h4>
+                <p className="text-[11px] font-mono text-muted-foreground leading-relaxed">
+                  Merch buyers unlock future community badges and access to gated Village channels as the supporter tier rolls out.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      <section className="border-t border-border bg-card/20">
         <div className="container mx-auto px-4 py-10 max-w-4xl">
           <div className="flex flex-col sm:flex-row items-center gap-6">
             <div className="flex-1 text-center sm:text-left">
@@ -198,6 +333,10 @@ export default function Merch() {
       </section>
 
       <UniverseFooter exclude={["merch"]} />
+
+      {selectedProduct && (
+        <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />
+      )}
     </div>
   );
 }

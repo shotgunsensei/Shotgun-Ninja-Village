@@ -57,8 +57,8 @@ See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and pa
   - `/arsenal` — The Arsenal: 5 gear items with AI-generated images
   - `/intel` — Forge Intel: 4 products mapped to in-universe tactical platforms
   - `/community` — The Village: community hub with 7 category channels, trending topics feed, 3-tier member perks
-  - `/merch` — Ronin Supply: premium merch storefront with 8 mock products, 6 collections, limited drops section, collection filtering
-- **Commerce Architecture**: Shopify-ready service layer (`src/services/store.ts`) with mock mode default; goes live via VITE_SHOPIFY_DOMAIN + VITE_SHOPIFY_STOREFRONT_TOKEN env vars
+  - `/merch` — Ronin Supply: premium merch storefront with product detail modal, featured gear, bestsellers, limited drops, 6 collection tiles, product grid with filtering, trust/conversion section, returns/support info
+- **Commerce Architecture**: Shopify Storefront API-ready service layer (`src/services/store.ts`) with async data loading, full GraphQL fetchers, variant mapping, and mock fallback; goes live via VITE_SHOPIFY_DOMAIN + VITE_SHOPIFY_STOREFRONT_TOKEN + VITE_STORE_MODE=live env vars
 - **Community Architecture**: Discourse-ready service layer (`src/services/community.ts`) with async data loading; mock mode default; goes live via VITE_DISCOURSE_URL + VITE_COMMUNITY_MODE=live env vars. SSO via VITE_DISCOURSE_SSO=true + VITE_DISCOURSE_SSO_LOGIN_URL. Embed via VITE_DISCOURSE_EMBED=true. Signup via VITE_DISCOURSE_SIGNUP_URL (fallback: shotgunninjas.com/join). Gated categories: ronin-lounge, founders-chamber. Discourse group mapping: ronin-supporters, founding-ninjas.
 - **Integration Config**: `src/config/integrations.ts` — provider config for Shopify, Discourse (URL, SSO, embed, signup, groups, gated categories), and auth. No API keys in client code.
 - **Routing**: wouter with BASE_URL support; image paths use `asset()` helper for subpath deployment safety
