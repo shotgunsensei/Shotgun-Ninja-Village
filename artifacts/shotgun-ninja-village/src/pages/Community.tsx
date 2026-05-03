@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Link } from "wouter";
 import { motion } from "framer-motion";
 import {
-  Megaphone, DoorOpen, BookOpen, Wrench, Hammer, Shirt, MessageCircle,
-  Users, Crown, Award, Lock, Zap, Bell, ChevronRight,
+  MessageCircle, Users, Lock, Zap, ChevronRight, AlertTriangle,
   MessageSquare, Eye, Pin, Flame, ShoppingBag, ExternalLink, Radio,
-  ArrowRight, UserPlus, Shield
+  ArrowRight, UserPlus, DoorOpen, Shield, Crown, Award
 } from "lucide-react";
 import type { ForumCategory, ForumTopic, MemberPerk, CommunityStats } from "@/data/community";
 import {
@@ -15,22 +14,7 @@ import {
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { UniverseFooter } from "@/components/shared/UniverseFooter";
 import { usePageMeta } from "@/hooks/usePageMeta";
-
-const iconMap: Record<string, React.ElementType> = {
-  megaphone: Megaphone,
-  "door-open": DoorOpen,
-  "book-open": BookOpen,
-  wrench: Wrench,
-  hammer: Hammer,
-  shirt: Shirt,
-  "message-circle": MessageCircle,
-  crown: Crown,
-  award: Award,
-  lock: Lock,
-  zap: Zap,
-  bell: Bell,
-  shield: Shield,
-};
+import { resolveIcon } from "@/lib/iconMap";
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -67,6 +51,7 @@ export default function Community() {
   const [perks, setPerks] = useState<MemberPerk[]>([]);
   const [stats, setStats] = useState<CommunityStats>({ totalMembers: 0, onlineNow: 0, totalTopics: 0, totalPosts: 0, newestMember: "" });
   const [loaded, setLoaded] = useState(false);
+  const [loadError, setLoadError] = useState(false);
 
   useEffect(() => {
     Promise.all([getCategories(), getFeaturedTopics(), getMemberPerks(), getCommunityStats()])
@@ -75,8 +60,12 @@ export default function Community() {
         setTopics(tops);
         setPerks(prks);
         setStats(sts);
-        setLoaded(true);
-      });
+      })
+      .catch((err) => {
+        console.error("[Community] data load failed:", err);
+        setLoadError(true);
+      })
+      .finally(() => setLoaded(true));
   }, []);
 
   const openCategories = allCategories.filter((c) => !c.locked);
@@ -84,6 +73,13 @@ export default function Community() {
 
   return (
     <div className="relative w-full min-h-[100dvh] flex flex-col">
+
+      {loadError && (
+        <div role="alert" className="border-b border-primary/40 bg-primary/10 text-primary px-4 py-2 font-mono text-xs uppercase tracking-widest text-center">
+          <AlertTriangle size={12} className="inline mr-1.5 align-[-2px]" aria-hidden="true" />
+          Network channel partial. Showing cached intel.
+        </div>
+      )}
 
       <section className="relative w-full py-16 md:py-24 flex items-center justify-center overflow-hidden border-b border-primary/20">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/8 via-background to-background" />
@@ -148,7 +144,7 @@ export default function Community() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {openCategories.map((cat, i) => {
-            const Icon = iconMap[cat.icon] || MessageCircle;
+            const Icon = resolveIcon(cat.icon, MessageCircle);
             const url = getCategoryUrl(cat.slug);
             const isClickable = live && url !== "#community-coming-soon";
             const Wrapper = isClickable ? "a" : "div";
@@ -206,7 +202,7 @@ export default function Community() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {gatedCategories.map((cat, i) => {
-                const Icon = iconMap[cat.icon] || Lock;
+                const Icon = resolveIcon(cat.icon, Lock);
                 return (
                   <motion.div
                     key={cat.id}
@@ -373,7 +369,7 @@ export default function Community() {
 
                 <div className="space-y-3">
                   {tierPerks.map((perk) => {
-                    const PerkIcon = iconMap[perk.icon] || Zap;
+                    const PerkIcon = resolveIcon(perk.icon, Zap);
                     return (
                       <div key={perk.id} className="flex items-start gap-2.5">
                         <PerkIcon size={14} className={`mt-0.5 flex-shrink-0 ${tierBadge[tier]}`} />

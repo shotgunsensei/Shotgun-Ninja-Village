@@ -1,86 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "wouter";
-import { ChevronRight, PlayCircle, UserSquare, ExternalLink, Terminal, Wrench, Cpu, BarChart3, Mail, Radio, Globe, ArrowUpRight, Users, ShoppingBag, Database, Activity, Crosshair } from "lucide-react";
+import { ChevronRight, PlayCircle, UserSquare, Mail, Radio, Globe, ArrowUpRight, Users, ShoppingBag, Database } from "lucide-react";
 import { motion } from "framer-motion";
 import { transmissions } from "@/data/transmissions";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { UniverseFooter } from "@/components/shared/UniverseFooter";
+import { EcosystemCard } from "@/components/shared/EcosystemCard";
+import { recoveredSystems, extendedSystems, ecosystem } from "@/data/ecosystem";
+import { queueSignal } from "@/lib/signalQueue";
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
-const primarySystems = [
-  {
-    name: "BrandForge OS",
-    role: "Campaign Command Platform",
-    desc: "Recovered in Transmission 02. Build influence architecture, deploy market signals, and cut through algorithmic suppression.",
-    icon: Terminal,
-    color: "text-blue-400",
-    borderColor: "border-blue-400/30",
-    url: "https://bf-os.com",
-    label: "bf-os.com"
-  },
-  {
-    name: "TorqueShed",
-    role: "Mechanical Intelligence Bay",
-    desc: "Recovered in Transmission 03. Decode stress patterns, reconstruct failure chains, and expose sabotage hiding in infrastructure.",
-    icon: Wrench,
-    color: "text-orange-500",
-    borderColor: "border-orange-500/30",
-    url: "https://TorqueShed.pro",
-    label: "TorqueShed.pro"
-  }
-];
-
-const extendedSystems = [
-  {
-    name: "TechDeck",
-    role: "Operations Console",
-    desc: "Infrastructure control, diagnostics, and command-layer support for field operations.",
-    icon: Cpu,
-    color: "text-purple-500",
-    url: "https://techdeck.app",
-    label: "TechDeck.app"
-  },
-  {
-    name: "TradeFlowKit",
-    role: "Commerce Operations",
-    desc: "Supply chain mapping, transaction intelligence, and commerce flow optimization.",
-    icon: BarChart3,
-    color: "text-green-500",
-    url: "https://tradeflowkit.com",
-    label: "TradeFlowKit.com"
-  },
-  {
-    name: "PulseDesk",
-    role: "Triage Network",
-    desc: "Coordinates incidents, escalations, and operational visibility across distributed teams under pressure.",
-    icon: Activity,
-    color: "text-rose-400",
-    url: "https://pulsedesk.support",
-    label: "PulseDesk.support"
-  },
-  {
-    name: "FaultlineLab",
-    role: "Diagnostic Training Range",
-    desc: "Run scenarios. Trace faults. Sharpen the signal-war reflexes through high-pressure diagnostic challenges.",
-    icon: Crosshair,
-    color: "text-yellow-400",
-    url: "https://faultlinelab.com",
-    label: "FaultlineLab.com"
-  }
-];
-
 function TypewriterText({ text }: { text: string }) {
   const [count, setCount] = useState(0);
+  const [visible, setVisible] = useState(true);
   useEffect(() => {
-    if (count >= text.length) return;
+    if (typeof document === "undefined") return;
+    const onVis = () => setVisible(document.visibilityState !== "hidden");
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, []);
+  useEffect(() => {
+    if (!visible || count >= text.length) return;
     const t = setTimeout(() => setCount(c => c + 1), 20);
     return () => clearTimeout(t);
-  }, [count, text.length]);
+  }, [count, text.length, visible]);
   return (
     <span>
       {text.slice(0, count)}
-      {count < text.length && <span className="inline-block w-2 h-5 bg-primary animate-pulse ml-0.5 align-middle" />}
+      {count < text.length && <span className="inline-block w-2 h-5 bg-primary animate-pulse ml-0.5 align-middle" aria-hidden="true" />}
     </span>
   );
 }
@@ -107,15 +55,16 @@ function SignalForm() {
       return;
     }
     setStatus("submitting");
-    try {
-      window.open(`https://shotgunninjas.com?email=${encodeURIComponent(email)}`, "_blank", "noopener,noreferrer");
+    queueSignal(email);
+    const popup = window.open(`https://shotgunninjas.com?email=${encodeURIComponent(email)}`, "_blank", "noopener,noreferrer");
+    if (popup) {
       setStatus("ok");
       setMessage("Channel locked. Continue setup in the new tab.");
-      form.reset();
-    } catch {
-      setStatus("error");
-      setMessage("Could not open hub. Disable popup blockers or visit shotgunninjas.com directly.");
+    } else {
+      setStatus("ok");
+      setMessage("Channel queued locally. Visit shotgunninjas.com to complete setup.");
     }
+    form.reset();
   };
 
   return (
@@ -158,7 +107,7 @@ export default function Home() {
       {/* ── HERO ── */}
       <section className="relative w-full min-h-[70vh] md:min-h-[85vh] flex items-center justify-center overflow-hidden border-b border-primary/20">
         <div className="absolute inset-0 z-0">
-          <img src={asset("images/hero.png")} alt="" aria-hidden="true" role="presentation" className="w-full h-full object-cover opacity-30 mix-blend-luminosity" />
+          <img src={asset("images/hero.png")} alt="" aria-hidden="true" role="presentation" fetchPriority="high" decoding="async" width="1920" height="1080" className="w-full h-full object-cover opacity-30 mix-blend-luminosity" />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/40" />
           <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-transparent to-background/80" />
         </div>
@@ -203,6 +152,9 @@ export default function Home() {
                 <img
                   src={asset("images/kage-9-operator.png")}
                   alt="Kage-9"
+                  width="288"
+                  height="384"
+                  decoding="async"
                   className="relative w-full aspect-[3/4] object-cover object-top drop-shadow-[0_0_20px_rgba(220,38,38,0.4)]"
                 />
                 <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-background to-transparent" />
@@ -240,6 +192,10 @@ export default function Home() {
                 <img
                   src={asset(tx.img)}
                   alt={tx.title}
+                  loading="lazy"
+                  decoding="async"
+                  width="640"
+                  height="360"
                   className="w-full h-full object-cover filter brightness-75 contrast-125 group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent to-background/60" />
@@ -287,6 +243,10 @@ export default function Home() {
                   <img
                     src={asset("images/kage-9-operator.png")}
                     alt="Kage-9"
+                    loading="lazy"
+                    decoding="async"
+                    width="224"
+                    height="299"
                     className="w-full aspect-[3/4] object-cover object-top drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]"
                   />
                   <div className="absolute inset-0 scanlines opacity-30" />
@@ -333,43 +293,17 @@ export default function Home() {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-          {primarySystems.map((sys, i) => {
-            const Icon = sys.icon;
-            return (
-              <motion.a
-                key={sys.name}
-                href={sys.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="tactical-border bg-card p-6 md:p-8 group hover:border-primary transition-all block relative overflow-hidden"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.1 }}
-              >
-                <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="flex items-start gap-4 mb-4">
-                  <div className={`p-3 border ${sys.borderColor} bg-background flex-shrink-0`}>
-                    <Icon size={28} className={sys.color} />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-display text-white uppercase tracking-widest group-hover:text-primary transition-colors">
-                      {sys.name}
-                    </h3>
-                    <span className="text-xs font-mono uppercase tracking-widest text-primary">
-                      {sys.role}
-                    </span>
-                  </div>
-                </div>
-                <p className="text-muted-foreground font-mono text-sm leading-relaxed mb-4">
-                  {sys.desc}
-                </p>
-                <span className="inline-flex items-center gap-2 text-secondary font-mono text-sm group-hover:text-white transition-colors">
-                  {sys.label} <ExternalLink size={14} />
-                </span>
-              </motion.a>
-            );
-          })}
+          {recoveredSystems.map((sys, i) => (
+            <motion.div
+              key={sys.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: i * 0.1 }}
+            >
+              <EcosystemCard product={sys} variant="compact" />
+            </motion.div>
+          ))}
         </div>
 
         <motion.div {...fadeUp}>
@@ -379,32 +313,9 @@ export default function Home() {
             </h3>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {extendedSystems.map((sys) => {
-              const Icon = sys.icon;
-              return (
-                <a
-                  key={sys.name}
-                  href={sys.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group border border-border bg-card/50 p-5 flex items-start gap-4 hover:border-primary/50 transition-all"
-                >
-                  <Icon size={22} className={`${sys.color} flex-shrink-0 mt-0.5`} />
-                  <div>
-                    <div className="flex items-baseline gap-3 mb-1">
-                      <h4 className="text-xl font-display text-white uppercase tracking-widest group-hover:text-primary transition-colors">
-                        {sys.name}
-                      </h4>
-                      <span className="text-[10px] font-mono text-muted-foreground uppercase">{sys.role}</span>
-                    </div>
-                    <p className="text-muted-foreground font-mono text-xs leading-relaxed mb-2">{sys.desc}</p>
-                    <span className="inline-flex items-center gap-1 text-secondary font-mono text-xs group-hover:text-white transition-colors">
-                      {sys.label} <ExternalLink size={10} />
-                    </span>
-                  </div>
-                </a>
-              );
-            })}
+            {extendedSystems.map((sys) => (
+              <EcosystemCard key={sys.id} product={sys} variant="compact" />
+            ))}
           </div>
         </motion.div>
       </section>
@@ -531,23 +442,21 @@ export default function Home() {
                 <Globe size={20} /> Enter ShotgunNinjas.com <ArrowUpRight size={18} />
               </a>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-2xl mx-auto">
-                <a href="https://bf-os.com" target="_blank" rel="noopener noreferrer" className="group border border-border bg-card/50 p-3 text-center hover:border-blue-400/50 transition-all">
-                  <span className="block font-display text-sm text-white uppercase tracking-widest group-hover:text-blue-400 transition-colors">BrandForge</span>
-                  <span className="block font-mono text-[10px] text-muted-foreground mt-1">bf-os.com</span>
-                </a>
-                <a href="https://TorqueShed.pro" target="_blank" rel="noopener noreferrer" className="group border border-border bg-card/50 p-3 text-center hover:border-orange-500/50 transition-all">
-                  <span className="block font-display text-sm text-white uppercase tracking-widest group-hover:text-orange-500 transition-colors">TorqueShed</span>
-                  <span className="block font-mono text-[10px] text-muted-foreground mt-1">TorqueShed.pro</span>
-                </a>
-                <a href="https://techdeck.app" target="_blank" rel="noopener noreferrer" className="group border border-border bg-card/50 p-3 text-center hover:border-purple-500/50 transition-all">
-                  <span className="block font-display text-sm text-white uppercase tracking-widest group-hover:text-purple-500 transition-colors">TechDeck</span>
-                  <span className="block font-mono text-[10px] text-muted-foreground mt-1">TechDeck.app</span>
-                </a>
-                <a href="https://tradeflowkit.com" target="_blank" rel="noopener noreferrer" className="group border border-border bg-card/50 p-3 text-center hover:border-green-500/50 transition-all">
-                  <span className="block font-display text-sm text-white uppercase tracking-widest group-hover:text-green-500 transition-colors">TradeFlowKit</span>
-                  <span className="block font-mono text-[10px] text-muted-foreground mt-1">TradeFlowKit.com</span>
-                </a>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 max-w-3xl mx-auto">
+                {ecosystem.map((p) => (
+                  <a
+                    key={p.id}
+                    href={p.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group border border-border bg-card/50 p-3 text-center hover:border-primary/50 transition-all"
+                  >
+                    <span className="block font-display text-sm text-white uppercase tracking-widest transition-colors group-hover:text-primary">
+                      {p.name}
+                    </span>
+                    <span className="block font-mono text-[10px] text-muted-foreground mt-1">{p.urlLabel}</span>
+                  </a>
+                ))}
               </div>
             </div>
           </motion.div>

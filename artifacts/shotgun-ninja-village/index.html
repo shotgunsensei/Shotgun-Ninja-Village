@@ -23,9 +23,19 @@
     <link rel="apple-touch-icon" href="icon-192.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://shotgunninjas.com">
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0A0A0F;color:#fff;font-family:system-ui,-apple-system,sans-serif;padding:2rem;text-align:center;">
+        <div style="max-width:480px;">
+          <h1 style="color:#DC2626;font-size:1.75rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1rem;">Signal Requires JavaScript</h1>
+          <p style="color:#9CA3AF;line-height:1.6;margin-bottom:1.5rem;">The Shotgun Ninja Village command hub runs on JavaScript. Enable scripts to receive the transmission.</p>
+          <p style="color:#9CA3AF;line-height:1.6;">Or visit the main hub at <a href="https://shotgunninjas.com" style="color:#3B82F6;">shotgunninjas.com</a>.</p>
+        </div>
+      </div>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
     <script>
       if ("serviceWorker" in navigator) {

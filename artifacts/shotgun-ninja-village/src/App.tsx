@@ -1,17 +1,20 @@
+import React, { Suspense, lazy } from "react";
 import { Switch, Route, Router as WouterRouter, useLocation } from "wouter";
 import { AnimatePresence, motion } from "framer-motion";
-import NotFound from "@/pages/not-found";
 
 import { Layout } from "@/components/layout/Layout";
-import Home from "@/pages/Home";
-import Archive from "@/pages/Archive";
-import Operators from "@/pages/Operators";
-import Grid from "@/pages/Grid";
-import Arsenal from "@/pages/Arsenal";
-import Intel from "@/pages/Intel";
-import Community from "@/pages/Community";
-import Merch from "@/pages/Merch";
-import Legal from "@/pages/Legal";
+import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
+
+const Home = lazy(() => import("@/pages/Home"));
+const Archive = lazy(() => import("@/pages/Archive"));
+const Operators = lazy(() => import("@/pages/Operators"));
+const Grid = lazy(() => import("@/pages/Grid"));
+const Arsenal = lazy(() => import("@/pages/Arsenal"));
+const Intel = lazy(() => import("@/pages/Intel"));
+const Community = lazy(() => import("@/pages/Community"));
+const Merch = lazy(() => import("@/pages/Merch"));
+const Legal = lazy(() => import("@/pages/Legal"));
+const NotFound = lazy(() => import("@/pages/not-found"));
 
 const pageVariants = {
   initial: { opacity: 0, y: 12 },
@@ -27,26 +30,44 @@ function AnimatedPage({ children }: { children: React.ReactNode }) {
   );
 }
 
+function RouteFallback() {
+  return (
+    <div
+      role="status"
+      aria-live="polite"
+      className="min-h-[60dvh] flex items-center justify-center"
+    >
+      <p className="font-mono text-xs text-muted-foreground uppercase tracking-widest animate-pulse">
+        Loading transmission...
+      </p>
+    </div>
+  );
+}
+
 function Router() {
   const [location] = useLocation();
 
   return (
     <Layout>
-      <AnimatePresence mode="wait">
-        <Switch key={location}>
-          <Route path="/">{() => <AnimatedPage><Home /></AnimatedPage>}</Route>
-          <Route path="/archive">{() => <AnimatedPage><Archive /></AnimatedPage>}</Route>
-          <Route path="/operators">{() => <AnimatedPage><Operators /></AnimatedPage>}</Route>
-          <Route path="/grid">{() => <AnimatedPage><Grid /></AnimatedPage>}</Route>
-          <Route path="/arsenal">{() => <AnimatedPage><Arsenal /></AnimatedPage>}</Route>
-          <Route path="/intel">{() => <AnimatedPage><Intel /></AnimatedPage>}</Route>
-          <Route path="/community">{() => <AnimatedPage><Community /></AnimatedPage>}</Route>
-          <Route path="/merch">{() => <AnimatedPage><Merch /></AnimatedPage>}</Route>
-          <Route path="/legal">{() => <AnimatedPage><Legal /></AnimatedPage>}</Route>
-          <Route path="/legal/:section">{() => <AnimatedPage><Legal /></AnimatedPage>}</Route>
-          <Route>{() => <AnimatedPage><NotFound /></AnimatedPage>}</Route>
-        </Switch>
-      </AnimatePresence>
+      <ErrorBoundary>
+        <Suspense fallback={<RouteFallback />}>
+          <AnimatePresence mode="wait">
+            <Switch key={location}>
+              <Route path="/">{() => <AnimatedPage><Home /></AnimatedPage>}</Route>
+              <Route path="/archive">{() => <AnimatedPage><Archive /></AnimatedPage>}</Route>
+              <Route path="/operators">{() => <AnimatedPage><Operators /></AnimatedPage>}</Route>
+              <Route path="/grid">{() => <AnimatedPage><Grid /></AnimatedPage>}</Route>
+              <Route path="/arsenal">{() => <AnimatedPage><Arsenal /></AnimatedPage>}</Route>
+              <Route path="/intel">{() => <AnimatedPage><Intel /></AnimatedPage>}</Route>
+              <Route path="/community">{() => <AnimatedPage><Community /></AnimatedPage>}</Route>
+              <Route path="/merch">{() => <AnimatedPage><Merch /></AnimatedPage>}</Route>
+              <Route path="/legal">{() => <AnimatedPage><Legal /></AnimatedPage>}</Route>
+              <Route path="/legal/:section">{() => <AnimatedPage><Legal /></AnimatedPage>}</Route>
+              <Route>{() => <AnimatedPage><NotFound /></AnimatedPage>}</Route>
+            </Switch>
+          </AnimatePresence>
+        </Suspense>
+      </ErrorBoundary>
     </Layout>
   );
 }

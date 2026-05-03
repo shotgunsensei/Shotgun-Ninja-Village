@@ -66,7 +66,42 @@ export function isLive(): boolean {
 
 const STOREFRONT_API_VERSION = "2024-01";
 
-function storefrontFetch(query: string, variables: Record<string, any> = {}): Promise<any> {
+interface ShopifyMoney { amount: string; currencyCode: string }
+interface ShopifySelectedOption { name: string; value: string }
+interface ShopifyImageNode { url: string; altText?: string | null }
+interface ShopifyVariantNode {
+  id: string;
+  title: string;
+  sku?: string | null;
+  price: ShopifyMoney;
+  compareAtPrice?: ShopifyMoney | null;
+  availableForSale?: boolean;
+  selectedOptions?: ShopifySelectedOption[];
+}
+interface ShopifyCollectionRef { handle: string }
+interface ShopifyProductNode {
+  id: string;
+  handle: string;
+  title: string;
+  description?: string;
+  tags?: string[];
+  images?: { edges: { node: ShopifyImageNode }[] };
+  variants?: { edges: { node: ShopifyVariantNode }[] };
+  collections?: { edges: { node: ShopifyCollectionRef }[] };
+}
+interface ShopifyCollectionNode {
+  id: string;
+  handle: string;
+  title: string;
+  description?: string;
+  productsCount?: { count: number };
+}
+interface StorefrontResponse<T> { data?: T; errors?: unknown }
+
+function storefrontFetch<T = unknown>(
+  query: string,
+  variables: Record<string, unknown> = {}
+): Promise<StorefrontResponse<T>> {
   const { domain, storefrontToken } = storeConfig.shopify;
   return fetch(`https://${domain}/api/${STOREFRONT_API_VERSION}/graphql.json`, {
     method: "POST",
@@ -89,11 +124,12 @@ async function fetchShopifyProducts(collectionHandle?: string): Promise<Product[
       : `query { products(first: 50) { edges { node { ${PRODUCT_FIELDS} } } } }`;
 
     const variables = collectionHandle ? { handle: collectionHandle } : {};
-    const data = await storefrontFetch(query, variables);
+    type ListResp = { products?: { edges: { node: ShopifyProductNode }[] }; collection?: { products: { edges: { node: ShopifyProductNode }[] } } };
+    const data = await storefrontFetch<ListResp>(query, variables);
     const edges = collectionHandle
       ? data.data?.collection?.products?.edges
       : data.data?.products?.edges;
-    return (edges ?? []).map((e: any) => mapShopifyProduct(e.node));
+    return (edges ?? []).map((e) => mapShopifyProduct(e.node));
   } catch {
     return mockProducts;
   }
@@ -101,7 +137,7 @@ async function fetchShopifyProducts(collectionHandle?: string): Promise<Product[
 
 async function fetchShopifyProduct(handle: string): Promise<Product | null> {
   try {
-    const data = await storefrontFetch(
+    const data = await storefrontFetch<{ product?: ShopifyProductNode | null }>(
       `query ($handle: String!) { product(handle: $handle) { ${PRODUCT_FIELDS} } }`,
       { handle }
     );
@@ -114,12 +150,12 @@ async function fetchShopifyProduct(handle: string): Promise<Product | null> {
 
 async function fetchShopifyCollections(): Promise<Collection[]> {
   try {
-    const data = await storefrontFetch(`query {
+    const data = await storefrontFetch<{ collections: { edges: { node: ShopifyCollectionNode }[] } }>(`query {
       collections(first: 20) {
         edges { node { id handle title description productsCount { count } } }
       }
     }`);
-    return (data.data?.collections?.edges ?? []).map((e: any) => ({
+    return (data.data?.collections?.edges ?? []).map((e) => ({
       id: e.node.id,
       handle: e.node.handle,
       title: e.node.title,
@@ -150,16 +186,16 @@ const PRODUCT_FIELDS = `
   collections(first: 10) { edges { node { handle } } }
 `;
 
-function mapShopifyProduct(node: any): Product {
+function mapShopifyProduct(node: ShopifyProductNode): Product {
   const tags: string[] = node.tags ?? [];
-  const collections = (node.collections?.edges ?? []).map((e: any) => e.node.handle);
+  const collections = (node.collections?.edges ?? []).map((e) => e.node.handle);
   return {
     id: node.id,
     handle: node.handle,
     title: node.title,
     description: node.description || "",
-    images: (node.images?.edges ?? []).map((e: any) => e.node.url),
-    variants: (node.variants?.edges ?? []).map((e: any) => ({
+    images: (node.images?.edges ?? []).map((e) => e.node.url),
+    variants: (node.variants?.edges ?? []).map((e) => ({
       id: e.node.id,
       title: e.node.title,
       sku: e.node.sku || "",
@@ -167,7 +203,7 @@ function mapShopifyProduct(node: any): Product {
       compareAtPrice: e.node.compareAtPrice ? parseFloat(e.node.compareAtPrice.amount) : undefined,
       available: e.node.availableForSale ?? true,
       options: Object.fromEntries(
-        (e.node.selectedOptions ?? []).map((o: any) => [o.name.toLowerCase(), o.value])
+        (e.node.selectedOptions ?? []).map((o) => [o.name.toLowerCase(), o.value])
       ),
     })),
     collections,

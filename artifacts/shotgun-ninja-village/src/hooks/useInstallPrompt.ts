@@ -15,7 +15,7 @@ export function useInstallPrompt() {
       return;
     }
 
-    if ((navigator as any).standalone === true) {
+    if ((navigator as Navigator & { standalone?: boolean }).standalone === true) {
       setIsInstalled(true);
       return;
     }

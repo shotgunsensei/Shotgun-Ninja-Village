@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import {
   ShoppingBag, Tag, ChevronRight, Shield, User, Zap,
   Award, Package, Truck, Star, Users, Play, Clock,
-  RefreshCw, CreditCard, ArrowRight, Flame
+  RefreshCw, CreditCard, ArrowRight, Flame, AlertTriangle
 } from "lucide-react";
 import type { Product, Collection } from "@/data/products";
 import { getProducts, getCollections, getFeaturedProducts, formatPrice } from "@/services/store";
@@ -38,6 +38,7 @@ export default function Merch() {
   const [activeCollection, setActiveCollection] = useState<string | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [loaded, setLoaded] = useState(false);
+  const [loadError, setLoadError] = useState(false);
 
   useEffect(() => {
     Promise.all([getProducts(), getCollections(), getFeaturedProducts()])
@@ -45,8 +46,12 @@ export default function Merch() {
         setAllProducts(prods);
         setAllCollections(cols);
         setFeaturedProducts(feat);
-        setLoaded(true);
-      });
+      })
+      .catch((err) => {
+        console.error("[Merch] data load failed:", err);
+        setLoadError(true);
+      })
+      .finally(() => setLoaded(true));
   }, []);
 
   const filteredProducts = activeCollection
@@ -69,6 +74,13 @@ export default function Merch() {
 
   return (
     <div className="relative w-full min-h-[100dvh] flex flex-col">
+
+      {loadError && (
+        <div role="alert" className="border-b border-primary/40 bg-primary/10 text-primary px-4 py-2 font-mono text-xs uppercase tracking-widest text-center">
+          <AlertTriangle size={12} className="inline mr-1.5 align-[-2px]" aria-hidden="true" />
+          Supply channel partial. Showing cached inventory.
+        </div>
+      )}
 
       <section className="relative w-full py-16 md:py-24 flex items-center justify-center overflow-hidden border-b border-primary/20">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/8 via-background to-background" />

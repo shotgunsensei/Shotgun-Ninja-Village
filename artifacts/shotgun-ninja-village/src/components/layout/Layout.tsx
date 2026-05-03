@@ -70,7 +70,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
           >
             <Globe size={18} />
           </a>
-          <button onClick={() => setIsOpen(!isOpen)} className="p-2 text-primary" aria-label="Toggle menu">
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="p-2 text-primary"
+            aria-label={isOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isOpen}
+            aria-controls="primary-nav"
+          >
             {isOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
@@ -80,14 +86,19 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <div
           className="fixed inset-0 bg-black/60 z-30 md:hidden"
           onClick={close}
-          aria-hidden
+          aria-hidden="true"
         />
       )}
 
-      <aside className={cn(
-        "fixed md:sticky top-0 left-0 h-[100dvh] w-60 border-r border-border bg-background/95 backdrop-blur z-40 flex flex-col transition-transform duration-300 ease-in-out md:translate-x-0",
-        isOpen ? "translate-x-0" : "-translate-x-full"
-      )}>
+      <aside
+        role="navigation"
+        aria-label="Primary"
+        id="primary-nav"
+        className={cn(
+          "fixed md:sticky top-0 left-0 h-[100dvh] w-60 border-r border-border bg-background/95 backdrop-blur z-40 flex flex-col transition-transform duration-300 ease-in-out md:translate-x-0",
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        )}
+      >
         <div className="p-5 border-b border-border/50">
           <Link href="/" onClick={close} className="block">
             <h1 className="text-2xl font-bold font-display text-primary tracking-widest uppercase glitch-text" data-text="SHOTGUN_NINJAS">
