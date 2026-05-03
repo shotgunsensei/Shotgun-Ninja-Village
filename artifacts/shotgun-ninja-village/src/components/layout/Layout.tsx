@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "wouter";
-import { Shield, Database, UserSquare, Map, Sword, Cpu, Menu, X, Download, Globe, Users, ShoppingBag } from "lucide-react";
+import { Shield, Database, UserSquare, Map, Sword, Cpu, Menu, X, Download, Globe, Users, ShoppingBag, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useInstallPrompt } from "@/hooks/useInstallPrompt";
 
@@ -110,7 +110,20 @@ export function Layout({ children }: { children: React.ReactNode }) {
             ))}
           </div>
 
-          <div className="pt-2 mt-2 border-t border-border/30">
+          <div className="pt-2 mt-2 border-t border-border/30 space-y-0.5">
+            <Link
+              href="/legal/terms"
+              onClick={close}
+              className={cn(
+                "flex items-center gap-3 px-4 py-2 font-mono text-xs uppercase tracking-widest transition-all border-l-2",
+                location.startsWith("/legal")
+                  ? "bg-primary/10 text-primary border-primary"
+                  : "text-muted-foreground border-transparent hover:bg-white/5 hover:text-foreground hover:border-white/20"
+              )}
+            >
+              <FileText size={13} />
+              Legal
+            </Link>
             <a
               href="https://shotgunninjas.com"
               target="_blank"

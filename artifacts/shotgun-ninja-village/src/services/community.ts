@@ -127,7 +127,10 @@ async function fetchDiscourseTopics(): Promise<ForumTopic[]> {
     const res = await fetch(`${communityConfig.discourse.url}/latest.json`);
     if (!res.ok) throw new Error(`Discourse API ${res.status}`);
     const data = await res.json();
-    const users = new Map((data.users ?? []).map((u: any) => [u.id, u]));
+    type DiscourseUser = { id: number; username: string };
+    const users = new Map<number, DiscourseUser>(
+      (data.users ?? []).map((u: DiscourseUser) => [u.id, u])
+    );
     return (data.topic_list?.topics ?? []).slice(0, 8).map((t: any) => {
       const poster = users.get(t.posters?.[0]?.user_id);
       return {

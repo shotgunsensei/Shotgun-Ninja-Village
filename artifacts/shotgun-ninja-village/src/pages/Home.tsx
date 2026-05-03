@@ -74,6 +74,61 @@ const fadeUp = {
   transition: { duration: 0.5 }
 };
 
+function SignalForm() {
+  const [status, setStatus] = useState<"idle" | "submitting" | "ok" | "error">("idle");
+  const [message, setMessage] = useState("");
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const email = (form.elements.namedItem("email") as HTMLInputElement)?.value.trim();
+    const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if (!valid) {
+      setStatus("error");
+      setMessage("Signal address invalid. Check format and retry.");
+      return;
+    }
+    setStatus("submitting");
+    try {
+      window.open(`https://shotgunninjas.com?email=${encodeURIComponent(email)}`, "_blank", "noopener,noreferrer");
+      setStatus("ok");
+      setMessage("Channel locked. Continue setup in the new tab.");
+      form.reset();
+    } catch {
+      setStatus("error");
+      setMessage("Could not open hub. Disable popup blockers or visit shotgunninjas.com directly.");
+    }
+  };
+
+  return (
+    <>
+      <form onSubmit={onSubmit} className="flex flex-col sm:flex-row items-stretch gap-3 max-w-lg mx-auto mb-3">
+        <input
+          type="email"
+          name="email"
+          required
+          aria-label="Email address"
+          placeholder="signal@address.com"
+          className="flex-1 px-4 py-3 bg-background border border-border text-white font-mono text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
+        />
+        <button
+          type="submit"
+          disabled={status === "submitting"}
+          className="clip-diagonal bg-primary hover:bg-primary/90 disabled:opacity-60 text-white px-6 py-3 font-display text-lg uppercase tracking-widest transition-all inline-flex items-center justify-center gap-2 whitespace-nowrap"
+        >
+          {status === "submitting" ? "Locking..." : "Lock In"} <ChevronRight size={18} />
+        </button>
+      </form>
+      {status === "ok" && (
+        <p role="status" className="font-mono text-xs text-secondary mb-3">{message}</p>
+      )}
+      {status === "error" && (
+        <p role="alert" className="font-mono text-xs text-primary mb-3">{message}</p>
+      )}
+    </>
+  );
+}
+
 export default function Home() {
   usePageMeta({
     title: "Command Hub",
@@ -421,31 +476,7 @@ export default function Home() {
               New transmissions incoming. Recovered systems deploying. Enter your signal address for mission briefings, early access, and classified drops before they reach the public feed.
             </p>
 
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                const form = e.currentTarget;
-                const email = (form.elements.namedItem("email") as HTMLInputElement)?.value;
-                if (email) {
-                  window.open(`https://shotgunninjas.com?email=${encodeURIComponent(email)}`, "_blank");
-                }
-              }}
-              className="flex flex-col sm:flex-row items-stretch gap-3 max-w-lg mx-auto mb-6"
-            >
-              <input
-                type="email"
-                name="email"
-                required
-                placeholder="signal@address.com"
-                className="flex-1 px-4 py-3 bg-background border border-border text-white font-mono text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
-              />
-              <button
-                type="submit"
-                className="clip-diagonal bg-primary hover:bg-primary/90 text-white px-6 py-3 font-display text-lg uppercase tracking-widest transition-all inline-flex items-center justify-center gap-2 whitespace-nowrap"
-              >
-                Lock In <ChevronRight size={18} />
-              </button>
-            </form>
+            <SignalForm />
 
             <p className="font-mono text-xs text-muted-foreground">
               No spam. No noise. Only signal.
