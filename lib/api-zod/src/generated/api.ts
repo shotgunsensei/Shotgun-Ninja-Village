@@ -14,3 +14,21 @@ import * as zod from "zod";
 export const HealthCheckResponse = zod.object({
   status: zod.string(),
 });
+
+/**
+ * Stores an email address for the Shotgun Ninjas archive list.
+ * @summary Capture an email signup
+ */
+export const createSignupBodyEmailMax = 320;
+
+export const createSignupBodySourceMax = 64;
+
+export const CreateSignupBody = zod.object({
+  email: zod.string().email().max(createSignupBodyEmailMax),
+  source: zod.string().max(createSignupBodySourceMax).optional(),
+});
+
+export const CreateSignupResponse = zod.object({
+  ok: zod.boolean(),
+  alreadySubscribed: zod.boolean(),
+});

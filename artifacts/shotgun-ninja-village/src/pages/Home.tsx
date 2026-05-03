@@ -11,7 +11,14 @@ import {
   extendedSystems,
   ecosystem,
 } from "@workspace/sn-ecosystem";
-import { queueSignal } from "@/lib/signalQueue";
+import {
+  queueSignal,
+  flushQueuedSignals,
+  getQueuedSignals,
+  clearQueuedSignals,
+  exportQueuedSignalsAsCsv,
+} from "@/lib/signalQueue";
+import { createSignup, ApiError } from "@workspace/api-client-react";
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
@@ -44,11 +51,36 @@ const fadeUp = {
   transition: { duration: 0.5 }
 };
 
+function isAdminView() {
+  if (typeof window === "undefined") return false;
+  try {
+    return new URLSearchParams(window.location.search).get("admin") === "1";
+  } catch {
+    return false;
+  }
+}
+
 function SignalForm() {
   const [status, setStatus] = useState<"idle" | "submitting" | "ok" | "error">("idle");
   const [message, setMessage] = useState("");
+  const [queuedCount, setQueuedCount] = useState(0);
+  const [admin] = useState(isAdminView);
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    let cancelled = false;
+    flushQueuedSignals("queue-flush")
+      .then(({ remaining }) => {
+        if (!cancelled) setQueuedCount(remaining);
+      })
+      .catch(() => {
+        if (!cancelled) setQueuedCount(getQueuedSignals().length);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
     const email = (form.elements.namedItem("email") as HTMLInputElement)?.value.trim();
@@ -58,17 +90,59 @@ function SignalForm() {
       setMessage("Signal address invalid. Check format and retry.");
       return;
     }
+
     setStatus("submitting");
-    queueSignal(email);
-    const popup = window.open(`https://shotgunninjas.com?email=${encodeURIComponent(email)}`, "_blank", "noopener,noreferrer");
-    if (popup) {
+    try {
+      const result = await createSignup({ email, source: "village-home" });
       setStatus("ok");
-      setMessage("Channel locked. Continue setup in the new tab.");
-    } else {
-      setStatus("ok");
-      setMessage("Channel queued locally. Visit shotgunninjas.com to complete setup.");
+      setMessage(
+        result.alreadySubscribed
+          ? "Channel already locked. You're on the list."
+          : "Channel locked. Mission briefings inbound.",
+      );
+      form.reset();
+      setQueuedCount(getQueuedSignals().length);
+    } catch (err) {
+      // Distinguish API rejections (4xx) from genuine network/unavailable failures.
+      // Only the latter should fall back to the local queue — 4xx means the input
+      // was rejected by the server and queueing it would just retry forever.
+      if (err instanceof ApiError && err.status >= 400 && err.status < 500) {
+        const detail =
+          (err.data && typeof err.data === "object" && "message" in err.data
+            ? String((err.data as { message?: unknown }).message ?? "")
+            : "") || "Signal rejected. Check the address and retry.";
+        setStatus("error");
+        setMessage(detail);
+        return;
+      }
+
+      // Network failure, 5xx, or parse error — queue locally so the address isn't lost.
+      const queued = queueSignal(email);
+      setQueuedCount(getQueuedSignals().length);
+      if (queued) {
+        setStatus("ok");
+        setMessage("Uplink unavailable. Signal queued locally — we'll retry on your next visit.");
+        form.reset();
+      } else {
+        setStatus("error");
+        setMessage("Signal failed and could not be queued. Please retry.");
+      }
+      // eslint-disable-next-line no-console
+      console.warn("Signup endpoint failed", err);
     }
-    form.reset();
+  };
+
+  const downloadCsv = () => {
+    const csv = exportQueuedSignalsAsCsv();
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `queued-signals-${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -95,6 +169,28 @@ function SignalForm() {
       )}
       {status === "error" && (
         <p role="alert" className="font-mono text-xs text-primary mb-3">{message}</p>
+      )}
+      {admin && queuedCount > 0 && (
+        <div className="font-mono text-xs text-muted-foreground mb-3 flex flex-col sm:flex-row items-center justify-center gap-2">
+          <span>{queuedCount} signal{queuedCount === 1 ? "" : "s"} queued locally (uplink failed).</span>
+          <button
+            type="button"
+            onClick={downloadCsv}
+            className="underline hover:text-secondary"
+          >
+            Export CSV
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              clearQueuedSignals();
+              setQueuedCount(0);
+            }}
+            className="underline hover:text-primary"
+          >
+            Clear queue
+          </button>
+        </div>
       )}
     </>
   );

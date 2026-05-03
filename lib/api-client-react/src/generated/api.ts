@@ -5,18 +5,26 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
+  MutationFunction,
   QueryFunction,
   QueryKey,
+  UseMutationOptions,
+  UseMutationResult,
   UseQueryOptions,
   UseQueryResult,
 } from "@tanstack/react-query";
 
-import type { HealthStatus } from "./api.schemas";
+import type {
+  ErrorResponse,
+  HealthStatus,
+  SignupRequest,
+  SignupResponse,
+} from "./api.schemas";
 
 import { customFetch } from "../custom-fetch";
-import type { ErrorType } from "../custom-fetch";
+import type { ErrorType, BodyType } from "../custom-fetch";
 
 type AwaitedInput<T> = PromiseLike<T> | T;
 
@@ -99,3 +107,90 @@ export function useHealthCheck<
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+/**
+ * Stores an email address for the Shotgun Ninjas archive list.
+ * @summary Capture an email signup
+ */
+export const getCreateSignupUrl = () => {
+  return `/api/signups`;
+};
+
+export const createSignup = async (
+  signupRequest: SignupRequest,
+  options?: RequestInit,
+): Promise<SignupResponse> => {
+  return customFetch<SignupResponse>(getCreateSignupUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(signupRequest),
+  });
+};
+
+export const getCreateSignupMutationOptions = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createSignup>>,
+    TError,
+    { data: BodyType<SignupRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createSignup>>,
+  TError,
+  { data: BodyType<SignupRequest> },
+  TContext
+> => {
+  const mutationKey = ["createSignup"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createSignup>>,
+    { data: BodyType<SignupRequest> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return createSignup(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreateSignupMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createSignup>>
+>;
+export type CreateSignupMutationBody = BodyType<SignupRequest>;
+export type CreateSignupMutationError = ErrorType<ErrorResponse>;
+
+/**
+ * @summary Capture an email signup
+ */
+export const useCreateSignup = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createSignup>>,
+    TError,
+    { data: BodyType<SignupRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createSignup>>,
+  TError,
+  { data: BodyType<SignupRequest> },
+  TContext
+> => {
+  return useMutation(getCreateSignupMutationOptions(options));
+};

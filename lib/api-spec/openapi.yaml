@@ -10,6 +10,8 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: signups
+    description: Email signup capture
 paths:
   /healthz:
     get:
@@ -24,6 +26,37 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /signups:
+    post:
+      operationId: createSignup
+      tags: [signups]
+      summary: Capture an email signup
+      description: Stores an email address for the Shotgun Ninjas archive list.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignupRequest"
+      responses:
+        "201":
+          description: Signup stored
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SignupResponse"
+        "200":
+          description: Signup already existed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SignupResponse"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +66,32 @@ components:
           type: string
       required:
         - status
-
+    SignupRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 320
+        source:
+          type: string
+          maxLength: 64
+      required:
+        - email
+    SignupResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        alreadySubscribed:
+          type: boolean
+      required:
+        - ok
+        - alreadySubscribed
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message

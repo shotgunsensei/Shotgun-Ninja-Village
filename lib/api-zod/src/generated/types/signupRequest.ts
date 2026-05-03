@@ -5,22 +5,10 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-export interface HealthStatus {
-  status: string;
-}
 
 export interface SignupRequest {
   /** @maxLength 320 */
   email: string;
   /** @maxLength 64 */
   source?: string;
-}
-
-export interface SignupResponse {
-  ok: boolean;
-  alreadySubscribed: boolean;
-}
-
-export interface ErrorResponse {
-  message: string;
 }
