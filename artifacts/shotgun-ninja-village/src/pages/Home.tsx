@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "wouter";
-import { ChevronRight, PlayCircle, UserSquare, ExternalLink, Terminal, Wrench, Cpu, BarChart3, Mail, Radio, Globe, ArrowUpRight, Users, ShoppingBag, Database } from "lucide-react";
+import { ChevronRight, PlayCircle, UserSquare, ExternalLink, Terminal, Wrench, Cpu, BarChart3, Mail, Radio, Globe, ArrowUpRight, Users, ShoppingBag, Database, Activity, Crosshair } from "lucide-react";
 import { motion } from "framer-motion";
 import { transmissions } from "@/data/transmissions";
 import { usePageMeta } from "@/hooks/usePageMeta";
@@ -49,6 +49,24 @@ const extendedSystems = [
     color: "text-green-500",
     url: "https://tradeflowkit.com",
     label: "TradeFlowKit.com"
+  },
+  {
+    name: "PulseDesk",
+    role: "Triage Network",
+    desc: "Coordinates incidents, escalations, and operational visibility across distributed teams under pressure.",
+    icon: Activity,
+    color: "text-rose-400",
+    url: "https://pulsedesk.support",
+    label: "PulseDesk.support"
+  },
+  {
+    name: "FaultlineLab",
+    role: "Diagnostic Training Range",
+    desc: "Run scenarios. Trace faults. Sharpen the signal-war reflexes through high-pressure diagnostic challenges.",
+    icon: Crosshair,
+    color: "text-yellow-400",
+    url: "https://faultlinelab.com",
+    label: "FaultlineLab.com"
   }
 ];
 

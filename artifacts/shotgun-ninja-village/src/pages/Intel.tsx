@@ -1,5 +1,5 @@
 import React from "react";
-import { Cpu, Wrench, ShieldCheck, Terminal, BarChart3, ExternalLink, ChevronRight } from "lucide-react";
+import { Cpu, Wrench, ShieldCheck, Terminal, BarChart3, ExternalLink, ChevronRight, Activity, Crosshair } from "lucide-react";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { UniverseFooter } from "@/components/shared/UniverseFooter";
 
@@ -58,11 +58,33 @@ const extendedNetwork = [
     color: "text-green-500",
     url: "https://tradeflowkit.com",
     urlLabel: "TradeFlowKit.com"
+  },
+  {
+    id: "pulsedesk",
+    name: "PulseDesk",
+    universeRole: "Triage Network",
+    realRole: "Healthcare operations and incident coordination",
+    desc: "Coordinates incidents, escalations, and operational visibility across distributed teams. Built for high-stakes coordination under pressure.",
+    icon: Activity,
+    color: "text-rose-400",
+    url: "https://pulsedesk.support",
+    urlLabel: "PulseDesk.support"
+  },
+  {
+    id: "faultlinelab",
+    name: "FaultlineLab",
+    universeRole: "Diagnostic Training Range",
+    realRole: "Diagnostic challenges, fault analysis, and high-pressure problem solving",
+    desc: "Run scenarios. Trace faults. Prove the operator under load. The training range where signal-war reflexes get sharpened.",
+    icon: Crosshair,
+    color: "text-yellow-400",
+    url: "https://faultlinelab.com",
+    urlLabel: "FaultlineLab.com"
   }
 ];
 
 export default function Intel() {
-  usePageMeta({ title: "Forge Intel", description: "Recovered systems online: BrandForge, TorqueShed, TechDeck, TradeFlowKit. Tactical platforms from the Shotgun Ninjas ecosystem." });
+  usePageMeta({ title: "Forge Intel", description: "Recovered systems online: BrandForge, TorqueShed, TechDeck, TradeFlowKit, PulseDesk, FaultlineLab. Tactical platforms from the Shotgun Ninjas ecosystem." });
   return (
     <div className="flex flex-col min-h-[100dvh]">
     <div className="container mx-auto px-4 py-12 max-w-6xl flex-1">

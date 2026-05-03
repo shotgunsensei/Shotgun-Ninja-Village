@@ -100,10 +100,19 @@ export function UniverseFooter({ exclude = [] }: UniverseFooterProps) {
 
         <div className="flex flex-col sm:flex-row items-center justify-between gap-2 pt-3">
           <p className="font-mono text-[11px] text-muted-foreground">
-            © {year} Shotgun Ninjas Productions. All rights reserved.
+            © {year} Shotgun Ninjas Productions. Built by{" "}
+            <a
+              href="https://shotgunninjas.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-secondary hover:text-white transition-colors"
+            >
+              Shotgun Ninjas Productions
+            </a>
+            .
           </p>
           <p className="font-mono text-[11px] text-muted-foreground">
-            Shotgun Ninja Village — part of the Shotgun Ninjas universe.
+            Part of the Shotgun Ninjas ecosystem.
           </p>
         </div>
       </div>
