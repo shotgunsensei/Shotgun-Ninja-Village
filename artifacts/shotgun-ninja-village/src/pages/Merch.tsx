@@ -11,7 +11,7 @@ import { getProducts, getCollections, getFeaturedProducts, formatPrice } from "@
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { ProductCard } from "@/components/shared/ProductCard";
 import { ProductModal } from "@/components/shared/ProductModal";
-import { UniverseFooter } from "@/components/shared/UniverseFooter";
+import { UniverseFooter } from "@workspace/sn-ecosystem";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
 const collectionIcons: Record<string, React.ElementType> = {
@@ -346,7 +346,7 @@ export default function Merch() {
         </div>
       </section>
 
-      <UniverseFooter exclude={["merch"]} />
+      <UniverseFooter LinkComponent={Link} exclude={["merch"]} />
 
       {selectedProduct && (
         <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />

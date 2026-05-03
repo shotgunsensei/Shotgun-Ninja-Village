@@ -518,6 +518,9 @@ importers:
       '@workspace/api-client-react':
         specifier: workspace:*
         version: link:../../lib/api-client-react
+      '@workspace/sn-ecosystem':
+        specifier: workspace:*
+        version: link:../../packages/sn-ecosystem
       class-variance-authority:
         specifier: 'catalog:'
         version: 0.7.1
@@ -819,6 +822,18 @@ importers:
       drizzle-kit:
         specifier: ^0.31.9
         version: 0.31.9
+
+  packages/sn-ecosystem:
+    devDependencies:
+      '@types/react':
+        specifier: 'catalog:'
+        version: 19.2.14
+      lucide-react:
+        specifier: 'catalog:'
+        version: 0.545.0(react@19.1.0)
+      react:
+        specifier: 'catalog:'
+        version: 19.1.0
 
   scripts:
     devDependencies:

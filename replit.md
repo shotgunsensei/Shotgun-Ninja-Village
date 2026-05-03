@@ -26,6 +26,25 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 
 See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and package details.
 
+## Shared packages
+
+### `@workspace/sn-ecosystem` (`packages/sn-ecosystem`)
+The single source of truth for the Shotgun Ninjas sister-product list and the shared cross-site UI used across all 7 ecosystem websites (BrandForge, TorqueShed, TechDeck, TradeFlowKit, PulseDesk, FaultlineLab, the Village hub).
+
+Exports:
+- `EcosystemProduct`, `EcosystemTier` — types
+- `ecosystem`, `recoveredSystems`, `extendedSystems`, `getProductById` — data
+- `EcosystemCard` — product card (variants: `compact`, `full`)
+- `UniverseFooter` — shared footer with cross-site links and legal nav
+
+**To update an ecosystem entry** (tagline, URL, color, add/remove a product): edit `packages/sn-ecosystem/src/data.ts` only. Every consuming sister site picks it up on the next build — do not duplicate the data into a sister site's `src/data/`.
+
+**Consuming the package from a sister site**:
+1. Add `"@workspace/sn-ecosystem": "workspace:*"` to the site's `package.json` and run `pnpm install`.
+2. Import: `import { UniverseFooter, EcosystemCard, ecosystem } from "@workspace/sn-ecosystem";`
+3. If the site uses a router (e.g. wouter), pass its Link via the `LinkComponent` prop so internal nav stays SPA: `<UniverseFooter LinkComponent={Link} />`. Without it, the footer falls back to plain `<a>` tags, which is appropriate for sister sites that don't share the village's router.
+4. Tailwind v4: add `@source "../../../packages/sn-ecosystem/src";` near the top of the site's main CSS file so utility classes used inside the package are scanned.
+
 ## Artifacts
 
 ### Shotgun Ninjas - Episode 1: The Signal in the Static

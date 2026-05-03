@@ -1,7 +1,8 @@
+import { Link } from "wouter";
 import React from "react";
 import { Crosshair } from "lucide-react";
 import { usePageMeta } from "@/hooks/usePageMeta";
-import { UniverseFooter } from "@/components/shared/UniverseFooter";
+import { UniverseFooter } from "@workspace/sn-ecosystem";
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
@@ -80,7 +81,7 @@ export default function Arsenal() {
         ))}
       </div>
     </div>
-    <UniverseFooter />
+    <UniverseFooter LinkComponent={Link} />
     </div>
   );
 }

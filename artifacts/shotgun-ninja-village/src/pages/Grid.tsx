@@ -1,7 +1,8 @@
+import { Link } from "wouter";
 import React from "react";
 import { MapPin, Skull } from "lucide-react";
 import { usePageMeta } from "@/hooks/usePageMeta";
-import { UniverseFooter } from "@/components/shared/UniverseFooter";
+import { UniverseFooter } from "@workspace/sn-ecosystem";
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
@@ -92,7 +93,7 @@ export default function Grid() {
         </div>
       </div>
     </div>
-    <UniverseFooter />
+    <UniverseFooter LinkComponent={Link} />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { UniverseFooter } from "@/components/shared/UniverseFooter";
+import { UniverseFooter } from "@workspace/sn-ecosystem";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
 export default function NotFound() {
@@ -23,7 +23,7 @@ export default function NotFound() {
           </Link>
         </div>
       </div>
-      <UniverseFooter />
+      <UniverseFooter LinkComponent={Link} />
     </div>
   );
 }

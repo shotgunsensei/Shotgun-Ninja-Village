@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useRoute } from "wouter";
 import { motion } from "framer-motion";
 import { Scale, Shield, RefreshCw, Mail, FileText, ExternalLink } from "lucide-react";
-import { UniverseFooter } from "@/components/shared/UniverseFooter";
+import { UniverseFooter } from "@workspace/sn-ecosystem";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
 type SectionKey = "terms" | "privacy" | "refunds" | "contact";
@@ -109,7 +109,7 @@ export default function Legal() {
       </section>
 
       <div className="mt-auto">
-        <UniverseFooter />
+        <UniverseFooter LinkComponent={Link} />
       </div>
     </div>
   );

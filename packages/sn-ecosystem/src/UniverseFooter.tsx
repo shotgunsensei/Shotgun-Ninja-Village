@@ -1,5 +1,9 @@
-import { Link } from "wouter";
+import type { ComponentType, AnchorHTMLAttributes } from "react";
 import { ExternalLink, Users, ShoppingBag, Database, ChevronRight } from "lucide-react";
+
+export type UniverseFooterLinkComponent = ComponentType<
+  AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }
+>;
 
 interface CrossLink {
   href: string;
@@ -8,7 +12,6 @@ interface CrossLink {
   icon: React.ElementType;
   color: string;
   hoverColor: string;
-  external?: boolean;
 }
 
 const allLinks: Record<string, CrossLink> = {
@@ -45,13 +48,40 @@ const legalLinks = [
   { href: "/legal/contact", label: "Contact" },
 ];
 
-interface UniverseFooterProps {
+const HUB_URL = "https://shotgunninjas.com";
+
+export interface UniverseFooterProps {
+  /**
+   * Keys of cross-links to hide (e.g. ["community"] when rendered on the Community page).
+   */
   exclude?: string[];
+  /**
+   * Optional Link component used for in-app navigation (e.g. wouter's <Link> or react-router's).
+   * Falls back to a plain <a> tag, which is useful for sister sites that don't share a router.
+   */
+  LinkComponent?: UniverseFooterLinkComponent;
+  /**
+   * Base URL prefix to apply to internal links so sister sites can point at the village
+   * (e.g. "https://shotgunninjas.com"). Leave undefined to keep links relative.
+   */
+  internalBaseUrl?: string;
 }
 
-export function UniverseFooter({ exclude = [] }: UniverseFooterProps) {
+const DefaultLink: UniverseFooterLinkComponent = ({ href, children, ...rest }) => (
+  <a href={href} {...rest}>
+    {children}
+  </a>
+);
+
+export function UniverseFooter({
+  exclude = [],
+  LinkComponent = DefaultLink,
+  internalBaseUrl,
+}: UniverseFooterProps) {
   const links = Object.entries(allLinks).filter(([key]) => !exclude.includes(key));
   const year = new Date().getFullYear();
+  const resolveHref = (href: string) =>
+    internalBaseUrl ? `${internalBaseUrl.replace(/\/$/, "")}${href}` : href;
 
   return (
     <footer className="border-t border-border">
@@ -61,9 +91,9 @@ export function UniverseFooter({ exclude = [] }: UniverseFooterProps) {
             {links.map(([key, link]) => {
               const Icon = link.icon;
               return (
-                <Link
+                <LinkComponent
                   key={key}
-                  href={link.href}
+                  href={resolveHref(link.href)}
                   className={`group border bg-card/50 p-4 flex items-center gap-3 transition-all ${link.color} ${link.hoverColor}`}
                 >
                   <Icon size={18} className="flex-shrink-0" />
@@ -72,7 +102,7 @@ export function UniverseFooter({ exclude = [] }: UniverseFooterProps) {
                     <span className="block font-mono text-[10px] text-muted-foreground">{link.sublabel}</span>
                   </div>
                   <ChevronRight size={14} className="text-muted-foreground group-hover:text-inherit transition-colors" />
-                </Link>
+                </LinkComponent>
               );
             })}
           </div>
@@ -80,16 +110,16 @@ export function UniverseFooter({ exclude = [] }: UniverseFooterProps) {
 
         <nav aria-label="Legal" className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 pt-4 pb-2 border-t border-border/50">
           {legalLinks.map((l) => (
-            <Link
+            <LinkComponent
               key={l.href}
-              href={l.href}
+              href={resolveHref(l.href)}
               className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground hover:text-white transition-colors"
             >
               {l.label}
-            </Link>
+            </LinkComponent>
           ))}
           <a
-            href="https://shotgunninjas.com"
+            href={HUB_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="font-mono text-[11px] uppercase tracking-widest text-secondary hover:text-white transition-colors inline-flex items-center gap-1"
@@ -102,7 +132,7 @@ export function UniverseFooter({ exclude = [] }: UniverseFooterProps) {
           <p className="font-mono text-[11px] text-muted-foreground">
             © {year} Shotgun Ninjas Productions. Built by{" "}
             <a
-              href="https://shotgunninjas.com"
+              href={HUB_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="text-secondary hover:text-white transition-colors"

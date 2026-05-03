@@ -1,6 +1,5 @@
-import React from "react";
 import { ExternalLink } from "lucide-react";
-import type { EcosystemProduct } from "@/data/ecosystem";
+import type { EcosystemProduct } from "./types";
 
 interface EcosystemCardProps {
   product: EcosystemProduct;

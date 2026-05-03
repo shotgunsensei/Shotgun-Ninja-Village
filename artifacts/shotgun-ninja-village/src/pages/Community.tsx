@@ -12,7 +12,7 @@ import {
   getCategoryUrl, getTopicUrl, getCommunityHomeUrl, getSignupUrl, isLive
 } from "@/services/community";
 import { SectionHeading } from "@/components/shared/SectionHeading";
-import { UniverseFooter } from "@/components/shared/UniverseFooter";
+import { UniverseFooter } from "@workspace/sn-ecosystem";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { resolveIcon } from "@/lib/iconMap";
 
@@ -419,7 +419,7 @@ export default function Community() {
         </div>
       </section>
 
-      <UniverseFooter exclude={["community"]} />
+      <UniverseFooter LinkComponent={Link} exclude={["community"]} />
     </div>
   );
 }

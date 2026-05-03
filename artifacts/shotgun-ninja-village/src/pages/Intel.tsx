@@ -1,9 +1,13 @@
+import { Link } from "wouter";
 import React from "react";
 import { ShieldCheck } from "lucide-react";
 import { usePageMeta } from "@/hooks/usePageMeta";
-import { UniverseFooter } from "@/components/shared/UniverseFooter";
-import { EcosystemCard } from "@/components/shared/EcosystemCard";
-import { recoveredSystems, extendedSystems } from "@/data/ecosystem";
+import {
+  UniverseFooter,
+  EcosystemCard,
+  recoveredSystems,
+  extendedSystems,
+} from "@workspace/sn-ecosystem";
 
 export default function Intel() {
   usePageMeta({
@@ -60,7 +64,7 @@ export default function Intel() {
           ))}
         </div>
       </div>
-      <UniverseFooter />
+      <UniverseFooter LinkComponent={Link} />
     </div>
   );
 }

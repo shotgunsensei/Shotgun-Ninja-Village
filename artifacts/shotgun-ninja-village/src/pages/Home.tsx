@@ -4,9 +4,13 @@ import { ChevronRight, PlayCircle, UserSquare, Mail, Radio, Globe, ArrowUpRight,
 import { motion } from "framer-motion";
 import { transmissions } from "@/data/transmissions";
 import { usePageMeta } from "@/hooks/usePageMeta";
-import { UniverseFooter } from "@/components/shared/UniverseFooter";
-import { EcosystemCard } from "@/components/shared/EcosystemCard";
-import { recoveredSystems, extendedSystems, ecosystem } from "@/data/ecosystem";
+import {
+  UniverseFooter,
+  EcosystemCard,
+  recoveredSystems,
+  extendedSystems,
+  ecosystem,
+} from "@workspace/sn-ecosystem";
 import { queueSignal } from "@/lib/signalQueue";
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
@@ -463,7 +467,7 @@ export default function Home() {
         </div>
       </section>
 
-      <UniverseFooter />
+      <UniverseFooter LinkComponent={Link} />
     </div>
   );
 }

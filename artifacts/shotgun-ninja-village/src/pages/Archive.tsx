@@ -1,8 +1,9 @@
+import { Link } from "wouter";
 import React from "react";
 import { PlayCircle, ChevronRight, Radio } from "lucide-react";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { transmissions } from "@/data/transmissions";
-import { UniverseFooter } from "@/components/shared/UniverseFooter";
+import { UniverseFooter } from "@workspace/sn-ecosystem";
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
@@ -71,7 +72,7 @@ export default function Archive() {
         </div>
       </div>
 
-      <UniverseFooter exclude={["archive"]} />
+      <UniverseFooter LinkComponent={Link} exclude={["archive"]} />
     </div>
   );
 }

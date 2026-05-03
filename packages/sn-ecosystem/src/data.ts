@@ -1,25 +1,5 @@
-import type { LucideIcon } from "lucide-react";
 import { Terminal, Wrench, Cpu, BarChart3, Activity, Crosshair } from "lucide-react";
-
-export type EcosystemTier = "recovered" | "extended";
-
-export interface EcosystemProduct {
-  id: string;
-  name: string;
-  designation?: string;
-  universeRole: string;
-  realRole: string;
-  shortDesc: string;
-  longDesc: string;
-  quote?: string;
-  episode?: string;
-  url: string;
-  urlLabel: string;
-  icon: LucideIcon;
-  color: string;
-  borderColor: string;
-  tier: EcosystemTier;
-}
+import type { EcosystemProduct } from "./types";
 
 export const ecosystem: EcosystemProduct[] = [
   {
@@ -116,3 +96,7 @@ export const ecosystem: EcosystemProduct[] = [
 
 export const recoveredSystems = ecosystem.filter((p) => p.tier === "recovered");
 export const extendedSystems = ecosystem.filter((p) => p.tier === "extended");
+
+export function getProductById(id: string): EcosystemProduct | undefined {
+  return ecosystem.find((p) => p.id === id);
+}
