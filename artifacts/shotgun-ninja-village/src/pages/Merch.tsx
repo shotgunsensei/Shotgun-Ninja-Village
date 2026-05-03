@@ -12,6 +12,7 @@ import { SectionHeading } from "@/components/shared/SectionHeading";
 import { ProductCard } from "@/components/shared/ProductCard";
 import { ProductModal } from "@/components/shared/ProductModal";
 import { UniverseFooter } from "@/components/shared/UniverseFooter";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const collectionIcons: Record<string, React.ElementType> = {
   shield: Shield,
@@ -30,6 +31,7 @@ const fadeUp = {
 };
 
 export default function Merch() {
+  usePageMeta({ title: "Ronin Supply", description: "Operator-grade apparel and accessories from the Shotgun Ninjas universe. Featured gear, bestsellers, and limited drops." });
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [allCollections, setAllCollections] = useState<Collection[]>([]);
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);

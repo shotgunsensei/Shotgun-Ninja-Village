@@ -1,7 +1,9 @@
 import { Link } from "wouter";
 import { UniverseFooter } from "@/components/shared/UniverseFooter";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 export default function NotFound() {
+  usePageMeta({ title: "Signal Lost — 404", description: "This sector is offline. The transmission could not be located." });
   return (
     <div className="flex flex-col min-h-[100dvh]">
       <div className="flex-1 w-full flex items-center justify-center">

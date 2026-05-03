@@ -14,6 +14,7 @@ import {
 } from "@/services/community";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { UniverseFooter } from "@/components/shared/UniverseFooter";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const iconMap: Record<string, React.ElementType> = {
   megaphone: Megaphone,
@@ -57,6 +58,7 @@ function MiniAvatar({ initials, className = "" }: { initials: string; className?
 }
 
 export default function Community() {
+  usePageMeta({ title: "The Village", description: "Join the village. Discussion channels, recovered systems support, drop announcements, and supporter perks for the Shotgun Ninjas community." });
   const live = isLive();
   const signupHref = getSignupUrl();
 

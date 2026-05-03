@@ -1,10 +1,12 @@
 import React from "react";
 import { MapPin, Skull } from "lucide-react";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { UniverseFooter } from "@/components/shared/UniverseFooter";
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
 export default function Grid() {
+  usePageMeta({ title: "The Grid Map", description: "Mapped sectors of the Grid: zones, threats, and signal-war hotspots from the Shotgun Ninjas universe." });
   const zones = [
     {
       id: "forge",

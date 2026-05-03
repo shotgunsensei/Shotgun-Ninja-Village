@@ -1,5 +1,6 @@
 import React from "react";
 import { Cpu, Wrench, ShieldCheck, Terminal, BarChart3, ExternalLink, ChevronRight } from "lucide-react";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { UniverseFooter } from "@/components/shared/UniverseFooter";
 
 const recoveredSystems = [
@@ -61,6 +62,7 @@ const extendedNetwork = [
 ];
 
 export default function Intel() {
+  usePageMeta({ title: "Forge Intel", description: "Recovered systems online: BrandForge, TorqueShed, TechDeck, TradeFlowKit. Tactical platforms from the Shotgun Ninjas ecosystem." });
   return (
     <div className="flex flex-col min-h-[100dvh]">
     <div className="container mx-auto px-4 py-12 max-w-6xl flex-1">

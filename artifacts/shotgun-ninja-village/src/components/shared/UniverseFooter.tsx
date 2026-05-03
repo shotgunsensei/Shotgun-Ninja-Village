@@ -38,12 +38,20 @@ const allLinks: Record<string, CrossLink> = {
   },
 };
 
+const legalLinks = [
+  { href: "/legal/terms", label: "Terms" },
+  { href: "/legal/privacy", label: "Privacy" },
+  { href: "/legal/refunds", label: "Refunds" },
+  { href: "/legal/contact", label: "Contact" },
+];
+
 interface UniverseFooterProps {
   exclude?: string[];
 }
 
 export function UniverseFooter({ exclude = [] }: UniverseFooterProps) {
   const links = Object.entries(allLinks).filter(([key]) => !exclude.includes(key));
+  const year = new Date().getFullYear();
 
   return (
     <footer className="border-t border-border">
@@ -69,18 +77,34 @@ export function UniverseFooter({ exclude = [] }: UniverseFooterProps) {
             })}
           </div>
         )}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-border/50">
-          <p className="font-mono text-xs text-muted-foreground">
-            Shotgun Ninja Village — Part of the <a href="https://shotgunninjas.com" target="_blank" rel="noopener noreferrer" className="text-secondary hover:text-white transition-colors">Shotgun Ninjas</a> universe
-          </p>
+
+        <nav aria-label="Legal" className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 pt-4 pb-2 border-t border-border/50">
+          {legalLinks.map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground hover:text-white transition-colors"
+            >
+              {l.label}
+            </Link>
+          ))}
           <a
             href="https://shotgunninjas.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-secondary hover:text-white font-mono text-xs uppercase tracking-widest transition-colors"
+            className="font-mono text-[11px] uppercase tracking-widest text-secondary hover:text-white transition-colors inline-flex items-center gap-1"
           >
-            ShotgunNinjas.com <ExternalLink size={12} />
+            ShotgunNinjas.com <ExternalLink size={10} />
           </a>
+        </nav>
+
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-2 pt-3">
+          <p className="font-mono text-[11px] text-muted-foreground">
+            © {year} Shotgun Ninjas Productions. All rights reserved.
+          </p>
+          <p className="font-mono text-[11px] text-muted-foreground">
+            Shotgun Ninja Village — part of the Shotgun Ninjas universe.
+          </p>
         </div>
       </div>
     </footer>

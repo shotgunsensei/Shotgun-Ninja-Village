@@ -1,10 +1,12 @@
 import React from "react";
 import { Crosshair } from "lucide-react";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { UniverseFooter } from "@/components/shared/UniverseFooter";
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
 export default function Arsenal() {
+  usePageMeta({ title: "The Arsenal", description: "Confirmed loadout: shotguns, energy katana, and field gear carried by Kage-9 across the trilogy." });
   const gear = [
     {
       id: "shotgun-back",

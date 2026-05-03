@@ -1,10 +1,12 @@
 import React from "react";
 import { UserSquare, Target, Activity } from "lucide-react";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { UniverseFooter } from "@/components/shared/UniverseFooter";
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
 export default function Operators() {
+  usePageMeta({ title: "Operator Files", description: "Field dossiers from the Shotgun Ninjas universe. Confirmed operators, classified gear, last known signals." });
   return (
     <div className="flex flex-col min-h-[100dvh]">
     <div className="container mx-auto px-4 py-12 max-w-6xl flex-1">

@@ -1,11 +1,13 @@
 import React from "react";
 import { PlayCircle, ChevronRight, Radio } from "lucide-react";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { transmissions } from "@/data/transmissions";
 import { UniverseFooter } from "@/components/shared/UniverseFooter";
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
 export default function Archive() {
+  usePageMeta({ title: "Mission Archive", description: "All three Shotgun Ninjas transmissions in one feed. Episode 1 playable now. Episodes 2 and 3 incoming." });
   return (
     <div className="flex flex-col min-h-[100dvh]">
       <div className="container mx-auto px-4 py-12 max-w-6xl flex-1">

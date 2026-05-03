@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import { ChevronRight, PlayCircle, UserSquare, ExternalLink, Terminal, Wrench, Cpu, BarChart3, Mail, Radio, Globe, ArrowUpRight, Users, ShoppingBag, Database } from "lucide-react";
 import { motion } from "framer-motion";
 import { transmissions } from "@/data/transmissions";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { UniverseFooter } from "@/components/shared/UniverseFooter";
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
@@ -74,13 +75,17 @@ const fadeUp = {
 };
 
 export default function Home() {
+  usePageMeta({
+    title: "Command Hub",
+    description: "Enter the Shotgun Ninjas universe. Watch transmissions, meet Kage-9, and join the village. Three episodes, two recovered systems, one expanding network.",
+  });
   return (
     <div className="relative w-full min-h-[100dvh] flex flex-col">
 
       {/* ── HERO ── */}
       <section className="relative w-full min-h-[70vh] md:min-h-[85vh] flex items-center justify-center overflow-hidden border-b border-primary/20">
         <div className="absolute inset-0 z-0">
-          <img src={asset("images/hero.png")} alt="" className="w-full h-full object-cover opacity-30 mix-blend-luminosity" />
+          <img src={asset("images/hero.png")} alt="" aria-hidden="true" role="presentation" className="w-full h-full object-cover opacity-30 mix-blend-luminosity" />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/40" />
           <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-transparent to-background/80" />
         </div>
