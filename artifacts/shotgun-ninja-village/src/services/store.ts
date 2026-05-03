@@ -186,7 +186,7 @@ const PRODUCT_FIELDS = `
   collections(first: 10) { edges { node { handle } } }
 `;
 
-function mapShopifyProduct(node: ShopifyProductNode): Product {
+export function mapShopifyProduct(node: ShopifyProductNode): Product {
   const tags: string[] = node.tags ?? [];
   const collections = (node.collections?.edges ?? []).map((e) => e.node.handle);
   return {
