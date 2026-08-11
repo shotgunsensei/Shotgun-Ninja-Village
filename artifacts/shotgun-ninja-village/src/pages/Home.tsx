@@ -21,6 +21,8 @@ import {
 import { createSignup, ApiError, useGetSignupsCount } from "@workspace/api-client-react";
 import { ShareButton } from "@/components/shared/ShareButton";
 import { markWatched, getWatched, getNextUnwatched } from "@/lib/watchProgress";
+import { markEnlisted } from "@/lib/operatorRecord";
+import { OperatorRecord } from "@/components/shared/OperatorRecord";
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
@@ -96,6 +98,7 @@ function SignalForm() {
     setStatus("submitting");
     try {
       const result = await createSignup({ email, source: "village-home" });
+      markEnlisted();
       setStatus("ok");
       setMessage(
         result.alreadySubscribed
@@ -352,6 +355,8 @@ export default function Home() {
             </motion.a>
           )})}
         </div>
+
+        <OperatorRecord className="mt-8" />
       </section>
 
       {/* ── KAGE-9 SPOTLIGHT ── */}

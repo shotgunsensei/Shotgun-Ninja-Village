@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { saveQuizResult, getQuizResult } from "@/lib/operatorRecord";
 import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
 import { Target, Activity, ShieldAlert, Cpu, ArrowRight, Share2, ShoppingBag, Users, Globe } from "lucide-react";
@@ -106,7 +107,8 @@ export default function Alignment() {
   
   const [currentStep, setCurrentStep] = useState(0);
   const [scores, setScores] = useState({ builder: 0, protector: 0, tracer: 0, breaker: 0 });
-  const [result, setResult] = useState<keyof typeof ARCHETYPES | null>(null);
+  // Restore a previously calibrated archetype so returning fans land on their result.
+  const [result, setResult] = useState<keyof typeof ARCHETYPES | null>(() => getQuizResult()?.archetype ?? null);
 
   const handleOptionSelect = (optionScores: Partial<Record<string, number>>) => {
     const newScores = { ...scores };
@@ -122,6 +124,7 @@ export default function Alignment() {
     } else {
       // Calculate result
       const topArchetype = Object.entries(newScores).reduce((a, b) => a[1] > b[1] ? a : b)[0] as keyof typeof ARCHETYPES;
+      saveQuizResult(topArchetype, ARCHETYPES[topArchetype].name);
       setResult(topArchetype);
     }
   };

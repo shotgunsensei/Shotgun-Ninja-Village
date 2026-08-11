@@ -17,6 +17,7 @@ import { usePageMeta } from "@/hooks/usePageMeta";
 import { resolveIcon } from "@/lib/iconMap";
 import { NextWaypoint } from "@/components/shared/NextWaypoint";
 import { ExternalFunnel } from "@/components/shared/ExternalFunnel";
+import { OperatorRecord } from "@/components/shared/OperatorRecord";
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -139,6 +140,10 @@ export default function Community() {
             ))}
           </div>
         </div>
+      </section>
+
+      <section className="container mx-auto px-4 pt-10 max-w-6xl">
+        <OperatorRecord />
       </section>
 
       <section id="channels" className="container mx-auto px-4 py-14 md:py-18 max-w-6xl">
