@@ -8,5 +8,6 @@
 
 export * from "./errorResponse";
 export * from "./healthStatus";
+export * from "./signupCountResponse";
 export * from "./signupRequest";
 export * from "./signupResponse";

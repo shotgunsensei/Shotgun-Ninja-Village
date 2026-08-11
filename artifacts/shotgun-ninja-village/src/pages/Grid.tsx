@@ -3,11 +3,12 @@ import React from "react";
 import { MapPin, Skull } from "lucide-react";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { UniverseFooter } from "@workspace/sn-ecosystem";
+import { NextWaypoint } from "@/components/shared/NextWaypoint";
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
 export default function Grid() {
-  usePageMeta({ title: "The Grid Map", description: "Mapped sectors of the Grid: zones, threats, and signal-war hotspots from the Shotgun Ninjas universe." });
+  usePageMeta({ title: "The Grid Map", description: "The world of the series, mapped" });
   const zones = [
     {
       id: "forge",
@@ -43,8 +44,11 @@ export default function Grid() {
           <h1 className="text-5xl md:text-7xl font-display font-bold text-white uppercase tracking-widest mb-2 glitch-text" data-text="THE GRID MAP">
             THE GRID MAP
           </h1>
-          <p className="text-muted-foreground font-mono text-sm border-l-2 border-primary pl-4 uppercase tracking-widest">
+          <p className="text-muted-foreground font-mono text-sm border-l-2 border-primary pl-4 uppercase tracking-widest mb-2">
             Topological scan // Sector Analysis
+          </p>
+          <p className="text-muted-foreground font-mono text-sm border-l-2 border-primary pl-4 max-w-lg">
+            The world of the series, mapped.
           </p>
         </div>
         <div className="flex items-center gap-2 bg-primary/10 border border-primary/30 px-3 py-1.5 text-primary font-mono text-xs">
@@ -93,6 +97,11 @@ export default function Grid() {
         </div>
       </div>
     </div>
+    
+    <NextWaypoint waypoints={[
+      { href: "/arsenal", title: "The Arsenal", desc: "View the hardware schematics and operator loadouts." }
+    ]} />
+
     <UniverseFooter LinkComponent={Link} />
     </div>
   );

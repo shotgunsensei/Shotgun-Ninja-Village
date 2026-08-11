@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "wouter";
-import { ChevronRight, PlayCircle, UserSquare, Mail, Radio, Globe, ArrowUpRight, Users, ShoppingBag, Database } from "lucide-react";
+import { ChevronRight, PlayCircle, UserSquare, Mail, Radio, Globe, ArrowUpRight, Users, ShoppingBag, Database, Code, Activity } from "lucide-react";
 import { motion } from "framer-motion";
 import { transmissions } from "@/data/transmissions";
 import { usePageMeta } from "@/hooks/usePageMeta";
@@ -18,7 +18,9 @@ import {
   clearQueuedSignals,
   exportQueuedSignalsAsCsv,
 } from "@/lib/signalQueue";
-import { createSignup, ApiError } from "@workspace/api-client-react";
+import { createSignup, ApiError, useGetSignupsCount } from "@workspace/api-client-react";
+import { ShareButton } from "@/components/shared/ShareButton";
+import { markWatched, getWatched, getNextUnwatched } from "@/lib/watchProgress";
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
@@ -196,11 +198,19 @@ function SignalForm() {
   );
 }
 
+import { NextWaypoint } from "@/components/shared/NextWaypoint";
+
 export default function Home() {
   usePageMeta({
     title: "Command Hub",
     description: "Enter the Shotgun Ninjas universe. Watch transmissions, meet Kage-9, and join the village. Three episodes, two recovered systems, one expanding network.",
   });
+
+  const watched = getWatched();
+  const nextTx = getNextUnwatched(transmissions.map(t => t.num));
+  const continueTx = nextTx ? transmissions.find(t => t.num === nextTx) : null;
+  const { data: signups } = useGetSignupsCount();
+
   return (
     <div className="relative w-full min-h-[100dvh] flex flex-col">
 
@@ -230,12 +240,13 @@ export default function Home() {
                 <TypewriterText text="Kage-9 moves through a signal war no one else can see. Three transmissions recovered. Two systems online. The network remembers." />
               </p>
 
-              <div className="flex flex-wrap items-center gap-4">
+              <div className="flex flex-wrap items-center gap-4 mb-6">
                 <a
-                  href="/shotgun-ninjas-ep1/"
+                  href={continueTx ? continueTx.href : transmissions[0].href}
+                  onClick={() => continueTx && markWatched(continueTx.num)}
                   className="clip-diagonal bg-primary hover:bg-primary/90 text-white px-8 py-3 font-display text-xl uppercase tracking-widest transition-all inline-flex items-center gap-2"
                 >
-                  <PlayCircle size={20} /> Watch Transmission 01
+                  <PlayCircle size={20} /> {continueTx ? `Continue: Transmission ${continueTx.num}` : "Watch Transmission 01"}
                 </a>
                 <a
                   href="#join-archive"
@@ -244,6 +255,8 @@ export default function Home() {
                   Join the Archive <ChevronRight size={20} />
                 </a>
               </div>
+              
+              <ShareButton title="The Network is Waking — Enter the Shotgun Ninjas Command Hub." />
             </div>
 
             <div className="hidden md:block w-64 lg:w-72 flex-shrink-0">
@@ -278,11 +291,14 @@ export default function Home() {
         </motion.div>
 
         <div className="space-y-6">
-          {transmissions.map((tx, i) => (
+          {transmissions.map((tx, i) => {
+            const isWatched = watched.includes(tx.num);
+            return (
             <motion.a
               key={tx.num}
               href={tx.href}
-              className="group tactical-border bg-card overflow-hidden flex flex-col md:flex-row transition-all hover:border-primary block"
+              onClick={() => markWatched(tx.num)}
+              className={`group tactical-border bg-card overflow-hidden flex flex-col md:flex-row transition-all hover:border-primary block ${isWatched ? 'border-primary/30' : ''}`}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -296,12 +312,17 @@ export default function Home() {
                   decoding="async"
                   width="640"
                   height="360"
-                  className="w-full h-full object-cover filter brightness-75 contrast-125 group-hover:scale-105 transition-transform duration-700"
+                  className={`w-full h-full object-cover filter brightness-75 contrast-125 group-hover:scale-105 transition-transform duration-700 ${isWatched ? 'grayscale opacity-80' : ''}`}
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent to-background/60" />
                 <div className="absolute top-3 left-3 px-2 py-1 bg-background/80 backdrop-blur border border-primary/40 font-mono text-[10px] text-primary uppercase tracking-widest">
                   Transmission {tx.num}
                 </div>
+                {isWatched && (
+                  <div className="absolute top-3 right-3 px-2 py-1 bg-primary/20 backdrop-blur border border-primary/40 font-mono text-[10px] text-white uppercase tracking-widest flex items-center gap-1.5">
+                    <Radio size={10} /> Signal Received / Watched
+                  </div>
+                )}
               </div>
 
               <div className="w-full md:w-3/5 p-6 md:p-8 flex flex-col justify-center">
@@ -325,11 +346,11 @@ export default function Home() {
                   )}
                 </div>
                 <div className="clip-diagonal bg-primary/20 border border-primary/40 text-primary px-4 py-2 font-display text-sm uppercase tracking-widest inline-flex items-center gap-2 self-start group-hover:bg-primary group-hover:text-white transition-all">
-                  <PlayCircle size={16} /> Watch Transmission
+                  <PlayCircle size={16} /> {isWatched ? "Rewatch Transmission" : "Watch Transmission"}
                 </div>
               </div>
             </motion.a>
-          ))}
+          )})}
         </div>
       </section>
 
@@ -428,9 +449,15 @@ export default function Home() {
               <h2 className="text-4xl md:text-5xl font-display text-white uppercase tracking-widest mb-2">
                 ENTER THE VILLAGE
               </h2>
-              <p className="text-muted-foreground font-mono text-sm max-w-md mx-auto">
+              <p className="text-muted-foreground font-mono text-sm max-w-md mx-auto mb-4">
                 Watch. Connect. Support. Three paths into the network.
               </p>
+              <Link
+                href="/alignment"
+                className="inline-flex items-center gap-2 border border-blue-400/30 bg-blue-400/10 text-blue-400 hover:bg-blue-400 hover:text-white px-4 py-1.5 font-mono text-xs uppercase tracking-widest transition-all"
+              >
+                <Activity size={14} className="animate-pulse" /> Take the Operator Alignment Quiz
+              </Link>
             </div>
           </motion.div>
 
@@ -475,10 +502,10 @@ export default function Home() {
                   <ShoppingBag size={20} className="text-orange-500" />
                 </div>
                 <h3 className="text-xl font-display text-white uppercase tracking-widest mb-1.5 group-hover:text-orange-500 transition-colors">
-                  Ronin Supply
+                  Merch
                 </h3>
                 <p className="text-muted-foreground font-mono text-xs leading-relaxed mb-3">
-                  Operator-grade gear. Every purchase directly funds the next transmission.
+                  Operator-grade gear. The Ronin Supply line. Every purchase directly funds the next transmission.
                 </p>
                 <span className="clip-diagonal bg-orange-500/20 border border-orange-500/40 text-orange-500 px-3 py-1 font-display text-sm uppercase tracking-widest inline-flex items-center gap-1.5 group-hover:bg-orange-500 group-hover:text-white transition-all">
                   Browse Merch <ChevronRight size={12} />
@@ -507,9 +534,16 @@ export default function Home() {
 
             <SignalForm />
 
-            <p className="font-mono text-xs text-muted-foreground">
-              No spam. No noise. Only signal.
-            </p>
+            <div className="flex flex-col items-center gap-2 mt-4 mb-2">
+              <p className="font-mono text-xs text-muted-foreground">
+                No spam. No noise. Only signal.
+              </p>
+              {signups && (
+                <div className="font-mono text-[10px] text-primary/70 uppercase tracking-widest bg-primary/5 px-2 py-0.5 border border-primary/20">
+                  <Activity size={10} className="inline mr-1 animate-pulse" /> {signups.count.toLocaleString()} Operators Enlisted
+                </div>
+              )}
+            </div>
           </motion.div>
         </div>
       </section>
@@ -533,14 +567,24 @@ export default function Home() {
                 This command hub is one node in a larger network. The full Shotgun Ninjas universe — expanded lore, future transmissions, operator briefings, and platform access — lives at the main site. Everything connects back to one signal.
               </p>
 
-              <a
-                href="https://shotgunninjas.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="clip-diagonal bg-primary hover:bg-primary/90 text-white px-8 py-3 font-display text-xl uppercase tracking-widest transition-all inline-flex items-center gap-2 mb-8"
-              >
-                <Globe size={20} /> Enter ShotgunNinjas.com <ArrowUpRight size={18} />
-              </a>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+                <a
+                  href="https://shotgunninjas.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="clip-diagonal bg-primary hover:bg-primary/90 text-white px-8 py-3 font-display text-lg uppercase tracking-widest transition-all inline-flex items-center gap-2"
+                >
+                  <Globe size={20} /> Enter ShotgunNinjas.com <ArrowUpRight size={18} />
+                </a>
+                <a
+                  href="https://www.operatoros.net"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="clip-diagonal bg-secondary hover:bg-secondary/90 text-white px-8 py-3 font-display text-lg uppercase tracking-widest transition-all inline-flex items-center gap-2"
+                >
+                  <Code size={20} /> Access OperatorOS <ArrowUpRight size={18} />
+                </a>
+              </div>
 
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3 max-w-3xl mx-auto">
                 {ecosystem.map((p) => (
@@ -563,6 +607,7 @@ export default function Home() {
         </div>
       </section>
 
+      <NextWaypoint waypoints={[{ href: "/shotgun-ninjas-ep1/", title: "Transmission 01", desc: "Watch the first episode now.", cta: "Watch", isExternal: true }]} />
       <UniverseFooter LinkComponent={Link} />
     </div>
   );

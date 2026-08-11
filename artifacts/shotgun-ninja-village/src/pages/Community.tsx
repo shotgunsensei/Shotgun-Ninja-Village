@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import {
   MessageCircle, Users, Lock, Zap, ChevronRight, AlertTriangle,
   MessageSquare, Eye, Pin, Flame, ShoppingBag, ExternalLink, Radio,
-  ArrowRight, UserPlus, DoorOpen, Shield, Crown, Award
+  ArrowRight, UserPlus, DoorOpen, Shield, Crown, Award, Activity
 } from "lucide-react";
 import type { ForumCategory, ForumTopic, MemberPerk, CommunityStats } from "@/data/community";
 import {
@@ -15,6 +15,8 @@ import { SectionHeading } from "@/components/shared/SectionHeading";
 import { UniverseFooter } from "@workspace/sn-ecosystem";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { resolveIcon } from "@/lib/iconMap";
+import { NextWaypoint } from "@/components/shared/NextWaypoint";
+import { ExternalFunnel } from "@/components/shared/ExternalFunnel";
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -301,13 +303,13 @@ export default function Community() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
             {[
-              { step: "01", title: "Create Account", desc: "Sign up and claim your callsign. Free and instant.", icon: UserPlus, color: "text-secondary" },
-              { step: "02", title: "Enter The Village", desc: "Access all public channels. Post, reply, and connect.", icon: DoorOpen, color: "text-secondary" },
-              { step: "03", title: "Gear Up", desc: "Grab merch or become a supporter to unlock gated channels.", icon: Shield, color: "text-orange-400" },
+              { step: "01", title: "Operator Alignment", desc: "Take the quiz to find your tactical archetype.", icon: Activity, color: "text-blue-400", href: "/alignment" },
+              { step: "02", title: "Create Account", desc: "Sign up and claim your callsign. Free and instant.", icon: UserPlus, color: "text-secondary", href: signupHref },
+              { step: "03", title: "Enter The Village", desc: "Access all public channels. Post, reply, and connect.", icon: DoorOpen, color: "text-secondary", href: signupHref },
             ].map((s, i) => (
               <motion.div
                 key={s.step}
-                className="tactical-border bg-card p-5 text-center"
+                className="tactical-border bg-card p-5 text-center flex flex-col h-full"
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -316,7 +318,12 @@ export default function Community() {
                 <div className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest mb-2">Step {s.step}</div>
                 <s.icon size={24} className={`mx-auto mb-3 ${s.color}`} />
                 <h3 className="text-lg font-display text-white uppercase tracking-widest mb-1">{s.title}</h3>
-                <p className="text-muted-foreground font-mono text-xs">{s.desc}</p>
+                <p className="text-muted-foreground font-mono text-xs flex-1">{s.desc}</p>
+                {s.href && s.href.startsWith("/") ? (
+                  <Link href={s.href} className="mt-4 text-xs font-mono uppercase tracking-widest text-primary hover:text-white transition-colors">Start <ChevronRight size={10} className="inline" /></Link>
+                ) : (
+                  <a href={s.href} target="_blank" rel="noopener noreferrer" className="mt-4 text-xs font-mono uppercase tracking-widest text-secondary hover:text-white transition-colors">Go <ExternalLink size={10} className="inline ml-1" /></a>
+                )}
               </motion.div>
             ))}
           </div>
@@ -383,14 +390,16 @@ export default function Community() {
                 </div>
 
                 {tier === "free" && (
-                  <a
-                    href={signupHref}
-                    target={live ? "_blank" : undefined}
-                    rel={live ? "noopener noreferrer" : undefined}
-                    className="mt-5 w-full clip-diagonal bg-secondary/20 hover:bg-secondary/30 border border-secondary/30 text-secondary px-4 py-2 font-display text-sm uppercase tracking-widest transition-all flex items-center justify-center gap-2"
-                  >
-                    Sign Up Free <ArrowRight size={14} />
-                  </a>
+                  <div className="mt-5 space-y-2">
+                    <a
+                      href={signupHref}
+                      target={live ? "_blank" : undefined}
+                      rel={live ? "noopener noreferrer" : undefined}
+                      className="w-full clip-diagonal bg-secondary/20 hover:bg-secondary/30 border border-secondary/30 text-secondary px-4 py-2 font-display text-sm uppercase tracking-widest transition-all flex items-center justify-center gap-2"
+                    >
+                      Sign Up Free <ArrowRight size={14} />
+                    </a>
+                  </div>
                 )}
               </motion.div>
             );
@@ -398,26 +407,11 @@ export default function Community() {
         </div>
       </section>
 
-      <section className="border-t border-border bg-card/20">
-        <div className="container mx-auto px-4 py-10 max-w-4xl">
-          <div className="flex flex-col sm:flex-row items-center gap-6">
-            <div className="flex-1 text-center sm:text-left">
-              <h3 className="text-xl font-display text-white uppercase tracking-widest mb-1">
-                Gear Up While You're Here
-              </h3>
-              <p className="text-muted-foreground font-mono text-xs">
-                Merch buyers unlock future community perks and supporter status.
-              </p>
-            </div>
-            <Link
-              href="/merch"
-              className="clip-diagonal bg-primary hover:bg-primary/90 text-white px-5 py-2 font-display text-base uppercase tracking-widest transition-all inline-flex items-center gap-2 whitespace-nowrap"
-            >
-              <ShoppingBag size={16} /> Ronin Supply <ChevronRight size={14} />
-            </Link>
-          </div>
-        </div>
-      </section>
+      <NextWaypoint waypoints={[
+        { href: "/merch", title: "Merch", desc: "Merch buyers unlock future community perks and supporter status." }
+      ]} />
+
+      <ExternalFunnel />
 
       <UniverseFooter LinkComponent={Link} exclude={["community"]} />
     </div>

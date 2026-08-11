@@ -57,6 +57,19 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /signups/count:
+    get:
+      operationId: getSignupsCount
+      tags: [signups]
+      summary: Get total signup count
+      description: Returns the total number of archive signups.
+      responses:
+        "200":
+          description: Signup count
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SignupCountResponse"
 components:
   schemas:
     HealthStatus:
@@ -88,6 +101,13 @@ components:
       required:
         - ok
         - alreadySubscribed
+    SignupCountResponse:
+      type: object
+      properties:
+        count:
+          type: integer
+      required:
+        - count
     ErrorResponse:
       type: object
       properties:

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Scale, Shield, RefreshCw, Mail, FileText, ExternalLink } from "lucide-react";
 import { UniverseFooter } from "@workspace/sn-ecosystem";
 import { usePageMeta } from "@/hooks/usePageMeta";
+import { NextWaypoint } from "@/components/shared/NextWaypoint";
 
 type SectionKey = "terms" | "privacy" | "refunds" | "contact";
 
@@ -24,7 +25,7 @@ const sections: Record<SectionKey, { label: string; icon: React.ElementType; tit
     label: "Refunds & Shipping",
     icon: RefreshCw,
     title: "Refunds, Returns & Shipping",
-    desc: "Policies for Ronin Supply merchandise and digital goods.",
+    desc: "Policies for our merch (the Ronin Supply line) and digital goods.",
   },
   contact: {
     label: "Contact",
@@ -108,6 +109,10 @@ export default function Legal() {
         </div>
       </section>
 
+      <NextWaypoint waypoints={[
+        { href: "/", title: "Command Hub", desc: "Return to the central network." }
+      ]} />
+
       <div className="mt-auto">
         <UniverseFooter LinkComponent={Link} />
       </div>
@@ -132,8 +137,7 @@ function TermsBody() {
       </p>
       <H>1. Use of the Site</H>
       <p>
-        The Site provides access to entertainment content, community discussion, recovered creative systems, and the
-        Ronin Supply merchandise catalog. You agree to use the Site lawfully and to respect other community members.
+        The Site provides access to entertainment content, community discussion, recovered creative systems, and our merch (the Ronin Supply line). You agree to use the Site lawfully and to respect other community members.
       </p>
       <H>2. Accounts & Community</H>
       <p>
@@ -220,7 +224,7 @@ function RefundsBody() {
     <>
       <H>Made-to-Order Items</H>
       <p>
-        Most Ronin Supply apparel is produced on-demand. Orders enter production within 24–48 hours of placement.
+        Most merch is produced on-demand. Orders enter production within 24–48 hours of placement.
         Cancellations are honored if production has not yet begun.
       </p>
       <H>Returns</H>

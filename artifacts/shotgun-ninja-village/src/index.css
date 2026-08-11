@@ -154,6 +154,11 @@
   position: relative;
   display: inline-block;
 }
+/* Headings must occupy their own line — inline-block lets them share a line with inline-flex badges */
+h1.glitch-text,
+h2.glitch-text {
+  display: block;
+}
 .glitch-text::before,
 .glitch-text::after {
   content: attr(data-text);

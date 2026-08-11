@@ -14,6 +14,7 @@ const Intel = lazy(() => import("@/pages/Intel"));
 const Community = lazy(() => import("@/pages/Community"));
 const Merch = lazy(() => import("@/pages/Merch"));
 const Legal = lazy(() => import("@/pages/Legal"));
+const Alignment = lazy(() => import("@/pages/Alignment"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 const pageVariants = {
@@ -63,6 +64,7 @@ function Router() {
               <Route path="/merch">{() => <AnimatedPage><Merch /></AnimatedPage>}</Route>
               <Route path="/legal">{() => <AnimatedPage><Legal /></AnimatedPage>}</Route>
               <Route path="/legal/:section">{() => <AnimatedPage><Legal /></AnimatedPage>}</Route>
+              <Route path="/alignment">{() => <AnimatedPage><Alignment /></AnimatedPage>}</Route>
               <Route>{() => <AnimatedPage><NotFound /></AnimatedPage>}</Route>
             </Switch>
           </AnimatePresence>

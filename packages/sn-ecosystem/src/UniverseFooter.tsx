@@ -33,8 +33,8 @@ const allLinks: Record<string, CrossLink> = {
   },
   merch: {
     href: "/merch",
-    label: "Ronin Supply",
-    sublabel: "Support the mission.",
+    label: "Merch",
+    sublabel: "Ronin Supply line — support the mission.",
     icon: ShoppingBag,
     color: "text-orange-500 border-orange-500/30",
     hoverColor: "hover:border-orange-500",
@@ -49,6 +49,7 @@ const legalLinks = [
 ];
 
 const HUB_URL = "https://shotgunninjas.com";
+const OPERATOR_OS_URL = "https://www.operatoros.net";
 
 export interface UniverseFooterProps {
   /**
@@ -125,6 +126,14 @@ export function UniverseFooter({
             className="font-mono text-[11px] uppercase tracking-widest text-secondary hover:text-white transition-colors inline-flex items-center gap-1"
           >
             ShotgunNinjas.com <ExternalLink size={10} />
+          </a>
+          <a
+            href={OPERATOR_OS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-mono text-[11px] uppercase tracking-widest text-secondary hover:text-white transition-colors inline-flex items-center gap-1"
+          >
+            OperatorOS.net <ExternalLink size={10} />
           </a>
         </nav>
 

@@ -32,3 +32,11 @@ export const CreateSignupResponse = zod.object({
   ok: zod.boolean(),
   alreadySubscribed: zod.boolean(),
 });
+
+/**
+ * Returns the total number of archive signups.
+ * @summary Get total signup count
+ */
+export const GetSignupsCountResponse = zod.object({
+  count: zod.number(),
+});

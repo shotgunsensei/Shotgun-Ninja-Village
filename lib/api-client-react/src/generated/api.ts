@@ -19,6 +19,7 @@ import type {
 import type {
   ErrorResponse,
   HealthStatus,
+  SignupCountResponse,
   SignupRequest,
   SignupResponse,
 } from "./api.schemas";
@@ -194,3 +195,79 @@ export const useCreateSignup = <
 > => {
   return useMutation(getCreateSignupMutationOptions(options));
 };
+
+/**
+ * Returns the total number of archive signups.
+ * @summary Get total signup count
+ */
+export const getGetSignupsCountUrl = () => {
+  return `/api/signups/count`;
+};
+
+export const getSignupsCount = async (
+  options?: RequestInit,
+): Promise<SignupCountResponse> => {
+  return customFetch<SignupCountResponse>(getGetSignupsCountUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetSignupsCountQueryKey = () => {
+  return [`/api/signups/count`] as const;
+};
+
+export const getGetSignupsCountQueryOptions = <
+  TData = Awaited<ReturnType<typeof getSignupsCount>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getSignupsCount>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetSignupsCountQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getSignupsCount>>> = ({
+    signal,
+  }) => getSignupsCount({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getSignupsCount>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetSignupsCountQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getSignupsCount>>
+>;
+export type GetSignupsCountQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Get total signup count
+ */
+
+export function useGetSignupsCount<
+  TData = Awaited<ReturnType<typeof getSignupsCount>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getSignupsCount>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetSignupsCountQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}

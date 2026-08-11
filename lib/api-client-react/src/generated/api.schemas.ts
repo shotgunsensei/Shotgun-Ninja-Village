@@ -21,6 +21,10 @@ export interface SignupResponse {
   alreadySubscribed: boolean;
 }
 
+export interface SignupCountResponse {
+  count: number;
+}
+
 export interface ErrorResponse {
   message: string;
 }

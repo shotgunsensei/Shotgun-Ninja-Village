@@ -3,11 +3,12 @@ import React from "react";
 import { UserSquare, Target, Activity } from "lucide-react";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { UniverseFooter } from "@workspace/sn-ecosystem";
+import { NextWaypoint } from "@/components/shared/NextWaypoint";
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
 export default function Operators() {
-  usePageMeta({ title: "Operator Files", description: "Field dossiers from the Shotgun Ninjas universe. Confirmed operators, classified gear, last known signals." });
+  usePageMeta({ title: "Operator Files", description: "Character dossiers from the series" });
   return (
     <div className="flex flex-col min-h-[100dvh]">
     <div className="container mx-auto px-4 py-12 max-w-6xl flex-1">
@@ -15,8 +16,11 @@ export default function Operators() {
         <h1 className="text-5xl md:text-7xl font-display font-bold text-white uppercase tracking-widest mb-2 glitch-text" data-text="OPERATOR FILES">
           OPERATOR FILES
         </h1>
-        <p className="text-muted-foreground font-mono text-sm border-l-2 border-primary pl-4 uppercase tracking-widest">
+        <p className="text-muted-foreground font-mono text-sm border-l-2 border-primary pl-4 uppercase tracking-widest mb-2">
           Classified Dossier // Clearance Level 9
+        </p>
+        <p className="text-muted-foreground font-mono text-sm border-l-2 border-primary pl-4 max-w-lg">
+          Character dossiers from the series.
         </p>
       </div>
 
@@ -108,6 +112,11 @@ export default function Operators() {
         </div>
       </div>
     </div>
+    
+    <NextWaypoint waypoints={[
+      { href: "/grid", title: "The Grid", desc: "Explore the zones and threat vectors of the network." }
+    ]} />
+
     <UniverseFooter LinkComponent={Link} />
     </div>
   );

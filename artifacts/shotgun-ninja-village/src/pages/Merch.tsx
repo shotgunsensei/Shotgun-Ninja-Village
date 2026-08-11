@@ -13,6 +13,8 @@ import { ProductCard } from "@/components/shared/ProductCard";
 import { ProductModal } from "@/components/shared/ProductModal";
 import { UniverseFooter } from "@workspace/sn-ecosystem";
 import { usePageMeta } from "@/hooks/usePageMeta";
+import { NextWaypoint } from "@/components/shared/NextWaypoint";
+import { ExternalFunnel } from "@/components/shared/ExternalFunnel";
 
 const collectionIcons: Record<string, React.ElementType> = {
   shield: Shield,
@@ -31,7 +33,7 @@ const fadeUp = {
 };
 
 export default function Merch() {
-  usePageMeta({ title: "Ronin Supply", description: "Operator-grade apparel and accessories from the Shotgun Ninjas universe. Featured gear, bestsellers, and limited drops." });
+  usePageMeta({ title: "Merch", description: "Operator-grade apparel and accessories from the Shotgun Ninjas universe. Featured gear, bestsellers, and limited drops." });
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [allCollections, setAllCollections] = useState<Collection[]>([]);
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
@@ -92,9 +94,13 @@ export default function Merch() {
             <ShoppingBag size={14} /> Official Store
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-display font-bold text-white uppercase tracking-widest mb-3 glitch-text" data-text="RONIN SUPPLY">
-            RONIN SUPPLY
+          <h1 className="text-5xl md:text-7xl font-display font-bold text-white uppercase tracking-widest mb-3 glitch-text" data-text="MERCH">
+            MERCH
           </h1>
+
+          <p className="text-sm font-mono text-primary uppercase tracking-widest mb-4">
+            The Ronin Supply Line
+          </p>
 
           <p className="text-base md:text-lg text-muted-foreground font-mono max-w-xl mx-auto mb-6">
             Operator-grade apparel and accessories from the Shotgun Ninjas universe. Every purchase fuels the next transmission.
@@ -262,7 +268,7 @@ export default function Merch() {
         <div className="container mx-auto px-4 py-12 md:py-16 max-w-5xl">
           <motion.div {...fadeUp}>
             <h3 className="text-2xl font-display text-white uppercase tracking-widest text-center mb-8">
-              The Ronin Supply Standard
+              The Merch Standard
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="tactical-border bg-card p-4 text-center">
@@ -325,26 +331,11 @@ export default function Merch() {
         </div>
       </section>
 
-      <section className="border-t border-border bg-card/20">
-        <div className="container mx-auto px-4 py-10 max-w-4xl">
-          <div className="flex flex-col sm:flex-row items-center gap-6">
-            <div className="flex-1 text-center sm:text-left">
-              <h3 className="text-xl font-display text-white uppercase tracking-widest mb-1">
-                Join the Village
-              </h3>
-              <p className="text-muted-foreground font-mono text-xs">
-                Share your gear, connect with operators, and unlock buyer perks.
-              </p>
-            </div>
-            <Link
-              href="/community"
-              className="clip-diagonal bg-secondary/20 border border-secondary/40 text-secondary px-5 py-2 font-display text-base uppercase tracking-widest hover:bg-secondary hover:text-white transition-all inline-flex items-center gap-2 whitespace-nowrap"
-            >
-              <Users size={16} /> The Village <ChevronRight size={14} />
-            </Link>
-          </div>
-        </div>
-      </section>
+      <NextWaypoint waypoints={[
+        { href: "/community", title: "The Village", desc: "Share your gear and connect with other operators." }
+      ]} />
+
+      <ExternalFunnel />
 
       <UniverseFooter LinkComponent={Link} exclude={["merch"]} />
 

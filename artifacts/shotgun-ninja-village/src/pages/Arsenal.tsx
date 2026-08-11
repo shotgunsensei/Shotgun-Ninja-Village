@@ -3,11 +3,12 @@ import React from "react";
 import { Crosshair } from "lucide-react";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { UniverseFooter } from "@workspace/sn-ecosystem";
+import { NextWaypoint } from "@/components/shared/NextWaypoint";
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
 export default function Arsenal() {
-  usePageMeta({ title: "The Arsenal", description: "Confirmed loadout: shotguns, energy katana, and field gear carried by Kage-9 across the trilogy." });
+  usePageMeta({ title: "The Arsenal", description: "Kage-9's gear, up close" });
   const gear = [
     {
       id: "shotgun-back",
@@ -53,8 +54,11 @@ export default function Arsenal() {
         <h1 className="text-5xl md:text-7xl font-display font-bold text-white uppercase tracking-widest mb-2 glitch-text" data-text="THE ARSENAL">
           THE ARSENAL
         </h1>
-        <p className="text-muted-foreground font-mono text-sm border-l-2 border-primary pl-4 uppercase tracking-widest">
+        <p className="text-muted-foreground font-mono text-sm border-l-2 border-primary pl-4 uppercase tracking-widest mb-2">
           Hardware Schematics // Loadout Catalog
+        </p>
+        <p className="text-muted-foreground font-mono text-sm border-l-2 border-primary pl-4 max-w-lg">
+          Kage-9's gear, up close.
         </p>
       </div>
 
@@ -81,6 +85,11 @@ export default function Arsenal() {
         ))}
       </div>
     </div>
+    
+    <NextWaypoint waypoints={[
+      { href: "/merch", title: "Merch", desc: "Get operator-grade gear to fund the next transmission." }
+    ]} />
+
     <UniverseFooter LinkComponent={Link} />
     </div>
   );

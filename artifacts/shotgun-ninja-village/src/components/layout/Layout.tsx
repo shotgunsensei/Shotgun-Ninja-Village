@@ -5,35 +5,42 @@ import { cn } from "@/lib/utils";
 import { useInstallPrompt } from "@/hooks/useInstallPrompt";
 
 const coreLinks = [
-  { href: "/", label: "Signal Feed", icon: Shield },
-  { href: "/archive", label: "Archive", icon: Database },
-  { href: "/operators", label: "Operator Files", icon: UserSquare },
-  { href: "/grid", label: "The Grid Map", icon: Map },
-  { href: "/arsenal", label: "Arsenal", icon: Sword },
-  { href: "/intel", label: "Forge Intel", icon: Cpu },
+  { href: "/", label: "Signal Feed", sublabel: "Home", icon: Shield },
+  { href: "/archive", label: "Archive", sublabel: "Watch the episodes", icon: Database },
+  { href: "/operators", label: "Operator Files", sublabel: "Meet the characters", icon: UserSquare },
+  { href: "/grid", label: "The Grid Map", sublabel: "Explore the world", icon: Map },
+  { href: "/arsenal", label: "Arsenal", sublabel: "The gear", icon: Sword },
+  { href: "/intel", label: "Forge Intel", sublabel: "Real tools & platforms", icon: Cpu },
 ];
 
 const hubLinks = [
-  { href: "/community", label: "The Village", icon: Users },
-  { href: "/merch", label: "Ronin Supply", icon: ShoppingBag },
+  { href: "/community", label: "The Village", sublabel: "Community", icon: Users },
+  { href: "/merch", label: "Merch", sublabel: "Ronin Supply line", icon: ShoppingBag },
 ];
 
-function NavLink({ href, label, icon: Icon, isActive, onClick }: {
-  href: string; label: string; icon: React.ElementType; isActive: boolean; onClick: () => void;
+function NavLink({ href, label, sublabel, icon: Icon, isActive, onClick }: {
+  href: string; label: string; sublabel?: string; icon: React.ElementType; isActive: boolean; onClick: () => void;
 }) {
   return (
     <Link
       href={href}
       onClick={onClick}
       className={cn(
-        "flex items-center gap-3 px-4 py-2.5 font-display text-lg uppercase tracking-wider transition-all border-l-2",
+        "flex items-center gap-3 px-4 py-2 transition-all border-l-2",
         isActive
           ? "bg-primary/10 text-primary border-primary"
           : "text-muted-foreground border-transparent hover:bg-white/5 hover:text-foreground hover:border-white/20"
       )}
     >
-      <Icon size={16} className={isActive ? "text-primary" : "text-muted-foreground"} />
-      {label}
+      <Icon size={16} className={cn("flex-shrink-0", isActive ? "text-primary" : "text-muted-foreground")} />
+      <span className="min-w-0">
+        <span className="block font-display text-lg uppercase tracking-wider leading-tight">{label}</span>
+        {sublabel && (
+          <span className="block font-mono text-[9px] uppercase tracking-widest text-muted-foreground/70 leading-tight">
+            {sublabel}
+          </span>
+        )}
+      </span>
     </Link>
   );
 }
@@ -139,10 +146,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
               href="https://shotgunninjas.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-3 px-4 py-2.5 font-display text-lg uppercase tracking-wider transition-all border-l-2 text-secondary border-transparent hover:bg-white/5 hover:text-white hover:border-secondary/40"
+              className="flex items-center gap-3 px-4 py-2 transition-all border-l-2 text-secondary border-transparent hover:bg-white/5 hover:text-white hover:border-secondary/40"
             >
-              <Globe size={16} className="text-secondary" />
-              Main Site
+              <Globe size={16} className="text-secondary flex-shrink-0" />
+              <span className="min-w-0">
+                <span className="block font-display text-lg uppercase tracking-wider leading-tight">Main Site</span>
+                <span className="block font-mono text-[9px] uppercase tracking-widest text-muted-foreground/70 leading-tight">ShotgunNinjas.com</span>
+              </span>
+            </a>
+            <a
+              href="https://www.operatoros.net"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 px-4 py-2 transition-all border-l-2 text-secondary border-transparent hover:bg-white/5 hover:text-white hover:border-secondary/40"
+            >
+              <Cpu size={16} className="text-secondary flex-shrink-0" />
+              <span className="min-w-0">
+                <span className="block font-display text-lg uppercase tracking-wider leading-tight">Operator OS</span>
+                <span className="block font-mono text-[9px] uppercase tracking-widest text-muted-foreground/70 leading-tight">OperatorOS.net</span>
+              </span>
             </a>
           </div>
         </nav>

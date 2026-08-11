@@ -8,12 +8,13 @@ import {
   recoveredSystems,
   extendedSystems,
 } from "@workspace/sn-ecosystem";
+import { NextWaypoint } from "@/components/shared/NextWaypoint";
+import { ExternalFunnel } from "@/components/shared/ExternalFunnel";
 
 export default function Intel() {
   usePageMeta({
     title: "Forge Intel",
-    description:
-      "Recovered systems online: BrandForge, TorqueShed, TechDeck, TradeFlowKit, PulseDesk, FaultlineLab. Tactical platforms from the Shotgun Ninjas ecosystem.",
+    description: "The real tools & platforms behind the fiction",
   });
 
   return (
@@ -27,8 +28,11 @@ export default function Intel() {
             >
               FORGE INTEL
             </h1>
-            <p className="text-muted-foreground font-mono text-sm border-l-2 border-primary pl-4 max-w-lg">
+            <p className="text-muted-foreground font-mono text-sm border-l-2 border-primary pl-4 max-w-lg mb-2">
               Field-recovered platforms from the first operational cycle. Each one pulled from a mission. Each one online.
+            </p>
+            <p className="text-muted-foreground font-mono text-sm border-l-2 border-primary pl-4 max-w-lg">
+              The real tools & platforms behind the fiction.
             </p>
           </div>
           <ShieldCheck size={48} className="text-primary/20 hidden md:block" aria-hidden="true" />
@@ -64,6 +68,14 @@ export default function Intel() {
           ))}
         </div>
       </div>
+      
+      <NextWaypoint waypoints={[
+        { href: "https://shotgunninjas.com", title: "ShotgunNinjas.com", desc: "The main hub of the universe.", isExternal: true },
+        { href: "https://www.operatoros.net", title: "OperatorOS", desc: "The tactical operator platform.", isExternal: true }
+      ]} />
+      
+      <ExternalFunnel />
+
       <UniverseFooter LinkComponent={Link} />
     </div>
   );

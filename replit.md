@@ -76,7 +76,7 @@ Exports:
   - `/arsenal` — The Arsenal: 5 gear items with AI-generated images
   - `/intel` — Forge Intel: 4 products mapped to in-universe tactical platforms
   - `/community` — The Village: community hub with 7 category channels, trending topics feed, 3-tier member perks
-  - `/merch` — Ronin Supply: premium merch storefront with product detail modal, featured gear, bestsellers, limited drops, 6 collection tiles, product grid with filtering, trust/conversion section, returns/support info
+  - `/merch` — Merch ("Ronin Supply line" as in-universe sublabel): premium merch storefront with product detail modal, featured gear, bestsellers, limited drops, 6 collection tiles, product grid with filtering, trust/conversion section, returns/support info
   - `/legal/:section` — Legal Suite: Terms of Service, Privacy Policy, Refunds & Shipping, Contact (with tab nav). Routes: `/legal`, `/legal/terms`, `/legal/privacy`, `/legal/refunds`, `/legal/contact`
 - **SEO**: `src/hooks/usePageMeta.ts` updates document.title + meta description + og/twitter tags per page. Applied to all 10 pages. `public/robots.txt` + `public/sitemap.xml` shipped.
 - **Ecosystem Cross-Linking**: Village positions itself as the community/entertainment hub of the Shotgun Ninjas Productions ecosystem. Cross-links to all 6 sister products via Home (extendedSystems) and Intel (recoveredSystems + extendedNetwork): BrandForge OS (bf-os.com), TorqueShed.pro, TechDeck.app, TradeFlowKit.com, PulseDesk.support, FaultlineLab.com. Every page footer links back to ShotgunNinjas.com (main hub) and includes "Built by Shotgun Ninjas Productions" attribution.
@@ -89,7 +89,7 @@ Exports:
 - **PWA**: Installable on mobile/desktop via manifest.json + service worker; install button in sidebar + mobile header (auto-hides when installed)
 - **Key files**:
   - `src/App.tsx` — wouter router with 8 routes
-  - `src/components/layout/Layout.tsx` — tactical sidebar layout with install button, Community + Ronin Supply nav, Main Site link
+  - `src/components/layout/Layout.tsx` — tactical sidebar layout with install button, Community + Merch nav with plain-language sublabels, Main Site + Operator OS external links
   - `src/hooks/useInstallPrompt.ts` — PWA install prompt hook (beforeinstallprompt/display-mode detection)
   - `src/pages/Home.tsx`, `Archive.tsx`, `Operators.tsx`, `Grid.tsx`, `Arsenal.tsx`, `Intel.tsx`, `Community.tsx`, `Merch.tsx`
   - `src/data/transmissions.ts` — shared trilogy config (single source of truth)
