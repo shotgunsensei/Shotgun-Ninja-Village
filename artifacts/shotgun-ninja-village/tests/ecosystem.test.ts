@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { ecosystem, recoveredSystems, extendedSystems } from "@/data/ecosystem";
+import { ecosystem, recoveredSystems, extendedSystems } from "@workspace/sn-ecosystem";
 
 describe("ecosystem data", () => {
   it("contains exactly 6 products", () => {
