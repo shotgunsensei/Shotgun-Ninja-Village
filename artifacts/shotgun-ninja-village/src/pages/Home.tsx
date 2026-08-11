@@ -18,11 +18,12 @@ import {
   clearQueuedSignals,
   exportQueuedSignalsAsCsv,
 } from "@/lib/signalQueue";
-import { createSignup, ApiError, useGetSignupsCount } from "@workspace/api-client-react";
 import { ShareButton } from "@/components/shared/ShareButton";
 import { markWatched, getWatched, getNextUnwatched } from "@/lib/watchProgress";
 import { markEnlisted } from "@/lib/operatorRecord";
 import { OperatorRecord } from "@/components/shared/OperatorRecord";
+import { createSignup, ApiError } from "@workspace/api-client-react";
+import { EnlistedCounter } from "@/components/shared/EnlistedCounter";
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
@@ -212,7 +213,6 @@ export default function Home() {
   const watched = getWatched();
   const nextTx = getNextUnwatched(transmissions.map(t => t.num));
   const continueTx = nextTx ? transmissions.find(t => t.num === nextTx) : null;
-  const { data: signups } = useGetSignupsCount();
 
   return (
     <div className="relative w-full min-h-[100dvh] flex flex-col">
@@ -543,11 +543,7 @@ export default function Home() {
               <p className="font-mono text-xs text-muted-foreground">
                 No spam. No noise. Only signal.
               </p>
-              {signups && (
-                <div className="font-mono text-[10px] text-primary/70 uppercase tracking-widest bg-primary/5 px-2 py-0.5 border border-primary/20">
-                  <Activity size={10} className="inline mr-1 animate-pulse" /> {signups.count.toLocaleString()} Operators Enlisted
-                </div>
-              )}
+              <EnlistedCounter />
             </div>
           </motion.div>
         </div>

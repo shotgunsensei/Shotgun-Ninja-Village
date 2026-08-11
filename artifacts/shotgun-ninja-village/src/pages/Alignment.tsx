@@ -6,6 +6,7 @@ import { Target, Activity, ShieldAlert, Cpu, ArrowRight, Share2, ShoppingBag, Us
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { UniverseFooter } from "@workspace/sn-ecosystem";
 import { ShareButton } from "@/components/shared/ShareButton";
+import { EMPTY_SCORES, applyOptionScores, computeTopArchetype, type Archetype } from "@/lib/quizScoring";
 
 const QUESTIONS: {
   id: number;
@@ -106,24 +107,18 @@ export default function Alignment() {
   usePageMeta({ title: "Operator Alignment", description: "Tactical calibration sequence. Discover your operator archetype." });
   
   const [currentStep, setCurrentStep] = useState(0);
-  const [scores, setScores] = useState({ builder: 0, protector: 0, tracer: 0, breaker: 0 });
+  const [scores, setScores] = useState(EMPTY_SCORES);
   // Restore a previously calibrated archetype so returning fans land on their result.
-  const [result, setResult] = useState<keyof typeof ARCHETYPES | null>(() => getQuizResult()?.archetype ?? null);
+  const [result, setResult] = useState<Archetype | null>(() => getQuizResult()?.archetype ?? null);
 
-  const handleOptionSelect = (optionScores: Partial<Record<string, number>>) => {
-    const newScores = { ...scores };
-    Object.entries(optionScores).forEach(([key, val]) => {
-      if (val) {
-        newScores[key as keyof typeof scores] += val;
-      }
-    });
+  const handleOptionSelect = (optionScores: Partial<Record<Archetype, number>>) => {
+    const newScores = applyOptionScores(scores, optionScores);
     setScores(newScores);
 
     if (currentStep < QUESTIONS.length - 1) {
       setCurrentStep(prev => prev + 1);
     } else {
-      // Calculate result
-      const topArchetype = Object.entries(newScores).reduce((a, b) => a[1] > b[1] ? a : b)[0] as keyof typeof ARCHETYPES;
+      const topArchetype = computeTopArchetype(newScores);
       saveQuizResult(topArchetype, ARCHETYPES[topArchetype].name);
       setResult(topArchetype);
     }
@@ -131,7 +126,7 @@ export default function Alignment() {
 
   const resetQuiz = () => {
     setCurrentStep(0);
-    setScores({ builder: 0, protector: 0, tracer: 0, breaker: 0 });
+    setScores(EMPTY_SCORES);
     setResult(null);
   };
 
