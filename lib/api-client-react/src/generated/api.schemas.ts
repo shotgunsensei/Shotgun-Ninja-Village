@@ -28,3 +28,184 @@ export interface SignupCountResponse {
 export interface ErrorResponse {
   message: string;
 }
+
+export type VillageArchetype =
+  (typeof VillageArchetype)[keyof typeof VillageArchetype];
+
+export const VillageArchetype = {
+  builder: "builder",
+  protector: "protector",
+  tracer: "tracer",
+  breaker: "breaker",
+} as const;
+
+export interface VillageRegisterRequest {
+  /**
+   * @minLength 2
+   * @maxLength 80
+   */
+  displayName: string;
+  /** @maxLength 320 */
+  email: string;
+  /**
+   * @minLength 3
+   * @maxLength 24
+   * @pattern ^[a-zA-Z0-9][a-zA-Z0-9_-]*$
+   */
+  callsign: string;
+  /**
+   * @minLength 10
+   * @maxLength 128
+   */
+  password: string;
+  newsletterOptIn: boolean;
+  termsAccepted: true;
+  archetype?: VillageArchetype;
+  /** @maxItems 12 */
+  watchedTransmissions?: string[];
+}
+
+export interface VillageLoginRequest {
+  /** @maxLength 320 */
+  email: string;
+  /** @maxLength 128 */
+  password: string;
+}
+
+export type VillageProfilePatchAvatarColor =
+  (typeof VillageProfilePatchAvatarColor)[keyof typeof VillageProfilePatchAvatarColor];
+
+export const VillageProfilePatchAvatarColor = {
+  crimson: "crimson",
+  cyan: "cyan",
+  amber: "amber",
+  emerald: "emerald",
+  violet: "violet",
+} as const;
+
+export interface VillageProfilePatch {
+  /**
+   * @minLength 2
+   * @maxLength 80
+   */
+  displayName?: string;
+  /**
+   * @minLength 3
+   * @maxLength 24
+   */
+  callsign?: string;
+  /** @maxLength 400 */
+  bio?: string;
+  avatarColor?: VillageProfilePatchAvatarColor;
+  newsletterOptIn?: boolean;
+}
+
+export interface VillageProgressPatch {
+  archetype?: VillageArchetype;
+  /** @maxItems 12 */
+  watchedTransmissions?: string[];
+}
+
+export interface VillageTopicCreate {
+  /** @maxLength 64 */
+  categorySlug: string;
+  /**
+   * @minLength 6
+   * @maxLength 140
+   */
+  title: string;
+  /**
+   * @minLength 10
+   * @maxLength 10000
+   */
+  body: string;
+}
+
+export interface VillageTopicPatch {
+  /**
+   * @minLength 6
+   * @maxLength 140
+   */
+  title: string;
+}
+
+export interface VillageReplyWrite {
+  /**
+   * @minLength 2
+   * @maxLength 10000
+   */
+  body: string;
+}
+
+export interface VillageBadge {
+  id: string;
+  label: string;
+  description: string;
+  earned: boolean;
+}
+
+export interface VillageUser {
+  id: string;
+  displayName: string;
+  callsign: string;
+  bio: string;
+  avatarColor: string;
+  role: string;
+  tier: string;
+  archetype?: VillageArchetype;
+  createdAt: string;
+  badges: VillageBadge[];
+  [key: string]: unknown;
+}
+
+export interface VillageUserEnvelope {
+  user: VillageUser;
+}
+
+export type VillageCategoryListCategoriesItem = { [key: string]: unknown };
+
+export interface VillageCategoryList {
+  categories: VillageCategoryListCategoriesItem[];
+}
+
+export interface VillageStats {
+  totalMembers: number;
+  onlineNow: number;
+  totalTopics: number;
+  totalPosts: number;
+  /** @nullable */
+  newestMember: string | null;
+}
+
+export type VillageTopicListTopicsItem = { [key: string]: unknown };
+
+export interface VillageTopicList {
+  topics: VillageTopicListTopicsItem[];
+  page: number;
+  hasMore: boolean;
+}
+
+export type VillageTopicDetailTopic = { [key: string]: unknown };
+
+export type VillageTopicDetailPostsItem = { [key: string]: unknown };
+
+export interface VillageTopicDetail {
+  topic: VillageTopicDetailTopic;
+  posts: VillageTopicDetailPostsItem[];
+}
+
+export interface IdResponse {
+  id: string;
+}
+
+export type ListVillageTopicsParams = {
+  category?: string;
+  /**
+   * @maxLength 100
+   */
+  q?: string;
+  /**
+   * @minimum 1
+   */
+  page?: number;
+};

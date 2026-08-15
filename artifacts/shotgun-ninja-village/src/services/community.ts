@@ -1,202 +1,239 @@
-import {
-  categories as mockCategories,
-  featuredTopics as mockTopics,
-  memberPerks as mockPerks,
-  communityStats as mockStats,
-  type ForumCategory,
-  type ForumTopic,
-  type MemberPerk,
-  type CommunityStats,
-} from "@/data/community";
-import {
-  communityConfig,
-  isLiveCommunity,
-  isSsoEnabled,
-  isEmbedEnabled,
-} from "@/config/integrations";
-
-export async function getCategories(): Promise<ForumCategory[]> {
-  if (isLiveCommunity()) {
-    return fetchDiscourseCategories();
-  }
-  return [...mockCategories].sort((a, b) => a.position - b.position);
+export interface BadgeView {
+  id: string;
+  label: string;
+  description: string;
+  earned: boolean;
 }
 
-export async function getFeaturedTopics(): Promise<ForumTopic[]> {
-  if (isLiveCommunity()) {
-    return fetchDiscourseTopics();
-  }
-  return mockTopics;
+export interface VillageUser {
+  id: string;
+  email?: string;
+  displayName: string;
+  callsign: string;
+  bio: string;
+  avatarColor: "crimson" | "cyan" | "amber" | "emerald" | "violet";
+  role: "member" | "moderator" | "admin";
+  tier: "free" | "supporter" | "founder";
+  newsletterOptIn?: boolean;
+  archetype: "builder" | "protector" | "tracer" | "breaker" | null;
+  watchedTransmissions: string[];
+  createdAt: string;
+  badges: BadgeView[];
 }
 
-export async function getMemberPerks(): Promise<MemberPerk[]> {
-  return mockPerks;
+export interface CommunityCategory {
+  slug: string;
+  name: string;
+  description: string;
+  icon: string;
+  color: string;
+  position: number;
+  requiredTier?: "supporter" | "founder";
+  topicCreationRole?: "admin";
+  locked: boolean;
+  canAccess: boolean;
+  canCreateTopic: boolean;
+  topicCount: number;
+  postCount: number;
 }
 
-export async function getCommunityStats(): Promise<CommunityStats> {
-  if (isLiveCommunity()) {
-    return fetchDiscourseStats();
-  }
-  return mockStats;
+export interface CommunityStats {
+  totalMembers: number;
+  onlineNow: number;
+  totalTopics: number;
+  totalPosts: number;
+  newestMember: string | null;
 }
 
-export function getCommunityUrl(path = ""): string {
-  if (isLiveCommunity() && communityConfig.discourse.url) {
-    return `${communityConfig.discourse.url}${path}`;
-  }
-  return "#community-coming-soon";
+export interface TopicSummary {
+  id: string;
+  categorySlug: string;
+  title: string;
+  excerpt: string;
+  viewCount: number;
+  pinned: boolean;
+  locked: boolean;
+  createdAt: string;
+  lastPostedAt: string;
+  authorId: string;
+  author: string;
+  authorDisplayName: string;
+  authorTier: string;
+  authorArchetype: string | null;
+  replyCount: number;
+  isMine: boolean;
 }
 
-export function getCommunityHomeUrl(): string {
-  return getCommunityUrl("/latest");
+export interface TopicPost {
+  id: string;
+  body: string;
+  isOriginal: boolean;
+  createdAt: string;
+  updatedAt: string;
+  authorId: string;
+  author: string;
+  authorDisplayName: string;
+  authorTier: string;
+  authorArchetype: string | null;
+  avatarColor: VillageUser["avatarColor"];
+  isMine: boolean;
 }
 
-export function getCategoryUrl(slug: string): string {
-  return getCommunityUrl(`/c/${slug}`);
-}
+export type TopicDetail = Omit<TopicSummary, "replyCount">;
 
-export function getTopicUrl(id: string): string {
-  return getCommunityUrl(`/t/${id}`);
-}
-
-export function getSignupUrl(): string {
-  if (communityConfig.signup.url) {
-    return communityConfig.signup.url;
-  }
-  if (isLiveCommunity() && communityConfig.discourse.url) {
-    return `${communityConfig.discourse.url}/signup`;
-  }
-  return communityConfig.signup.fallbackUrl;
-}
-
-export function getLoginUrl(returnPath?: string): string {
-  if (isSsoEnabled()) {
-    const base = communityConfig.sso.loginUrl;
-    return returnPath ? `${base}?return_path=${encodeURIComponent(returnPath)}` : base;
-  }
-  if (isLiveCommunity() && communityConfig.discourse.url) {
-    return `${communityConfig.discourse.url}/login`;
-  }
-  return "#login-not-configured";
-}
-
-export function getEmbedUrl(canonicalPageUrl: string): string | null {
-  if (!isEmbedEnabled() || !communityConfig.discourse.url) return null;
-  return `${communityConfig.discourse.url}/embed/comments?embed_url=${encodeURIComponent(canonicalPageUrl)}`;
-}
-
-export function isCategoryGated(slug: string): boolean {
-  return communityConfig.gatedCategories.includes(slug);
-}
-
-export function getRequiredGroup(category: ForumCategory): string | null {
-  return category.requiredGroup ?? null;
-}
-
-export function isLive(): boolean {
-  return isLiveCommunity();
-}
-
-async function fetchDiscourseCategories(): Promise<ForumCategory[]> {
-  try {
-    const res = await fetch(`${communityConfig.discourse.url}/categories.json`);
-    if (!res.ok) throw new Error(`Discourse API ${res.status}`);
-    const data = await res.json();
-    return (data.category_list?.categories ?? []).map((c: any) => ({
-      id: `cat-${c.id}`,
-      slug: c.slug,
-      discourseId: c.id,
-      name: c.name,
-      description: c.description || "",
-      icon: mapDiscourseIcon(c.slug),
-      color: `text-[#${c.color}]`,
-      topicCount: c.topic_count || 0,
-      postCount: c.post_count || 0,
-      position: c.position ?? 99,
-      locked: c.read_restricted ?? false,
-      requiredGroup: c.read_restricted ? (c.group_permissions?.[0]?.group_name ?? undefined) : undefined,
-      latestPosterAvatars: [],
-    }));
-  } catch {
-    return [...mockCategories].sort((a, b) => a.position - b.position);
+export class VillageApiError extends Error {
+  constructor(
+    public status: number,
+    message: string,
+    public field?: string,
+  ) {
+    super(message);
+    this.name = "VillageApiError";
   }
 }
 
-async function fetchDiscourseTopics(): Promise<ForumTopic[]> {
-  try {
-    const res = await fetch(`${communityConfig.discourse.url}/latest.json`);
-    if (!res.ok) throw new Error(`Discourse API ${res.status}`);
-    const data = await res.json();
-    type DiscourseUser = { id: number; username: string };
-    const users = new Map<number, DiscourseUser>(
-      (data.users ?? []).map((u: DiscourseUser) => [u.id, u])
+async function apiRequest<T>(path: string, init: RequestInit = {}): Promise<T> {
+  const headers = new Headers(init.headers);
+  headers.set("Accept", "application/json");
+  if (init.body && !headers.has("Content-Type"))
+    headers.set("Content-Type", "application/json");
+  const response = await fetch(`/api${path}`, {
+    ...init,
+    headers,
+    credentials: "include",
+  });
+  if (response.status === 204) return undefined as T;
+
+  const contentType = response.headers.get("content-type") ?? "";
+  const data = contentType.includes("application/json")
+    ? await response.json()
+    : null;
+  if (!response.ok) {
+    throw new VillageApiError(
+      response.status,
+      typeof data?.message === "string"
+        ? data.message
+        : "The Village uplink failed",
+      typeof data?.field === "string" ? data.field : undefined,
     );
-    return (data.topic_list?.topics ?? []).slice(0, 8).map((t: any) => {
-      const poster = users.get(t.posters?.[0]?.user_id);
-      return {
-        id: String(t.id),
-        categorySlug: findCategorySlug(t.category_id),
-        title: t.title,
-        author: poster?.username ?? "unknown",
-        authorAvatar: poster?.username?.substring(0, 2).toUpperCase() ?? "",
-        replyCount: t.reply_count ?? 0,
-        viewCount: t.views ?? 0,
-        lastActivity: formatRelativeTime(t.last_posted_at),
-        pinned: t.pinned ?? false,
-        hot: (t.reply_count ?? 0) > 20,
-        excerpt: t.excerpt ?? "",
-      };
-    });
-  } catch {
-    return mockTopics;
   }
+  return data as T;
 }
 
-async function fetchDiscourseStats(): Promise<CommunityStats> {
-  try {
-    const res = await fetch(`${communityConfig.discourse.url}/about.json`);
-    if (!res.ok) throw new Error(`Discourse API ${res.status}`);
-    const data = await res.json();
-    const about = data.about ?? {};
-    return {
-      totalMembers: about.stats?.user_count ?? mockStats.totalMembers,
-      onlineNow: about.stats?.active_users_last_day ?? mockStats.onlineNow,
-      totalTopics: about.stats?.topic_count ?? mockStats.totalTopics,
-      totalPosts: about.stats?.post_count ?? mockStats.totalPosts,
-      newestMember: about.stats?.last_registered_username ?? mockStats.newestMember,
-    };
-  } catch {
-    return mockStats;
-  }
+export interface RegisterAccountInput {
+  displayName: string;
+  email: string;
+  callsign: string;
+  password: string;
+  newsletterOptIn: boolean;
+  termsAccepted: true;
+  archetype?: VillageUser["archetype"];
+  watchedTransmissions?: string[];
 }
 
-function mapDiscourseIcon(slug: string): string {
-  const map: Record<string, string> = {
-    "dojo-announcements": "megaphone",
-    "village-gate": "door-open",
-    "lore-episodes": "book-open",
-    "arsenal-builds": "wrench",
-    "the-forge": "hammer",
-    "merch-flex": "shirt",
-    "ronin-lounge": "lock",
-    "founders-chamber": "crown",
-    "support-suggestions": "message-circle",
-  };
-  return map[slug] ?? "message-circle";
-}
+export const accountApi = {
+  register: (input: RegisterAccountInput) =>
+    apiRequest<{ user: VillageUser }>("/auth/register", {
+      method: "POST",
+      body: JSON.stringify(input),
+    }),
+  login: (input: { email: string; password: string }) =>
+    apiRequest<{ user: VillageUser }>("/auth/login", {
+      method: "POST",
+      body: JSON.stringify(input),
+    }),
+  logout: () => apiRequest<void>("/auth/logout", { method: "POST" }),
+  me: () => apiRequest<{ user: VillageUser }>("/auth/me"),
+  update: (
+    input: Partial<
+      Pick<
+        VillageUser,
+        "displayName" | "callsign" | "bio" | "avatarColor" | "newsletterOptIn"
+      >
+    >,
+  ) =>
+    apiRequest<{ user: VillageUser }>("/auth/me", {
+      method: "PATCH",
+      body: JSON.stringify(input),
+    }),
+  syncProgress: (input: {
+    archetype?: NonNullable<VillageUser["archetype"]>;
+    watchedTransmissions?: string[];
+  }) =>
+    apiRequest<{ user: VillageUser }>("/auth/progress", {
+      method: "PATCH",
+      body: JSON.stringify(input),
+    }),
+};
 
-function findCategorySlug(discourseId: number): string {
-  const match = mockCategories.find((c) => c.discourseId === discourseId);
-  return match?.slug ?? "general";
-}
+export const communityApi = {
+  categories: () =>
+    apiRequest<{ categories: CommunityCategory[] }>("/community/categories"),
+  stats: () => apiRequest<CommunityStats>("/community/stats"),
+  topics: (filters: { category?: string; q?: string; page?: number } = {}) => {
+    const params = new URLSearchParams();
+    if (filters.category) params.set("category", filters.category);
+    if (filters.q) params.set("q", filters.q);
+    if (filters.page && filters.page > 1)
+      params.set("page", String(filters.page));
+    const query = params.toString();
+    return apiRequest<{
+      topics: TopicSummary[];
+      page: number;
+      hasMore: boolean;
+    }>(`/community/topics${query ? `?${query}` : ""}`);
+  },
+  topic: (id: string) =>
+    apiRequest<{ topic: TopicDetail; posts: TopicPost[] }>(
+      `/community/topics/${encodeURIComponent(id)}`,
+    ),
+  createTopic: (input: { categorySlug: string; title: string; body: string }) =>
+    apiRequest<{ id: string }>("/community/topics", {
+      method: "POST",
+      body: JSON.stringify(input),
+    }),
+  updateTopic: (id: string, title: string) =>
+    apiRequest<{ ok: true }>(`/community/topics/${encodeURIComponent(id)}`, {
+      method: "PATCH",
+      body: JSON.stringify({ title }),
+    }),
+  removeTopic: (id: string) =>
+    apiRequest<void>(`/community/topics/${encodeURIComponent(id)}`, {
+      method: "DELETE",
+    }),
+  reply: (id: string, body: string) =>
+    apiRequest<{ id: string }>(
+      `/community/topics/${encodeURIComponent(id)}/replies`,
+      { method: "POST", body: JSON.stringify({ body }) },
+    ),
+  updatePost: (id: string, body: string) =>
+    apiRequest<{ ok: true }>(`/community/posts/${encodeURIComponent(id)}`, {
+      method: "PATCH",
+      body: JSON.stringify({ body }),
+    }),
+  removePost: (id: string) =>
+    apiRequest<void>(`/community/posts/${encodeURIComponent(id)}`, {
+      method: "DELETE",
+    }),
+  operator: (callsign: string) =>
+    apiRequest<{ user: VillageUser }>(
+      `/community/operators/${encodeURIComponent(callsign)}`,
+    ),
+};
 
-function formatRelativeTime(iso: string): string {
-  if (!iso) return "";
-  const diff = Date.now() - new Date(iso).getTime();
-  const mins = Math.floor(diff / 60000);
-  if (mins < 60) return `${mins}m ago`;
-  const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs}h ago`;
-  const days = Math.floor(hrs / 24);
-  return `${days}d ago`;
+export function formatRelativeTime(value: string): string {
+  const time = new Date(value).getTime();
+  const seconds = Math.max(0, Math.floor((Date.now() - time) / 1000));
+  if (seconds < 60) return "just now";
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 30) return `${days}d ago`;
+  return new Intl.DateTimeFormat(undefined, {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  }).format(new Date(value));
 }

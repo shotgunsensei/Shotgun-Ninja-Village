@@ -12,6 +12,10 @@ tags:
     description: Health operations
   - name: signups
     description: Email signup capture
+  - name: village-auth
+    description: Shotgun Ninja account and session operations
+  - name: village-community
+    description: Native Village boards, topics, replies, and public profiles
 paths:
   /healthz:
     get:
@@ -70,7 +74,302 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/SignupCountResponse"
+  /auth/register:
+    post:
+      operationId: registerVillageAccount
+      tags: [village-auth]
+      summary: Create a free Shotgun Ninja account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VillageRegisterRequest"
+      responses:
+        "201":
+          description: Account created and session cookie issued
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VillageUserEnvelope"
+        "409":
+          description: Email or callsign already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /auth/login:
+    post:
+      operationId: loginVillageAccount
+      tags: [village-auth]
+      summary: Start an account session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VillageLoginRequest"
+      responses:
+        "200":
+          description: Authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VillageUserEnvelope"
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /auth/logout:
+    post:
+      operationId: logoutVillageAccount
+      tags: [village-auth]
+      summary: End the current account session
+      responses:
+        "204":
+          description: Signed out
+  /auth/me:
+    get:
+      operationId: getVillageAccount
+      tags: [village-auth]
+      summary: Get the current private account profile
+      security:
+        - villageSession: []
+      responses:
+        "200":
+          description: Current account
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VillageUserEnvelope"
+        "401":
+          description: Not authenticated
+    patch:
+      operationId: updateVillageAccount
+      tags: [village-auth]
+      summary: Update the current profile and notification consent
+      security:
+        - villageSession: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VillageProfilePatch"
+      responses:
+        "200":
+          description: Updated account
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VillageUserEnvelope"
+  /auth/progress:
+    patch:
+      operationId: syncVillageProgress
+      tags: [village-auth]
+      summary: Merge locally earned alignment and watch progress into the account
+      security:
+        - villageSession: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VillageProgressPatch"
+      responses:
+        "200":
+          description: Synced account
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VillageUserEnvelope"
+  /community/categories:
+    get:
+      operationId: listVillageCategories
+      tags: [village-community]
+      summary: List visible board metadata and access state
+      responses:
+        "200":
+          description: Community channels
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VillageCategoryList"
+  /community/stats:
+    get:
+      operationId: getVillageStats
+      tags: [village-community]
+      summary: Get live community totals
+      responses:
+        "200":
+          description: Live totals
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VillageStats"
+  /community/topics:
+    get:
+      operationId: listVillageTopics
+      tags: [village-community]
+      summary: List accessible topics with optional board and title search filters
+      parameters:
+        - in: query
+          name: category
+          schema: { type: string }
+        - in: query
+          name: q
+          schema: { type: string, maxLength: 100 }
+        - in: query
+          name: page
+          schema: { type: integer, minimum: 1, default: 1 }
+      responses:
+        "200":
+          description: Topic page
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VillageTopicList"
+    post:
+      operationId: createVillageTopic
+      tags: [village-community]
+      summary: Create a topic in an authorized board
+      security:
+        - villageSession: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VillageTopicCreate"
+      responses:
+        "201":
+          description: Topic created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IdResponse"
+  /community/topics/{id}:
+    parameters:
+      - $ref: "#/components/parameters/UuidPath"
+    get:
+      operationId: getVillageTopic
+      tags: [village-community]
+      summary: Read an accessible topic and every current post
+      responses:
+        "200":
+          description: Topic discussion
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VillageTopicDetail"
+        "403":
+          description: Tier-gated channel
+    patch:
+      operationId: updateVillageTopic
+      tags: [village-community]
+      summary: Edit an owned topic title
+      security:
+        - villageSession: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VillageTopicPatch"
+      responses:
+        "200":
+          description: Updated
+    delete:
+      operationId: deleteVillageTopic
+      tags: [village-community]
+      summary: Soft-delete an owned topic
+      security:
+        - villageSession: []
+      responses:
+        "204":
+          description: Removed
+  /community/topics/{id}/replies:
+    parameters:
+      - $ref: "#/components/parameters/UuidPath"
+    post:
+      operationId: createVillageReply
+      tags: [village-community]
+      summary: Reply to an accessible unlocked topic
+      security:
+        - villageSession: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VillageReplyWrite"
+      responses:
+        "201":
+          description: Reply created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IdResponse"
+  /community/posts/{id}:
+    parameters:
+      - $ref: "#/components/parameters/UuidPath"
+    patch:
+      operationId: updateVillagePost
+      tags: [village-community]
+      summary: Edit an owned post
+      security:
+        - villageSession: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VillageReplyWrite"
+      responses:
+        "200":
+          description: Updated
+    delete:
+      operationId: deleteVillagePost
+      tags: [village-community]
+      summary: Soft-delete an owned reply
+      security:
+        - villageSession: []
+      responses:
+        "204":
+          description: Removed
+  /community/operators/{callsign}:
+    get:
+      operationId: getVillageOperator
+      tags: [village-community]
+      summary: Get a privacy-safe public operator profile
+      parameters:
+        - in: path
+          name: callsign
+          required: true
+          schema: { type: string, minLength: 3, maxLength: 24 }
+      responses:
+        "200":
+          description: Public operator
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VillageUserEnvelope"
 components:
+  securitySchemes:
+    villageSession:
+      type: apiKey
+      in: cookie
+      name: snv_session
+  parameters:
+    UuidPath:
+      in: path
+      name: id
+      required: true
+      schema:
+        type: string
+        format: uuid
   schemas:
     HealthStatus:
       type: object
@@ -115,3 +414,155 @@ components:
           type: string
       required:
         - message
+    VillageRegisterRequest:
+      type: object
+      properties:
+        displayName: { type: string, minLength: 2, maxLength: 80 }
+        email: { type: string, format: email, maxLength: 320 }
+        callsign:
+          {
+            type: string,
+            minLength: 3,
+            maxLength: 24,
+            pattern: "^[a-zA-Z0-9][a-zA-Z0-9_-]*$",
+          }
+        password: { type: string, minLength: 10, maxLength: 128 }
+        newsletterOptIn: { type: boolean, default: false }
+        termsAccepted: { type: boolean, const: true }
+        archetype: { $ref: "#/components/schemas/VillageArchetype" }
+        watchedTransmissions:
+          type: array
+          maxItems: 12
+          items: { type: string }
+      required:
+        [displayName, email, callsign, password, newsletterOptIn, termsAccepted]
+    VillageLoginRequest:
+      type: object
+      properties:
+        email: { type: string, format: email, maxLength: 320 }
+        password: { type: string, maxLength: 128 }
+      required: [email, password]
+    VillageProfilePatch:
+      type: object
+      properties:
+        displayName: { type: string, minLength: 2, maxLength: 80 }
+        callsign: { type: string, minLength: 3, maxLength: 24 }
+        bio: { type: string, maxLength: 400 }
+        avatarColor:
+          { type: string, enum: [crimson, cyan, amber, emerald, violet] }
+        newsletterOptIn: { type: boolean }
+    VillageProgressPatch:
+      type: object
+      properties:
+        archetype: { $ref: "#/components/schemas/VillageArchetype" }
+        watchedTransmissions:
+          type: array
+          maxItems: 12
+          items: { type: string }
+    VillageTopicCreate:
+      type: object
+      properties:
+        categorySlug: { type: string, maxLength: 64 }
+        title: { type: string, minLength: 6, maxLength: 140 }
+        body: { type: string, minLength: 10, maxLength: 10000 }
+      required: [categorySlug, title, body]
+    VillageTopicPatch:
+      type: object
+      properties:
+        title: { type: string, minLength: 6, maxLength: 140 }
+      required: [title]
+    VillageReplyWrite:
+      type: object
+      properties:
+        body: { type: string, minLength: 2, maxLength: 10000 }
+      required: [body]
+    VillageArchetype:
+      type: string
+      enum: [builder, protector, tracer, breaker]
+    VillageBadge:
+      type: object
+      properties:
+        id: { type: string }
+        label: { type: string }
+        description: { type: string }
+        earned: { type: boolean }
+      required: [id, label, description, earned]
+    VillageUser:
+      type: object
+      additionalProperties: true
+      properties:
+        id: { type: string, format: uuid }
+        displayName: { type: string }
+        callsign: { type: string }
+        bio: { type: string }
+        avatarColor: { type: string }
+        role: { type: string }
+        tier: { type: string }
+        archetype: { $ref: "#/components/schemas/VillageArchetype" }
+        createdAt: { type: string, format: date-time }
+        badges:
+          type: array
+          items: { $ref: "#/components/schemas/VillageBadge" }
+      required:
+        [
+          id,
+          displayName,
+          callsign,
+          bio,
+          avatarColor,
+          role,
+          tier,
+          createdAt,
+          badges,
+        ]
+    VillageUserEnvelope:
+      type: object
+      properties:
+        user: { $ref: "#/components/schemas/VillageUser" }
+      required: [user]
+    VillageCategoryList:
+      type: object
+      properties:
+        categories:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+      required: [categories]
+    VillageStats:
+      type: object
+      properties:
+        totalMembers: { type: integer }
+        onlineNow: { type: integer }
+        totalTopics: { type: integer }
+        totalPosts: { type: integer }
+        newestMember: { type: [string, "null"] }
+      required: [totalMembers, onlineNow, totalTopics, totalPosts, newestMember]
+    VillageTopicList:
+      type: object
+      properties:
+        topics:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        page: { type: integer }
+        hasMore: { type: boolean }
+      required: [topics, page, hasMore]
+    VillageTopicDetail:
+      type: object
+      properties:
+        topic:
+          type: object
+          additionalProperties: true
+        posts:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+      required: [topic, posts]
+    IdResponse:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+      required: [id]
