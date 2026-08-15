@@ -7,6 +7,7 @@ export function markWatched(num: string) {
     if (!current.includes(num)) {
       current.push(num);
       localStorage.setItem(WATCH_KEY, JSON.stringify(current));
+      window.dispatchEvent(new Event("sn:progress"));
     }
   } catch (e) {
     // ignore

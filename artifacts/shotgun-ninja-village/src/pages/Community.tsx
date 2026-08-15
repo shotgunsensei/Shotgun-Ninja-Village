@@ -1,471 +1,475 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "wouter";
-import { motion } from "framer-motion";
 import {
-  MessageCircle, Users, Lock, Zap, ChevronRight, AlertTriangle,
-  MessageSquare, Eye, Pin, Flame, ShoppingBag, ExternalLink, Radio,
-  ArrowRight, UserPlus, DoorOpen, Shield, Crown, Award, Activity
+  ArrowRight,
+  Award,
+  Crown,
+  Eye,
+  Flame,
+  Lock,
+  MessageCircle,
+  MessageSquare,
+  Pin,
+  Radio,
+  ShieldCheck,
+  UserPlus,
+  Users,
 } from "lucide-react";
-import type { ForumCategory, ForumTopic, MemberPerk, CommunityStats } from "@/data/community";
-import {
-  getCategories, getFeaturedTopics, getMemberPerks, getCommunityStats,
-  getCategoryUrl, getTopicUrl, getCommunityHomeUrl, getSignupUrl, isLive
-} from "@/services/community";
+import { useAuth } from "@/auth/AuthContext";
+import { OperatorAvatar } from "@/components/community/OperatorAvatar";
 import { SectionHeading } from "@/components/shared/SectionHeading";
-import { UniverseFooter } from "@workspace/sn-ecosystem";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { resolveIcon } from "@/lib/iconMap";
-import { NextWaypoint } from "@/components/shared/NextWaypoint";
-import { ExternalFunnel } from "@/components/shared/ExternalFunnel";
-import { OperatorRecord } from "@/components/shared/OperatorRecord";
+import {
+  communityApi,
+  formatRelativeTime,
+  type CommunityCategory,
+  type CommunityStats,
+  type TopicSummary,
+} from "@/services/community";
 
-const fadeUp = {
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: { duration: 0.5 },
+const emptyStats: CommunityStats = {
+  totalMembers: 0,
+  onlineNow: 0,
+  totalTopics: 0,
+  totalPosts: 0,
+  newestMember: null,
 };
-
-const avatarColors: Record<string, string> = {
-  K9: "bg-primary/80 text-white",
-  SG: "bg-purple-500/80 text-white",
-  NR: "bg-orange-500/80 text-white",
-  BR: "bg-green-500/80 text-white",
-  CW: "bg-secondary/80 text-white",
-  DX: "bg-blue-400/80 text-white",
-};
-
-function MiniAvatar({ initials, className = "" }: { initials: string; className?: string }) {
-  const colorClass = avatarColors[initials] || "bg-muted text-muted-foreground";
-  return (
-    <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[8px] font-mono font-bold border border-background ${colorClass} ${className}`}>
-      {initials}
-    </div>
-  );
-}
 
 export default function Community() {
-  usePageMeta({ title: "The Village", description: "Join the village. Discussion channels, recovered systems support, drop announcements, and supporter perks for the Shotgun Ninjas community." });
-  const live = isLive();
-  const signupHref = getSignupUrl();
-
-  const [allCategories, setCategories] = useState<ForumCategory[]>([]);
-  const [topics, setTopics] = useState<ForumTopic[]>([]);
-  const [perks, setPerks] = useState<MemberPerk[]>([]);
-  const [stats, setStats] = useState<CommunityStats>({ totalMembers: 0, onlineNow: 0, totalTopics: 0, totalPosts: 0, newestMember: "" });
-  const [loaded, setLoaded] = useState(false);
-  const [loadError, setLoadError] = useState(false);
+  usePageMeta({
+    title: "The Village Community",
+    description:
+      "Browse public Shotgun Ninja message boards, create an operator account, post topics, reply, and earn persistent badges.",
+  });
+  const { user } = useAuth();
+  const [categories, setCategories] = useState<CommunityCategory[]>([]);
+  const [topics, setTopics] = useState<TopicSummary[]>([]);
+  const [stats, setStats] = useState<CommunityStats>(emptyStats);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    Promise.all([getCategories(), getFeaturedTopics(), getMemberPerks(), getCommunityStats()])
-      .then(([cats, tops, prks, sts]) => {
-        setCategories(cats);
-        setTopics(tops);
-        setPerks(prks);
-        setStats(sts);
+    let active = true;
+    Promise.all([
+      communityApi.categories(),
+      communityApi.topics(),
+      communityApi.stats(),
+    ])
+      .then(([categoryResult, topicResult, statsResult]) => {
+        if (!active) return;
+        setCategories(categoryResult.categories);
+        setTopics(topicResult.topics.slice(0, 8));
+        setStats(statsResult);
       })
-      .catch((err) => {
-        console.error("[Community] data load failed:", err);
-        setLoadError(true);
-      })
-      .finally(() => setLoaded(true));
-  }, []);
-
-  const openCategories = allCategories.filter((c) => !c.locked);
-  const gatedCategories = allCategories.filter((c) => c.locked);
+      .catch(
+        (requestError) =>
+          active &&
+          setError(
+            requestError instanceof Error
+              ? requestError.message
+              : "Village channels are unavailable",
+          ),
+      )
+      .finally(() => active && setLoading(false));
+    return () => {
+      active = false;
+    };
+  }, [user?.id]);
 
   return (
-    <div className="relative w-full min-h-[100dvh] flex flex-col">
+    <div className="min-h-[100dvh]">
+      <section className="community-hero relative overflow-hidden border-b border-primary/25">
+        <div className="relative z-10 container mx-auto grid max-w-6xl gap-8 px-4 py-14 md:py-20 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
+          <div>
+            <div className="mb-4 inline-flex items-center gap-2 border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 font-mono text-xs uppercase text-cyan-200">
+              <Radio
+                size={13}
+                className="motion-safe:animate-pulse"
+                aria-hidden="true"
+              />{" "}
+              Public network online
+            </div>
+            <h1 className="text-balance font-display text-6xl font-bold uppercase leading-[0.9] text-white md:text-8xl">
+              The
+              <br />
+              <span className="text-primary">Village</span>
+            </h1>
+            <p className="mt-5 max-w-2xl text-pretty font-mono text-sm leading-relaxed text-slate-300 md:text-base">
+              Read every public board as a visitor. Claim a free callsign to
+              start topics, reply to operators, sync your alignment, and build a
+              badge record that travels with your profile.
+            </p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              {user ? (
+                <Link
+                  href="/community/village-gate"
+                  className="inline-flex items-center gap-2 bg-primary px-5 py-3 font-display text-lg uppercase text-white hover:bg-primary/90"
+                >
+                  Enter the boards <ArrowRight size={17} />
+                </Link>
+              ) : (
+                <Link
+                  href="/account?mode=signup&returnTo=/community"
+                  className="inline-flex items-center gap-2 bg-primary px-5 py-3 font-display text-lg uppercase text-white hover:bg-primary/90"
+                >
+                  <UserPlus size={17} /> Claim a callsign
+                </Link>
+              )}
+              <a
+                href="#channels"
+                className="inline-flex items-center gap-2 border border-white/20 bg-background/70 px-5 py-3 font-display text-lg uppercase text-white hover:border-cyan-400/40"
+              >
+                Browse as visitor <ArrowRight size={17} />
+              </a>
+            </div>
+          </div>
 
-      {loadError && (
-        <div role="alert" className="border-b border-primary/40 bg-primary/10 text-primary px-4 py-2 font-mono text-xs uppercase tracking-widest text-center">
-          <AlertTriangle size={12} className="inline mr-1.5 align-[-2px]" aria-hidden="true" />
-          Network channel partial. Showing cached intel.
+          <div className="border border-white/15 bg-background/80 p-5 shadow-2xl">
+            <div className="mb-4 flex items-center justify-between">
+              <span className="font-mono text-[10px] uppercase text-muted-foreground">
+                Network telemetry
+              </span>
+              <span className="flex items-center gap-1.5 font-mono text-[10px] uppercase text-emerald-300">
+                <span className="size-1.5 bg-emerald-400" /> Live data
+              </span>
+            </div>
+            <div className="grid grid-cols-2 gap-px border border-border bg-border">
+              {[
+                { label: "Operators", value: stats.totalMembers, Icon: Users },
+                { label: "Online now", value: stats.onlineNow, Icon: Radio },
+                {
+                  label: "Topics",
+                  value: stats.totalTopics,
+                  Icon: MessageSquare,
+                },
+                {
+                  label: "Posts",
+                  value: stats.totalPosts,
+                  Icon: MessageCircle,
+                },
+              ].map(({ label, value, Icon }) => (
+                <div key={label} className="bg-card p-4">
+                  <Icon
+                    size={14}
+                    className="mb-2 text-primary"
+                    aria-hidden="true"
+                  />
+                  <strong className="block font-display text-2xl tabular-nums text-white">
+                    {Number(value).toLocaleString()}
+                  </strong>
+                  <span className="font-mono text-[9px] uppercase text-muted-foreground">
+                    {label}
+                  </span>
+                </div>
+              ))}
+            </div>
+            {stats.newestMember && (
+              <p className="mt-3 font-mono text-[10px] text-muted-foreground">
+                Newest signal:{" "}
+                <Link
+                  href={`/community/operator/${stats.newestMember}`}
+                  className="text-cyan-300"
+                >
+                  @{stats.newestMember}
+                </Link>
+              </p>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {error && (
+        <div className="container mx-auto max-w-6xl px-4 pt-8">
+          <div
+            role="alert"
+            className="border border-primary/40 bg-primary/10 p-4 font-mono text-sm text-red-100"
+          >
+            <strong className="block uppercase">
+              Community uplink unavailable
+            </strong>
+            <span className="mt-1 block text-xs text-muted-foreground">
+              {error}. No placeholder activity is being presented as live.
+            </span>
+          </div>
         </div>
       )}
 
-      <section className="relative w-full py-16 md:py-24 flex items-center justify-center overflow-hidden border-b border-primary/20">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/8 via-background to-background" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-secondary/8 rounded-full blur-[140px] pointer-events-none" />
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
-
-        <div className="relative z-10 container px-4 mx-auto max-w-3xl text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 mb-5 border border-secondary/30 bg-secondary/10 text-secondary text-xs font-mono uppercase tracking-widest">
-            <Users size={14} /> Network Hub
-          </div>
-
-          <h1 className="text-5xl md:text-7xl font-display font-bold text-white uppercase tracking-widest mb-3 glitch-text" data-text="THE VILLAGE">
-            THE VILLAGE
-          </h1>
-
-          <p className="text-base md:text-lg text-muted-foreground font-mono max-w-xl mx-auto mb-8">
-            Where operators connect. Discuss transmissions, share builds, surface theories, and shape the future of the Shotgun Ninjas network.
-          </p>
-
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            <a
-              href={signupHref}
-              target={live ? "_blank" : undefined}
-              rel={live ? "noopener noreferrer" : undefined}
-              className="clip-diagonal bg-primary hover:bg-primary/90 text-white px-6 py-2.5 font-display text-lg uppercase tracking-widest transition-all inline-flex items-center gap-2"
-            >
-              <UserPlus size={18} /> Join The Village
-            </a>
-            <a
-              href="#channels"
-              className="clip-diagonal border border-primary/50 hover:bg-primary/10 text-primary px-6 py-2.5 font-display text-lg uppercase tracking-widest transition-all inline-flex items-center gap-2 bg-background/50 backdrop-blur"
-            >
-              Explore Channels <ChevronRight size={18} />
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <section className="border-b border-border bg-card/30">
-        <div className="container mx-auto px-4 py-4 max-w-6xl">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {[
-              { label: "Operators", value: stats.totalMembers.toLocaleString(), icon: Users },
-              { label: "Online Now", value: stats.onlineNow.toString(), icon: Radio, pulse: true },
-              { label: "Topics", value: stats.totalTopics.toLocaleString(), icon: MessageSquare },
-              { label: "Posts", value: stats.totalPosts.toLocaleString(), icon: MessageCircle },
-            ].map((stat) => (
-              <div key={stat.label} className="flex items-center gap-2.5 py-1">
-                <stat.icon size={14} className={`text-muted-foreground flex-shrink-0 ${stat.pulse ? "animate-pulse text-green-500" : ""}`} />
-                <div>
-                  <div className="text-base font-display text-white uppercase tracking-wider leading-none">{stat.value}</div>
-                  <div className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">{stat.label}</div>
-                </div>
-              </div>
+      <section
+        id="channels"
+        className="container mx-auto max-w-6xl px-4 py-12 md:py-16"
+      >
+        <SectionHeading
+          title="Message Boards"
+          subtitle="Public channels are readable without an account. Sign in only when you want to contribute."
+        />
+        {loading ? (
+          <ChannelSkeleton />
+        ) : (
+          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+            {categories.map((category) => (
+              <CategoryCard key={category.slug} category={category} />
             ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="container mx-auto px-4 pt-10 max-w-6xl">
-        <OperatorRecord />
-      </section>
-
-      <section id="channels" className="container mx-auto px-4 py-14 md:py-18 max-w-6xl">
-        <SectionHeading title="CHANNELS" subtitle="Purpose-built zones for every kind of signal." />
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {openCategories.map((cat, i) => {
-            const Icon = resolveIcon(cat.icon, MessageCircle);
-            const url = getCategoryUrl(cat.slug);
-            const isClickable = live && url !== "#community-coming-soon";
-            const Wrapper = isClickable ? "a" : "div";
-            const wrapperProps = isClickable ? { href: url, target: "_blank", rel: "noopener noreferrer" } : {};
-
-            return (
-              <motion.div
-                key={cat.id}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.3, delay: i * 0.04 }}
-              >
-                <Wrapper
-                  {...wrapperProps}
-                  className="tactical-border bg-card p-4 group hover:border-primary/60 transition-all cursor-pointer block h-full"
-                >
-                  <div className="flex items-start gap-3 mb-2">
-                    <div className={`p-1.5 border border-border bg-background ${cat.color}`}>
-                      <Icon size={16} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-lg font-display text-white uppercase tracking-widest group-hover:text-primary transition-colors leading-tight">
-                        {cat.name}
-                      </h3>
-                      <div className="flex items-center gap-2 text-[10px] font-mono text-muted-foreground mt-0.5">
-                        <span>{cat.topicCount} topics</span>
-                        <span className="opacity-40">&middot;</span>
-                        <span>{cat.postCount} posts</span>
-                      </div>
-                    </div>
-                  </div>
-                  <p className="text-muted-foreground font-mono text-xs leading-relaxed mb-2">
-                    {cat.description}
-                  </p>
-                  {cat.latestPosterAvatars && cat.latestPosterAvatars.length > 0 && (
-                    <div className="flex items-center gap-1 mt-auto">
-                      <span className="text-[9px] font-mono text-muted-foreground mr-1">Recent:</span>
-                      {cat.latestPosterAvatars.map((a, j) => (
-                        <MiniAvatar key={j} initials={a} className="-ml-0.5 first:ml-0" />
-                      ))}
-                    </div>
-                  )}
-                </Wrapper>
-              </motion.div>
-            );
-          })}
-        </div>
-
-        {gatedCategories.length > 0 && (
-          <div className="mt-6">
-            <div className="flex items-center gap-2 mb-3">
-              <Lock size={12} className="text-orange-400" />
-              <span className="text-xs font-mono text-orange-400 uppercase tracking-widest">Gated Channels</span>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {gatedCategories.map((cat, i) => {
-                const Icon = resolveIcon(cat.icon, Lock);
-                return (
-                  <motion.div
-                    key={cat.id}
-                    className="tactical-border bg-card/60 p-4 group border-orange-500/20 relative overflow-hidden"
-                    initial={{ opacity: 0, y: 16 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.3, delay: i * 0.04 }}
-                  >
-                    <div className="absolute top-0 right-0 px-2 py-0.5 bg-orange-500/10 border-l border-b border-orange-500/20 font-mono text-[8px] text-orange-400 uppercase tracking-widest">
-                      {cat.requiredGroup === "founding-ninjas" ? "Founders Only" : "Supporters Only"}
-                    </div>
-                    <div className="flex items-start gap-3 mb-2">
-                      <div className="p-1.5 border border-orange-500/30 bg-orange-500/5 text-orange-400">
-                        <Icon size={16} />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-lg font-display text-white/60 uppercase tracking-widest leading-tight">
-                          {cat.name}
-                        </h3>
-                        <div className="flex items-center gap-2 text-[10px] font-mono text-muted-foreground mt-0.5">
-                          <span>{cat.topicCount} topics</span>
-                          <span className="opacity-40">&middot;</span>
-                          <span>{cat.postCount} posts</span>
-                        </div>
-                      </div>
-                    </div>
-                    <p className="text-muted-foreground/60 font-mono text-xs leading-relaxed">
-                      {cat.description}
-                    </p>
-                  </motion.div>
-                );
-              })}
-            </div>
           </div>
         )}
       </section>
 
-      <section className="border-y border-border bg-card/20">
-        <div className="container mx-auto px-4 py-14 md:py-18 max-w-6xl">
-          <SectionHeading title="ACTIVE SIGNALS" subtitle="Trending threads from across the village." />
-
-          <div className="space-y-1.5">
-            {topics.map((topic, i) => {
-              const cat = allCategories.find((c) => c.slug === topic.categorySlug);
-              const url = getTopicUrl(topic.id);
-              const isClickable = live && url !== "#community-coming-soon";
-
-              return (
-                <motion.div
-                  key={topic.id}
-                  initial={{ opacity: 0, x: -8 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.25, delay: i * 0.04 }}
-                >
-                  {isClickable ? (
-                    <a href={url} target="_blank" rel="noopener noreferrer" className="group border border-border bg-card/40 px-4 py-3 hover:border-primary/40 transition-all cursor-pointer block">
-                      <TopicRow topic={topic} cat={cat} />
-                    </a>
-                  ) : (
-                    <div className="group border border-border bg-card/40 px-4 py-3 hover:border-primary/40 transition-all cursor-pointer">
-                      <TopicRow topic={topic} cat={cat} />
-                    </div>
-                  )}
-                </motion.div>
-              );
-            })}
+      <section className="border-y border-border bg-card/35">
+        <div className="container mx-auto max-w-6xl px-4 py-12 md:py-16">
+          <div className="mb-7 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+            <SectionHeading
+              title="Active Signals"
+              subtitle="The latest live discussions from across accessible channels."
+            />
+            <Link
+              href="/community/village-gate"
+              className="mb-8 inline-flex items-center gap-1 font-mono text-xs uppercase text-cyan-300 hover:text-white"
+            >
+              All discussions <ArrowRight size={13} />
+            </Link>
           </div>
-
-          {live && (
-            <div className="mt-4 text-center">
-              <a
-                href={getCommunityHomeUrl()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-secondary hover:text-white font-mono text-xs uppercase tracking-widest transition-colors"
+          {!loading && topics.length === 0 ? (
+            <div className="border border-dashed border-border bg-background/40 p-8 text-center">
+              <MessageSquare
+                size={28}
+                className="mx-auto text-primary"
+                aria-hidden="true"
+              />
+              <h3 className="mt-3 text-balance font-display text-2xl uppercase text-white">
+                The channel is clear
+              </h3>
+              <p className="mx-auto mt-1 max-w-md text-pretty font-mono text-xs text-muted-foreground">
+                Be the first operator to introduce yourself at the Village Gate.
+              </p>
+              <Link
+                href={
+                  user
+                    ? "/community/village-gate"
+                    : "/account?mode=signup&returnTo=/community/village-gate"
+                }
+                className="mt-5 inline-flex items-center gap-2 bg-primary px-4 py-2 font-mono text-xs uppercase text-white"
               >
-                View all topics <ExternalLink size={12} />
-              </a>
+                Start the first signal <ArrowRight size={13} />
+              </Link>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {topics.map((topic) => (
+                <TopicRow
+                  key={topic.id}
+                  topic={topic}
+                  category={categories.find(
+                    (item) => item.slug === topic.categorySlug,
+                  )}
+                />
+              ))}
             </div>
           )}
         </div>
       </section>
 
-      <section id="join" className="border-b border-primary/20 bg-gradient-to-b from-primary/5 to-transparent">
-        <div className="container mx-auto px-4 py-14 md:py-18 max-w-4xl">
-          <motion.div {...fadeUp} className="text-center mb-10">
-            <h2 className="text-4xl md:text-5xl font-display text-white uppercase tracking-widest mb-2">
-              JOIN THE NETWORK
-            </h2>
-            <p className="text-muted-foreground font-mono text-sm border-l-2 border-primary pl-4 max-w-md mx-auto text-left">
-              Three steps. Free to enter. Upgrade if you want to go deeper.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
-            {[
-              { step: "01", title: "Operator Alignment", desc: "Take the quiz to find your tactical archetype.", icon: Activity, color: "text-blue-400", href: "/alignment" },
-              { step: "02", title: "Create Account", desc: "Sign up and claim your callsign. Free and instant.", icon: UserPlus, color: "text-secondary", href: signupHref },
-              { step: "03", title: "Enter The Village", desc: "Access all public channels. Post, reply, and connect.", icon: DoorOpen, color: "text-secondary", href: signupHref },
-            ].map((s, i) => (
-              <motion.div
-                key={s.step}
-                className="tactical-border bg-card p-5 text-center flex flex-col h-full"
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.3, delay: i * 0.08 }}
-              >
-                <div className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest mb-2">Step {s.step}</div>
-                <s.icon size={24} className={`mx-auto mb-3 ${s.color}`} />
-                <h3 className="text-lg font-display text-white uppercase tracking-widest mb-1">{s.title}</h3>
-                <p className="text-muted-foreground font-mono text-xs flex-1">{s.desc}</p>
-                {s.href && s.href.startsWith("/") ? (
-                  <Link href={s.href} className="mt-4 text-xs font-mono uppercase tracking-widest text-primary hover:text-white transition-colors">Start <ChevronRight size={10} className="inline" /></Link>
-                ) : (
-                  <a href={s.href} target="_blank" rel="noopener noreferrer" className="mt-4 text-xs font-mono uppercase tracking-widest text-secondary hover:text-white transition-colors">Go <ExternalLink size={10} className="inline ml-1" /></a>
-                )}
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="text-center">
-            <a
-              href={signupHref}
-              target={live ? "_blank" : undefined}
-              rel={live ? "noopener noreferrer" : undefined}
-              className="clip-diagonal bg-primary hover:bg-primary/90 text-white px-8 py-3 font-display text-xl uppercase tracking-widest transition-all inline-flex items-center gap-2"
-            >
-              <UserPlus size={20} /> Join The Village
-            </a>
-            <p className="text-muted-foreground font-mono text-[10px] mt-3 uppercase tracking-widest">
-              Free &middot; No credit card &middot; Instant access
-            </p>
-          </div>
+      <section className="container mx-auto max-w-6xl px-4 py-12 md:py-16">
+        <SectionHeading
+          title="Access & Recognition"
+          subtitle="The free community is live now. Paid recognition stays gated until it can be granted honestly."
+        />
+        <div className="grid gap-4 md:grid-cols-3">
+          <TierCard
+            icon={ShieldCheck}
+            title="Open Access"
+            status="Available now"
+            color="text-cyan-300"
+            perks={[
+              "Read every public board",
+              "Create topics and replies",
+              "Persistent profile and milestone badges",
+            ]}
+          />
+          <TierCard
+            icon={Award}
+            title="Ronin Supporter"
+            status="Rollout pending"
+            color="text-amber-300"
+            perks={[
+              "Supporter flair on posts",
+              "Ronin Lounge access",
+              "Future early merch windows",
+            ]}
+          />
+          <TierCard
+            icon={Crown}
+            title="Founding Ninja"
+            status="Grant-only"
+            color="text-primary"
+            perks={[
+              "Permanent founder badge",
+              "Founders Chamber access",
+              "First-look feedback windows",
+            ]}
+          />
         </div>
       </section>
-
-      <section id="perks" className="container mx-auto px-4 py-14 md:py-18 max-w-6xl">
-        <SectionHeading title="MEMBER TIERS" subtitle="Three access levels. More unlocking as the network grows." />
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {(["free", "supporter", "founder"] as const).map((tier) => {
-            const tierPerks = perks.filter((p) => p.tier === tier);
-            const tierLabels = { free: "Open Access", supporter: "Ronin Supporter", founder: "Founding Ninja" };
-            const tierColors = { free: "border-secondary/30 bg-secondary/5", supporter: "border-orange-500/30 bg-orange-500/5", founder: "border-primary/30 bg-primary/5" };
-            const tierBadge = { free: "text-secondary", supporter: "text-orange-500", founder: "text-primary" };
-            const tierBorderHighlight = { free: "", supporter: "hover:border-orange-500/40", founder: "hover:border-primary/40" };
-            const comingSoon = tier !== "free";
-
-            return (
-              <motion.div
-                key={tier}
-                className={`tactical-border bg-card p-5 relative ${comingSoon ? "opacity-80" : ""} ${tierBorderHighlight[tier]} transition-all`}
-                {...fadeUp}
-              >
-                {comingSoon && (
-                  <div className="absolute top-2.5 right-2.5 px-2 py-0.5 bg-muted border border-border font-mono text-[8px] text-muted-foreground uppercase tracking-widest">
-                    Coming Soon
-                  </div>
-                )}
-                <div className={`inline-flex items-center gap-1.5 px-2 py-0.5 border text-xs font-mono uppercase tracking-widest mb-4 ${tierColors[tier]} ${tierBadge[tier]}`}>
-                  {tier === "founder" && <Crown size={11} />}
-                  {tier === "supporter" && <Award size={11} />}
-                  {tier === "free" && <Users size={11} />}
-                  {tierLabels[tier]}
-                </div>
-
-                <div className="space-y-3">
-                  {tierPerks.map((perk) => {
-                    const PerkIcon = resolveIcon(perk.icon, Zap);
-                    return (
-                      <div key={perk.id} className="flex items-start gap-2.5">
-                        <PerkIcon size={14} className={`mt-0.5 flex-shrink-0 ${tierBadge[tier]}`} />
-                        <div>
-                          <h4 className="text-sm font-display text-white uppercase tracking-wider leading-tight">{perk.title}</h4>
-                          <p className="text-[11px] font-mono text-muted-foreground mt-0.5 leading-relaxed">{perk.description}</p>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {tier === "free" && (
-                  <div className="mt-5 space-y-2">
-                    <a
-                      href={signupHref}
-                      target={live ? "_blank" : undefined}
-                      rel={live ? "noopener noreferrer" : undefined}
-                      className="w-full clip-diagonal bg-secondary/20 hover:bg-secondary/30 border border-secondary/30 text-secondary px-4 py-2 font-display text-sm uppercase tracking-widest transition-all flex items-center justify-center gap-2"
-                    >
-                      Sign Up Free <ArrowRight size={14} />
-                    </a>
-                  </div>
-                )}
-              </motion.div>
-            );
-          })}
-        </div>
-      </section>
-
-      <NextWaypoint waypoints={[
-        { href: "/merch", title: "Merch", desc: "Merch buyers unlock future community perks and supporter status." }
-      ]} />
-
-      <ExternalFunnel />
-
-      <UniverseFooter LinkComponent={Link} exclude={["community"]} />
     </div>
   );
 }
 
-function TopicRow({ topic, cat }: { topic: ForumTopic; cat?: ForumCategory }) {
-  return (
-    <div className="flex items-center gap-3">
-      {topic.authorAvatar && (
-        <div className="hidden sm:block">
-          <MiniAvatar initials={topic.authorAvatar} className="w-7 h-7 text-[10px]" />
-        </div>
-      )}
-
-      <div className="hidden sm:flex flex-col items-center text-muted-foreground min-w-[40px]">
-        <MessageSquare size={14} />
-        <span className="text-[10px] font-mono mt-0.5">{topic.replyCount}</span>
+function CategoryCard({ category }: { category: CommunityCategory }) {
+  const Icon = resolveIcon(category.icon, MessageCircle);
+  const content = (
+    <>
+      <div className="flex items-start justify-between gap-3">
+        <span
+          className={`flex size-9 items-center justify-center border border-border bg-background ${category.color}`}
+        >
+          <Icon size={17} aria-hidden="true" />
+        </span>
+        {category.locked && (
+          <span className="flex items-center gap-1 border border-amber-400/30 bg-amber-400/10 px-2 py-1 font-mono text-[9px] uppercase text-amber-200">
+            <Lock size={10} /> {category.requiredTier}
+          </span>
+        )}
       </div>
+      <h3 className="mt-4 text-balance font-display text-2xl uppercase text-white group-hover:text-primary">
+        {category.name}
+      </h3>
+      <p className="mt-1 min-h-12 text-pretty font-mono text-xs leading-relaxed text-muted-foreground">
+        {category.description}
+      </p>
+      <div className="mt-5 flex items-center justify-between border-t border-border pt-3 font-mono text-[10px] uppercase text-muted-foreground">
+        <span className="tabular-nums">
+          {category.topicCount} topics · {category.postCount} posts
+        </span>
+        <span
+          className={category.canAccess ? "text-cyan-300" : "text-amber-300"}
+        >
+          {category.canAccess ? "Open →" : "Locked"}
+        </span>
+      </div>
+    </>
+  );
+  const classes =
+    "group block border bg-card p-5 transition-colors " +
+    (category.canAccess
+      ? "border-border hover:border-primary/50"
+      : "border-amber-400/20 opacity-80");
+  return category.canAccess ? (
+    <Link href={`/community/${category.slug}`} className={classes}>
+      {content}
+    </Link>
+  ) : (
+    <div className={classes}>{content}</div>
+  );
+}
 
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-0.5">
-          {topic.pinned && <Pin size={11} className="text-primary flex-shrink-0" />}
-          {topic.hot && <Flame size={11} className="text-orange-500 flex-shrink-0" />}
-          <h3 className="text-base font-display text-white uppercase tracking-wider group-hover:text-primary transition-colors truncate">
+export function TopicRow({
+  topic,
+  category,
+}: {
+  topic: TopicSummary;
+  category?: CommunityCategory;
+}) {
+  return (
+    <Link
+      href={`/community/topic/${topic.id}`}
+      className="group grid gap-3 border border-border bg-background/65 p-4 hover:border-primary/45 sm:grid-cols-[auto_1fr_auto] sm:items-center"
+    >
+      <OperatorAvatar callsign={topic.author} className="size-9" />
+      <div className="min-w-0">
+        <div className="flex items-center gap-2">
+          {topic.pinned && (
+            <Pin
+              size={12}
+              className="shrink-0 text-primary"
+              aria-label="Pinned"
+            />
+          )}
+          {topic.replyCount >= 10 && (
+            <Flame
+              size={12}
+              className="shrink-0 text-amber-400"
+              aria-label="Active"
+            />
+          )}
+          <h3 className="line-clamp-1 text-balance font-display text-lg uppercase text-white group-hover:text-primary">
             {topic.title}
           </h3>
         </div>
-        {topic.excerpt && (
-          <p className="text-[11px] font-mono text-muted-foreground/70 truncate mb-1 hidden md:block">
-            {topic.excerpt}
-          </p>
-        )}
-        <div className="flex items-center gap-2 text-[10px] font-mono text-muted-foreground flex-wrap">
-          {cat && (
-            <span className={`px-1.5 py-0.5 border border-border bg-background ${cat.color}`}>
-              {cat.name}
-            </span>
-          )}
-          <span>{topic.author}</span>
-          {topic.authorBadge && (
-            <span className="text-secondary bg-secondary/10 border border-secondary/20 px-1.5 py-0.5">
-              {topic.authorBadge}
-            </span>
-          )}
-          <span className="hidden sm:inline"><Eye size={10} className="inline mr-0.5" />{topic.viewCount}</span>
-          <span className="opacity-50">{topic.lastActivity}</span>
+        <p className="mt-0.5 line-clamp-1 text-pretty font-mono text-[11px] text-muted-foreground">
+          {topic.excerpt}
+        </p>
+        <div className="mt-1.5 flex flex-wrap items-center gap-2 font-mono text-[9px] uppercase text-muted-foreground">
+          <span className="text-slate-300">@{topic.author}</span>
+          <span>in {category?.name ?? topic.categorySlug}</span>
+          <span>{formatRelativeTime(topic.lastPostedAt)}</span>
         </div>
       </div>
+      <div className="flex gap-3 font-mono text-[10px] text-muted-foreground sm:block sm:text-right">
+        <span className="block tabular-nums">
+          <MessageCircle size={11} className="mr-1 inline" />
+          {topic.replyCount}
+        </span>
+        <span className="block tabular-nums">
+          <Eye size={11} className="mr-1 inline" />
+          {topic.viewCount}
+        </span>
+      </div>
+    </Link>
+  );
+}
+
+function TierCard({
+  icon: Icon,
+  title,
+  status,
+  color,
+  perks,
+}: {
+  icon: React.ElementType;
+  title: string;
+  status: string;
+  color: string;
+  perks: string[];
+}) {
+  return (
+    <div className="border border-border bg-card p-5">
+      <div className="flex items-center justify-between gap-3">
+        <Icon size={20} className={color} />
+        <span className="border border-border bg-background px-2 py-1 font-mono text-[8px] uppercase text-muted-foreground">
+          {status}
+        </span>
+      </div>
+      <h3 className="mt-4 text-balance font-display text-2xl uppercase text-white">
+        {title}
+      </h3>
+      <ul className="mt-4 space-y-2">
+        {perks.map((perk) => (
+          <li
+            key={perk}
+            className="flex gap-2 text-pretty font-mono text-xs text-muted-foreground"
+          >
+            <ArrowRight size={11} className={`mt-0.5 shrink-0 ${color}`} />
+            {perk}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function ChannelSkeleton() {
+  return (
+    <div
+      className="grid gap-3 md:grid-cols-2 xl:grid-cols-3"
+      role="status"
+      aria-live="polite"
+    >
+      {Array.from({ length: 6 }).map((_, index) => (
+        <div
+          key={index}
+          className="h-48 animate-pulse border border-border bg-card"
+        />
+      ))}
+      <span className="sr-only">Loading message boards</span>
     </div>
   );
 }

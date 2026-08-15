@@ -29,9 +29,11 @@ See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and pa
 ## Shared packages
 
 ### `@workspace/sn-ecosystem` (`packages/sn-ecosystem`)
+
 The single source of truth for the Shotgun Ninjas sister-product list and the shared cross-site UI used across all 7 ecosystem websites (BrandForge, TorqueShed, TechDeck, TradeFlowKit, PulseDesk, FaultlineLab, the Village hub).
 
 Exports:
+
 - `EcosystemProduct`, `EcosystemTier` — types
 - `ecosystem`, `recoveredSystems`, `extendedSystems`, `getProductById` — data
 - `EcosystemCard` — product card (variants: `compact`, `full`)
@@ -40,6 +42,7 @@ Exports:
 **To update an ecosystem entry** (tagline, URL, color, add/remove a product): edit `packages/sn-ecosystem/src/data.ts` only. Every consuming sister site picks it up on the next build — do not duplicate the data into a sister site's `src/data/`.
 
 **Consuming the package from a sister site**:
+
 1. Add `"@workspace/sn-ecosystem": "workspace:*"` to the site's `package.json` and run `pnpm install`.
 2. Import: `import { UniverseFooter, EcosystemCard, ecosystem } from "@workspace/sn-ecosystem";`
 3. If the site uses a router (e.g. wouter), pass its Link via the `LinkComponent` prop so internal nav stays SPA: `<UniverseFooter LinkComponent={Link} />`. Without it, the footer falls back to plain `<a>` tags, which is appropriate for sister sites that don't share the village's router.
@@ -48,6 +51,7 @@ Exports:
 ## Artifacts
 
 ### Shotgun Ninjas - Episode 1: The Signal in the Static
+
 - **Path**: `artifacts/shotgun-ninjas-ep1/`
 - **Type**: video-js (animated video, not deployable — export from preview pane)
 - **Stack**: React + Vite + Framer Motion + Tailwind CSS
@@ -63,9 +67,10 @@ Exports:
   - `src/index.css` — glitch effects, CRT overlay, brand variables
 
 ### Shotgun Ninja Village (Hub App)
+
 - **Path**: `artifacts/shotgun-ninja-village/`
-- **Type**: react-vite (presentation-first, no backend)
-- **Stack**: React + Vite + Tailwind CSS + Framer Motion + wouter
+- **Type**: full-stack community and entertainment hub
+- **Stack**: React 19 + Vite + Tailwind CSS + Framer Motion + wouter; Express 5 + PostgreSQL + Drizzle backend
 - **Description**: Immersive cyber-noir hub for the Shotgun Ninjas universe — tactical command interface aesthetic
 - **Port**: 24938 (previewPath: `/`)
 - **Pages**: 8 sections
@@ -81,29 +86,30 @@ Exports:
 - **SEO**: `src/hooks/usePageMeta.ts` updates document.title + meta description + og/twitter tags per page. Applied to all 10 pages. `public/robots.txt` + `public/sitemap.xml` shipped.
 - **Ecosystem Cross-Linking**: Village positions itself as the community/entertainment hub of the Shotgun Ninjas Productions ecosystem. Cross-links to all 6 sister products via Home (extendedSystems) and Intel (recoveredSystems + extendedNetwork): BrandForge OS (bf-os.com), TorqueShed.pro, TechDeck.app, TradeFlowKit.com, PulseDesk.support, FaultlineLab.com. Every page footer links back to ShotgunNinjas.com (main hub) and includes "Built by Shotgun Ninjas Productions" attribution.
 - **Commerce Architecture**: Shopify Storefront API-ready service layer (`src/services/store.ts`) with async data loading, full GraphQL fetchers, variant mapping, and mock fallback; goes live via VITE_SHOPIFY_DOMAIN + VITE_SHOPIFY_STOREFRONT_TOKEN + VITE_STORE_MODE=live env vars
-- **Community Architecture**: Discourse-ready service layer (`src/services/community.ts`) with async data loading; mock mode default; goes live via VITE_DISCOURSE_URL + VITE_COMMUNITY_MODE=live env vars. SSO via VITE_DISCOURSE_SSO=true + VITE_DISCOURSE_SSO_LOGIN_URL. Embed via VITE_DISCOURSE_EMBED=true. Signup via VITE_DISCOURSE_SIGNUP_URL (fallback: shotgunninjas.com/join). Gated categories: ronin-lounge, founders-chamber. Discourse group mapping: ronin-supporters, founding-ninjas.
-- **Integration Config**: `src/config/integrations.ts` — provider config for Shopify, Discourse (URL, SSO, embed, signup, groups, gated categories), and auth. No API keys in client code.
+- **Community Architecture**: Native PostgreSQL-backed accounts, HTTP-only database sessions, public message-board reads, authenticated topics/replies, owner edit/removal, privacy-safe profiles, server-derived badges, and API-enforced supporter/founder rooms. Community screens do not use mock activity.
+- **Integration Config**: `src/config/integrations.ts` remains the provider config for the optional Shopify catalog. Community and auth use the same-origin `/api` service.
 - **Routing**: wouter with BASE_URL support; image paths use `asset()` helper for subpath deployment safety
 - **Fonts**: Space Grotesk (body) + Teko (display)
 - **Palette**: deep red (#B91C1C/#DC2626), electric blue (#3B82F6/#60A5FA), near-black (#0A0A0F)
 - **PWA**: Installable on mobile/desktop via manifest.json + service worker; install button in sidebar + mobile header (auto-hides when installed)
 - **Key files**:
-  - `src/App.tsx` — wouter router with 8 routes
+  - `src/App.tsx` — wouter router for story, commerce, account, board, topic, and operator-profile routes
   - `src/components/layout/Layout.tsx` — tactical sidebar layout with install button, Community + Merch nav with plain-language sublabels, Main Site + Operator OS external links
   - `src/hooks/useInstallPrompt.ts` — PWA install prompt hook (beforeinstallprompt/display-mode detection)
-  - `src/pages/Home.tsx`, `Archive.tsx`, `Operators.tsx`, `Grid.tsx`, `Arsenal.tsx`, `Intel.tsx`, `Community.tsx`, `Merch.tsx`
+  - `src/pages/Community.tsx`, `CommunityBoard.tsx`, `CommunityTopic.tsx`, `CommunityOperator.tsx`, `Account.tsx` — native community and identity surfaces
   - `src/data/transmissions.ts` — shared trilogy config (single source of truth)
   - `src/data/products.ts` — 8 mock products, 6 collections with full variant/SKU data model (Printful-ready)
-  - `src/data/community.ts` — 8 forum categories (7 open + 1 gated) with Discourse IDs, 6 featured topics with excerpts/avatars, 9 member perks across 3 tiers, community stats
+  - `artifacts/api-server/src/community/catalog.ts` — 9 channel definitions and tier/role policy
   - `src/services/store.ts` — store service abstraction (mock → Shopify transition)
-  - `src/services/community.ts` — community service abstraction (mock → Discourse transition)
-  - `src/config/integrations.ts` — env-based config for Shopify, Discourse, auth
+  - `src/services/community.ts` — typed native account/community API client
+  - `lib/db/src/schema/village-community.ts` — account, session, topic, and post schema
   - `src/index.css` — cyber-noir theme with glitch effects, scanlines, tactical borders
   - `public/manifest.json` — PWA manifest (standalone, theme #B91C1C)
   - `public/sw.js` — minimal service worker for installability
   - `public/images/` — 14+ AI-generated images (hero, character, zones, arsenal, episodes, icons)
 
 ### Shotgun Ninjas - Episode 2: Forge Protocol
+
 - **Path**: `artifacts/shotgun-ninjas-ep2/`
 - **Type**: video-js (animated video, not deployable — export from preview pane)
 - **Stack**: React + Vite + Framer Motion + Tailwind CSS
@@ -117,6 +123,7 @@ Exports:
   - `public/images/` — 9 AI-generated anime-style scene images
 
 ### Shotgun Ninjas - Episode 3: Fracture Scan
+
 - **Path**: `artifacts/shotgun-ninjas-ep3/`
 - **Type**: video-js (animated video, not deployable — export from preview pane)
 - **Stack**: React + Vite + Framer Motion + Tailwind CSS

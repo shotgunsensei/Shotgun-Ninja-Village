@@ -11,13 +11,23 @@ export interface SavedQuizResult {
   savedAt: string;
 }
 
-const ARCHETYPE_IDS: ArchetypeId[] = ["builder", "protector", "tracer", "breaker"];
+const ARCHETYPE_IDS: ArchetypeId[] = [
+  "builder",
+  "protector",
+  "tracer",
+  "breaker",
+];
 
 export function saveQuizResult(archetype: ArchetypeId, name: string) {
   if (typeof window === "undefined") return;
   try {
-    const record: SavedQuizResult = { archetype, name, savedAt: new Date().toISOString() };
+    const record: SavedQuizResult = {
+      archetype,
+      name,
+      savedAt: new Date().toISOString(),
+    };
     localStorage.setItem(QUIZ_RESULT_KEY, JSON.stringify(record));
+    window.dispatchEvent(new Event("sn:progress"));
   } catch {
     // ignore
   }
@@ -34,11 +44,17 @@ export function getQuizResult(): SavedQuizResult | null {
       typeof parsed === "object" &&
       "archetype" in parsed &&
       typeof (parsed as { archetype: unknown }).archetype === "string" &&
-      ARCHETYPE_IDS.includes((parsed as { archetype: string }).archetype as ArchetypeId) &&
+      ARCHETYPE_IDS.includes(
+        (parsed as { archetype: string }).archetype as ArchetypeId,
+      ) &&
       "name" in parsed &&
       typeof (parsed as { name: unknown }).name === "string"
     ) {
-      const p = parsed as { archetype: ArchetypeId; name: string; savedAt?: unknown };
+      const p = parsed as {
+        archetype: ArchetypeId;
+        name: string;
+        savedAt?: unknown;
+      };
       return {
         archetype: p.archetype,
         name: p.name,
@@ -76,12 +92,17 @@ export interface OperatorBadges {
   earnedCount: number;
 }
 
-export function getOperatorBadges(allTransmissionNums: string[]): OperatorBadges {
+export function getOperatorBadges(
+  allTransmissionNums: string[],
+): OperatorBadges {
   const watched = getWatched();
   const trilogyComplete =
-    allTransmissionNums.length > 0 && allTransmissionNums.every((num) => watched.includes(num));
+    allTransmissionNums.length > 0 &&
+    allTransmissionNums.every((num) => watched.includes(num));
   const quizComplete = getQuizResult() !== null;
   const enlisted = isEnlisted();
-  const earnedCount = [trilogyComplete, quizComplete, enlisted].filter(Boolean).length;
+  const earnedCount = [trilogyComplete, quizComplete, enlisted].filter(
+    Boolean,
+  ).length;
   return { trilogyComplete, quizComplete, enlisted, earnedCount };
 }

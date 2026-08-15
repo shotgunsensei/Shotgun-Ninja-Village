@@ -12,6 +12,10 @@ const Grid = lazy(() => import("@/pages/Grid"));
 const Arsenal = lazy(() => import("@/pages/Arsenal"));
 const Intel = lazy(() => import("@/pages/Intel"));
 const Community = lazy(() => import("@/pages/Community"));
+const CommunityBoard = lazy(() => import("@/pages/CommunityBoard"));
+const CommunityTopic = lazy(() => import("@/pages/CommunityTopic"));
+const CommunityOperator = lazy(() => import("@/pages/CommunityOperator"));
+const Account = lazy(() => import("@/pages/Account"));
 const Merch = lazy(() => import("@/pages/Merch"));
 const Legal = lazy(() => import("@/pages/Legal"));
 const Alignment = lazy(() => import("@/pages/Alignment"));
@@ -19,13 +23,26 @@ const NotFound = lazy(() => import("@/pages/not-found"));
 
 const pageVariants = {
   initial: { opacity: 0, y: 12 },
-  animate: { opacity: 1, y: 0, transition: { duration: 0.35, ease: "easeOut" as const } },
-  exit: { opacity: 0, y: -8, transition: { duration: 0.2, ease: "easeIn" as const } },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.18, ease: "easeOut" as const },
+  },
+  exit: {
+    opacity: 0,
+    y: -8,
+    transition: { duration: 0.12, ease: "easeIn" as const },
+  },
 };
 
 function AnimatedPage({ children }: { children: React.ReactNode }) {
   return (
-    <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
+    <motion.div
+      variants={pageVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+    >
       {children}
     </motion.div>
   );
@@ -54,18 +71,118 @@ function Router() {
         <Suspense fallback={<RouteFallback />}>
           <AnimatePresence mode="wait">
             <Switch key={location}>
-              <Route path="/">{() => <AnimatedPage><Home /></AnimatedPage>}</Route>
-              <Route path="/archive">{() => <AnimatedPage><Archive /></AnimatedPage>}</Route>
-              <Route path="/operators">{() => <AnimatedPage><Operators /></AnimatedPage>}</Route>
-              <Route path="/grid">{() => <AnimatedPage><Grid /></AnimatedPage>}</Route>
-              <Route path="/arsenal">{() => <AnimatedPage><Arsenal /></AnimatedPage>}</Route>
-              <Route path="/intel">{() => <AnimatedPage><Intel /></AnimatedPage>}</Route>
-              <Route path="/community">{() => <AnimatedPage><Community /></AnimatedPage>}</Route>
-              <Route path="/merch">{() => <AnimatedPage><Merch /></AnimatedPage>}</Route>
-              <Route path="/legal">{() => <AnimatedPage><Legal /></AnimatedPage>}</Route>
-              <Route path="/legal/:section">{() => <AnimatedPage><Legal /></AnimatedPage>}</Route>
-              <Route path="/alignment">{() => <AnimatedPage><Alignment /></AnimatedPage>}</Route>
-              <Route>{() => <AnimatedPage><NotFound /></AnimatedPage>}</Route>
+              <Route path="/">
+                {() => (
+                  <AnimatedPage>
+                    <Home />
+                  </AnimatedPage>
+                )}
+              </Route>
+              <Route path="/archive">
+                {() => (
+                  <AnimatedPage>
+                    <Archive />
+                  </AnimatedPage>
+                )}
+              </Route>
+              <Route path="/operators">
+                {() => (
+                  <AnimatedPage>
+                    <Operators />
+                  </AnimatedPage>
+                )}
+              </Route>
+              <Route path="/grid">
+                {() => (
+                  <AnimatedPage>
+                    <Grid />
+                  </AnimatedPage>
+                )}
+              </Route>
+              <Route path="/arsenal">
+                {() => (
+                  <AnimatedPage>
+                    <Arsenal />
+                  </AnimatedPage>
+                )}
+              </Route>
+              <Route path="/intel">
+                {() => (
+                  <AnimatedPage>
+                    <Intel />
+                  </AnimatedPage>
+                )}
+              </Route>
+              <Route path="/community">
+                {() => (
+                  <AnimatedPage>
+                    <Community />
+                  </AnimatedPage>
+                )}
+              </Route>
+              <Route path="/community/topic/:id">
+                {() => (
+                  <AnimatedPage>
+                    <CommunityTopic />
+                  </AnimatedPage>
+                )}
+              </Route>
+              <Route path="/community/operator/:callsign">
+                {() => (
+                  <AnimatedPage>
+                    <CommunityOperator />
+                  </AnimatedPage>
+                )}
+              </Route>
+              <Route path="/community/:slug">
+                {() => (
+                  <AnimatedPage>
+                    <CommunityBoard />
+                  </AnimatedPage>
+                )}
+              </Route>
+              <Route path="/account">
+                {() => (
+                  <AnimatedPage>
+                    <Account />
+                  </AnimatedPage>
+                )}
+              </Route>
+              <Route path="/merch">
+                {() => (
+                  <AnimatedPage>
+                    <Merch />
+                  </AnimatedPage>
+                )}
+              </Route>
+              <Route path="/legal">
+                {() => (
+                  <AnimatedPage>
+                    <Legal />
+                  </AnimatedPage>
+                )}
+              </Route>
+              <Route path="/legal/:section">
+                {() => (
+                  <AnimatedPage>
+                    <Legal />
+                  </AnimatedPage>
+                )}
+              </Route>
+              <Route path="/alignment">
+                {() => (
+                  <AnimatedPage>
+                    <Alignment />
+                  </AnimatedPage>
+                )}
+              </Route>
+              <Route>
+                {() => (
+                  <AnimatedPage>
+                    <NotFound />
+                  </AnimatedPage>
+                )}
+              </Route>
             </Switch>
           </AnimatePresence>
         </Suspense>

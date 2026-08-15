@@ -19,9 +19,23 @@ import type {
 import type {
   ErrorResponse,
   HealthStatus,
+  IdResponse,
+  ListVillageTopicsParams,
   SignupCountResponse,
   SignupRequest,
   SignupResponse,
+  VillageCategoryList,
+  VillageLoginRequest,
+  VillageProfilePatch,
+  VillageProgressPatch,
+  VillageRegisterRequest,
+  VillageReplyWrite,
+  VillageStats,
+  VillageTopicCreate,
+  VillageTopicDetail,
+  VillageTopicList,
+  VillageTopicPatch,
+  VillageUserEnvelope,
 } from "./api.schemas";
 
 import { customFetch } from "../custom-fetch";
@@ -264,6 +278,1445 @@ export function useGetSignupsCount<
   request?: SecondParameter<typeof customFetch>;
 }): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetSignupsCountQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Create a free Shotgun Ninja account
+ */
+export const getRegisterVillageAccountUrl = () => {
+  return `/api/auth/register`;
+};
+
+export const registerVillageAccount = async (
+  villageRegisterRequest: VillageRegisterRequest,
+  options?: RequestInit,
+): Promise<VillageUserEnvelope> => {
+  return customFetch<VillageUserEnvelope>(getRegisterVillageAccountUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(villageRegisterRequest),
+  });
+};
+
+export const getRegisterVillageAccountMutationOptions = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof registerVillageAccount>>,
+    TError,
+    { data: BodyType<VillageRegisterRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof registerVillageAccount>>,
+  TError,
+  { data: BodyType<VillageRegisterRequest> },
+  TContext
+> => {
+  const mutationKey = ["registerVillageAccount"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof registerVillageAccount>>,
+    { data: BodyType<VillageRegisterRequest> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return registerVillageAccount(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type RegisterVillageAccountMutationResult = NonNullable<
+  Awaited<ReturnType<typeof registerVillageAccount>>
+>;
+export type RegisterVillageAccountMutationBody =
+  BodyType<VillageRegisterRequest>;
+export type RegisterVillageAccountMutationError = ErrorType<ErrorResponse>;
+
+/**
+ * @summary Create a free Shotgun Ninja account
+ */
+export const useRegisterVillageAccount = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof registerVillageAccount>>,
+    TError,
+    { data: BodyType<VillageRegisterRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof registerVillageAccount>>,
+  TError,
+  { data: BodyType<VillageRegisterRequest> },
+  TContext
+> => {
+  return useMutation(getRegisterVillageAccountMutationOptions(options));
+};
+
+/**
+ * @summary Start an account session
+ */
+export const getLoginVillageAccountUrl = () => {
+  return `/api/auth/login`;
+};
+
+export const loginVillageAccount = async (
+  villageLoginRequest: VillageLoginRequest,
+  options?: RequestInit,
+): Promise<VillageUserEnvelope> => {
+  return customFetch<VillageUserEnvelope>(getLoginVillageAccountUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(villageLoginRequest),
+  });
+};
+
+export const getLoginVillageAccountMutationOptions = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof loginVillageAccount>>,
+    TError,
+    { data: BodyType<VillageLoginRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof loginVillageAccount>>,
+  TError,
+  { data: BodyType<VillageLoginRequest> },
+  TContext
+> => {
+  const mutationKey = ["loginVillageAccount"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof loginVillageAccount>>,
+    { data: BodyType<VillageLoginRequest> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return loginVillageAccount(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type LoginVillageAccountMutationResult = NonNullable<
+  Awaited<ReturnType<typeof loginVillageAccount>>
+>;
+export type LoginVillageAccountMutationBody = BodyType<VillageLoginRequest>;
+export type LoginVillageAccountMutationError = ErrorType<ErrorResponse>;
+
+/**
+ * @summary Start an account session
+ */
+export const useLoginVillageAccount = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof loginVillageAccount>>,
+    TError,
+    { data: BodyType<VillageLoginRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof loginVillageAccount>>,
+  TError,
+  { data: BodyType<VillageLoginRequest> },
+  TContext
+> => {
+  return useMutation(getLoginVillageAccountMutationOptions(options));
+};
+
+/**
+ * @summary End the current account session
+ */
+export const getLogoutVillageAccountUrl = () => {
+  return `/api/auth/logout`;
+};
+
+export const logoutVillageAccount = async (
+  options?: RequestInit,
+): Promise<void> => {
+  return customFetch<void>(getLogoutVillageAccountUrl(), {
+    ...options,
+    method: "POST",
+  });
+};
+
+export const getLogoutVillageAccountMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof logoutVillageAccount>>,
+    TError,
+    void,
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof logoutVillageAccount>>,
+  TError,
+  void,
+  TContext
+> => {
+  const mutationKey = ["logoutVillageAccount"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof logoutVillageAccount>>,
+    void
+  > = () => {
+    return logoutVillageAccount(requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type LogoutVillageAccountMutationResult = NonNullable<
+  Awaited<ReturnType<typeof logoutVillageAccount>>
+>;
+
+export type LogoutVillageAccountMutationError = ErrorType<unknown>;
+
+/**
+ * @summary End the current account session
+ */
+export const useLogoutVillageAccount = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof logoutVillageAccount>>,
+    TError,
+    void,
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof logoutVillageAccount>>,
+  TError,
+  void,
+  TContext
+> => {
+  return useMutation(getLogoutVillageAccountMutationOptions(options));
+};
+
+/**
+ * @summary Get the current private account profile
+ */
+export const getGetVillageAccountUrl = () => {
+  return `/api/auth/me`;
+};
+
+export const getVillageAccount = async (
+  options?: RequestInit,
+): Promise<VillageUserEnvelope> => {
+  return customFetch<VillageUserEnvelope>(getGetVillageAccountUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetVillageAccountQueryKey = () => {
+  return [`/api/auth/me`] as const;
+};
+
+export const getGetVillageAccountQueryOptions = <
+  TData = Awaited<ReturnType<typeof getVillageAccount>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getVillageAccount>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetVillageAccountQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getVillageAccount>>
+  > = ({ signal }) => getVillageAccount({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getVillageAccount>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetVillageAccountQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getVillageAccount>>
+>;
+export type GetVillageAccountQueryError = ErrorType<void>;
+
+/**
+ * @summary Get the current private account profile
+ */
+
+export function useGetVillageAccount<
+  TData = Awaited<ReturnType<typeof getVillageAccount>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getVillageAccount>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetVillageAccountQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Update the current profile and notification consent
+ */
+export const getUpdateVillageAccountUrl = () => {
+  return `/api/auth/me`;
+};
+
+export const updateVillageAccount = async (
+  villageProfilePatch: VillageProfilePatch,
+  options?: RequestInit,
+): Promise<VillageUserEnvelope> => {
+  return customFetch<VillageUserEnvelope>(getUpdateVillageAccountUrl(), {
+    ...options,
+    method: "PATCH",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(villageProfilePatch),
+  });
+};
+
+export const getUpdateVillageAccountMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateVillageAccount>>,
+    TError,
+    { data: BodyType<VillageProfilePatch> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateVillageAccount>>,
+  TError,
+  { data: BodyType<VillageProfilePatch> },
+  TContext
+> => {
+  const mutationKey = ["updateVillageAccount"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateVillageAccount>>,
+    { data: BodyType<VillageProfilePatch> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return updateVillageAccount(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdateVillageAccountMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateVillageAccount>>
+>;
+export type UpdateVillageAccountMutationBody = BodyType<VillageProfilePatch>;
+export type UpdateVillageAccountMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Update the current profile and notification consent
+ */
+export const useUpdateVillageAccount = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateVillageAccount>>,
+    TError,
+    { data: BodyType<VillageProfilePatch> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof updateVillageAccount>>,
+  TError,
+  { data: BodyType<VillageProfilePatch> },
+  TContext
+> => {
+  return useMutation(getUpdateVillageAccountMutationOptions(options));
+};
+
+/**
+ * @summary Merge locally earned alignment and watch progress into the account
+ */
+export const getSyncVillageProgressUrl = () => {
+  return `/api/auth/progress`;
+};
+
+export const syncVillageProgress = async (
+  villageProgressPatch: VillageProgressPatch,
+  options?: RequestInit,
+): Promise<VillageUserEnvelope> => {
+  return customFetch<VillageUserEnvelope>(getSyncVillageProgressUrl(), {
+    ...options,
+    method: "PATCH",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(villageProgressPatch),
+  });
+};
+
+export const getSyncVillageProgressMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof syncVillageProgress>>,
+    TError,
+    { data: BodyType<VillageProgressPatch> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof syncVillageProgress>>,
+  TError,
+  { data: BodyType<VillageProgressPatch> },
+  TContext
+> => {
+  const mutationKey = ["syncVillageProgress"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof syncVillageProgress>>,
+    { data: BodyType<VillageProgressPatch> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return syncVillageProgress(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type SyncVillageProgressMutationResult = NonNullable<
+  Awaited<ReturnType<typeof syncVillageProgress>>
+>;
+export type SyncVillageProgressMutationBody = BodyType<VillageProgressPatch>;
+export type SyncVillageProgressMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Merge locally earned alignment and watch progress into the account
+ */
+export const useSyncVillageProgress = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof syncVillageProgress>>,
+    TError,
+    { data: BodyType<VillageProgressPatch> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof syncVillageProgress>>,
+  TError,
+  { data: BodyType<VillageProgressPatch> },
+  TContext
+> => {
+  return useMutation(getSyncVillageProgressMutationOptions(options));
+};
+
+/**
+ * @summary List visible board metadata and access state
+ */
+export const getListVillageCategoriesUrl = () => {
+  return `/api/community/categories`;
+};
+
+export const listVillageCategories = async (
+  options?: RequestInit,
+): Promise<VillageCategoryList> => {
+  return customFetch<VillageCategoryList>(getListVillageCategoriesUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getListVillageCategoriesQueryKey = () => {
+  return [`/api/community/categories`] as const;
+};
+
+export const getListVillageCategoriesQueryOptions = <
+  TData = Awaited<ReturnType<typeof listVillageCategories>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof listVillageCategories>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getListVillageCategoriesQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof listVillageCategories>>
+  > = ({ signal }) => listVillageCategories({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof listVillageCategories>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type ListVillageCategoriesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listVillageCategories>>
+>;
+export type ListVillageCategoriesQueryError = ErrorType<unknown>;
+
+/**
+ * @summary List visible board metadata and access state
+ */
+
+export function useListVillageCategories<
+  TData = Awaited<ReturnType<typeof listVillageCategories>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof listVillageCategories>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getListVillageCategoriesQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Get live community totals
+ */
+export const getGetVillageStatsUrl = () => {
+  return `/api/community/stats`;
+};
+
+export const getVillageStats = async (
+  options?: RequestInit,
+): Promise<VillageStats> => {
+  return customFetch<VillageStats>(getGetVillageStatsUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetVillageStatsQueryKey = () => {
+  return [`/api/community/stats`] as const;
+};
+
+export const getGetVillageStatsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getVillageStats>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getVillageStats>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetVillageStatsQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getVillageStats>>> = ({
+    signal,
+  }) => getVillageStats({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getVillageStats>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetVillageStatsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getVillageStats>>
+>;
+export type GetVillageStatsQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Get live community totals
+ */
+
+export function useGetVillageStats<
+  TData = Awaited<ReturnType<typeof getVillageStats>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getVillageStats>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetVillageStatsQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary List accessible topics with optional board and title search filters
+ */
+export const getListVillageTopicsUrl = (params?: ListVillageTopicsParams) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/community/topics?${stringifiedParams}`
+    : `/api/community/topics`;
+};
+
+export const listVillageTopics = async (
+  params?: ListVillageTopicsParams,
+  options?: RequestInit,
+): Promise<VillageTopicList> => {
+  return customFetch<VillageTopicList>(getListVillageTopicsUrl(params), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getListVillageTopicsQueryKey = (
+  params?: ListVillageTopicsParams,
+) => {
+  return [`/api/community/topics`, ...(params ? [params] : [])] as const;
+};
+
+export const getListVillageTopicsQueryOptions = <
+  TData = Awaited<ReturnType<typeof listVillageTopics>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: ListVillageTopicsParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listVillageTopics>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getListVillageTopicsQueryKey(params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof listVillageTopics>>
+  > = ({ signal }) => listVillageTopics(params, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof listVillageTopics>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type ListVillageTopicsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listVillageTopics>>
+>;
+export type ListVillageTopicsQueryError = ErrorType<unknown>;
+
+/**
+ * @summary List accessible topics with optional board and title search filters
+ */
+
+export function useListVillageTopics<
+  TData = Awaited<ReturnType<typeof listVillageTopics>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: ListVillageTopicsParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listVillageTopics>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getListVillageTopicsQueryOptions(params, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Create a topic in an authorized board
+ */
+export const getCreateVillageTopicUrl = () => {
+  return `/api/community/topics`;
+};
+
+export const createVillageTopic = async (
+  villageTopicCreate: VillageTopicCreate,
+  options?: RequestInit,
+): Promise<IdResponse> => {
+  return customFetch<IdResponse>(getCreateVillageTopicUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(villageTopicCreate),
+  });
+};
+
+export const getCreateVillageTopicMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createVillageTopic>>,
+    TError,
+    { data: BodyType<VillageTopicCreate> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createVillageTopic>>,
+  TError,
+  { data: BodyType<VillageTopicCreate> },
+  TContext
+> => {
+  const mutationKey = ["createVillageTopic"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createVillageTopic>>,
+    { data: BodyType<VillageTopicCreate> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return createVillageTopic(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreateVillageTopicMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createVillageTopic>>
+>;
+export type CreateVillageTopicMutationBody = BodyType<VillageTopicCreate>;
+export type CreateVillageTopicMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Create a topic in an authorized board
+ */
+export const useCreateVillageTopic = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createVillageTopic>>,
+    TError,
+    { data: BodyType<VillageTopicCreate> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createVillageTopic>>,
+  TError,
+  { data: BodyType<VillageTopicCreate> },
+  TContext
+> => {
+  return useMutation(getCreateVillageTopicMutationOptions(options));
+};
+
+/**
+ * @summary Read an accessible topic and every current post
+ */
+export const getGetVillageTopicUrl = (id: string) => {
+  return `/api/community/topics/${id}`;
+};
+
+export const getVillageTopic = async (
+  id: string,
+  options?: RequestInit,
+): Promise<VillageTopicDetail> => {
+  return customFetch<VillageTopicDetail>(getGetVillageTopicUrl(id), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetVillageTopicQueryKey = (id: string) => {
+  return [`/api/community/topics/${id}`] as const;
+};
+
+export const getGetVillageTopicQueryOptions = <
+  TData = Awaited<ReturnType<typeof getVillageTopic>>,
+  TError = ErrorType<void>,
+>(
+  id: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getVillageTopic>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetVillageTopicQueryKey(id);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getVillageTopic>>> = ({
+    signal,
+  }) => getVillageTopic(id, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getVillageTopic>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetVillageTopicQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getVillageTopic>>
+>;
+export type GetVillageTopicQueryError = ErrorType<void>;
+
+/**
+ * @summary Read an accessible topic and every current post
+ */
+
+export function useGetVillageTopic<
+  TData = Awaited<ReturnType<typeof getVillageTopic>>,
+  TError = ErrorType<void>,
+>(
+  id: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getVillageTopic>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetVillageTopicQueryOptions(id, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Edit an owned topic title
+ */
+export const getUpdateVillageTopicUrl = (id: string) => {
+  return `/api/community/topics/${id}`;
+};
+
+export const updateVillageTopic = async (
+  id: string,
+  villageTopicPatch: VillageTopicPatch,
+  options?: RequestInit,
+): Promise<void> => {
+  return customFetch<void>(getUpdateVillageTopicUrl(id), {
+    ...options,
+    method: "PATCH",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(villageTopicPatch),
+  });
+};
+
+export const getUpdateVillageTopicMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateVillageTopic>>,
+    TError,
+    { id: string; data: BodyType<VillageTopicPatch> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateVillageTopic>>,
+  TError,
+  { id: string; data: BodyType<VillageTopicPatch> },
+  TContext
+> => {
+  const mutationKey = ["updateVillageTopic"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateVillageTopic>>,
+    { id: string; data: BodyType<VillageTopicPatch> }
+  > = (props) => {
+    const { id, data } = props ?? {};
+
+    return updateVillageTopic(id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdateVillageTopicMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateVillageTopic>>
+>;
+export type UpdateVillageTopicMutationBody = BodyType<VillageTopicPatch>;
+export type UpdateVillageTopicMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Edit an owned topic title
+ */
+export const useUpdateVillageTopic = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateVillageTopic>>,
+    TError,
+    { id: string; data: BodyType<VillageTopicPatch> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof updateVillageTopic>>,
+  TError,
+  { id: string; data: BodyType<VillageTopicPatch> },
+  TContext
+> => {
+  return useMutation(getUpdateVillageTopicMutationOptions(options));
+};
+
+/**
+ * @summary Soft-delete an owned topic
+ */
+export const getDeleteVillageTopicUrl = (id: string) => {
+  return `/api/community/topics/${id}`;
+};
+
+export const deleteVillageTopic = async (
+  id: string,
+  options?: RequestInit,
+): Promise<void> => {
+  return customFetch<void>(getDeleteVillageTopicUrl(id), {
+    ...options,
+    method: "DELETE",
+  });
+};
+
+export const getDeleteVillageTopicMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteVillageTopic>>,
+    TError,
+    { id: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteVillageTopic>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const mutationKey = ["deleteVillageTopic"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteVillageTopic>>,
+    { id: string }
+  > = (props) => {
+    const { id } = props ?? {};
+
+    return deleteVillageTopic(id, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type DeleteVillageTopicMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteVillageTopic>>
+>;
+
+export type DeleteVillageTopicMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Soft-delete an owned topic
+ */
+export const useDeleteVillageTopic = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteVillageTopic>>,
+    TError,
+    { id: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof deleteVillageTopic>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  return useMutation(getDeleteVillageTopicMutationOptions(options));
+};
+
+/**
+ * @summary Reply to an accessible unlocked topic
+ */
+export const getCreateVillageReplyUrl = (id: string) => {
+  return `/api/community/topics/${id}/replies`;
+};
+
+export const createVillageReply = async (
+  id: string,
+  villageReplyWrite: VillageReplyWrite,
+  options?: RequestInit,
+): Promise<IdResponse> => {
+  return customFetch<IdResponse>(getCreateVillageReplyUrl(id), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(villageReplyWrite),
+  });
+};
+
+export const getCreateVillageReplyMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createVillageReply>>,
+    TError,
+    { id: string; data: BodyType<VillageReplyWrite> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createVillageReply>>,
+  TError,
+  { id: string; data: BodyType<VillageReplyWrite> },
+  TContext
+> => {
+  const mutationKey = ["createVillageReply"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createVillageReply>>,
+    { id: string; data: BodyType<VillageReplyWrite> }
+  > = (props) => {
+    const { id, data } = props ?? {};
+
+    return createVillageReply(id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreateVillageReplyMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createVillageReply>>
+>;
+export type CreateVillageReplyMutationBody = BodyType<VillageReplyWrite>;
+export type CreateVillageReplyMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Reply to an accessible unlocked topic
+ */
+export const useCreateVillageReply = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createVillageReply>>,
+    TError,
+    { id: string; data: BodyType<VillageReplyWrite> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createVillageReply>>,
+  TError,
+  { id: string; data: BodyType<VillageReplyWrite> },
+  TContext
+> => {
+  return useMutation(getCreateVillageReplyMutationOptions(options));
+};
+
+/**
+ * @summary Edit an owned post
+ */
+export const getUpdateVillagePostUrl = (id: string) => {
+  return `/api/community/posts/${id}`;
+};
+
+export const updateVillagePost = async (
+  id: string,
+  villageReplyWrite: VillageReplyWrite,
+  options?: RequestInit,
+): Promise<void> => {
+  return customFetch<void>(getUpdateVillagePostUrl(id), {
+    ...options,
+    method: "PATCH",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(villageReplyWrite),
+  });
+};
+
+export const getUpdateVillagePostMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateVillagePost>>,
+    TError,
+    { id: string; data: BodyType<VillageReplyWrite> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateVillagePost>>,
+  TError,
+  { id: string; data: BodyType<VillageReplyWrite> },
+  TContext
+> => {
+  const mutationKey = ["updateVillagePost"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateVillagePost>>,
+    { id: string; data: BodyType<VillageReplyWrite> }
+  > = (props) => {
+    const { id, data } = props ?? {};
+
+    return updateVillagePost(id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdateVillagePostMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateVillagePost>>
+>;
+export type UpdateVillagePostMutationBody = BodyType<VillageReplyWrite>;
+export type UpdateVillagePostMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Edit an owned post
+ */
+export const useUpdateVillagePost = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateVillagePost>>,
+    TError,
+    { id: string; data: BodyType<VillageReplyWrite> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof updateVillagePost>>,
+  TError,
+  { id: string; data: BodyType<VillageReplyWrite> },
+  TContext
+> => {
+  return useMutation(getUpdateVillagePostMutationOptions(options));
+};
+
+/**
+ * @summary Soft-delete an owned reply
+ */
+export const getDeleteVillagePostUrl = (id: string) => {
+  return `/api/community/posts/${id}`;
+};
+
+export const deleteVillagePost = async (
+  id: string,
+  options?: RequestInit,
+): Promise<void> => {
+  return customFetch<void>(getDeleteVillagePostUrl(id), {
+    ...options,
+    method: "DELETE",
+  });
+};
+
+export const getDeleteVillagePostMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteVillagePost>>,
+    TError,
+    { id: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteVillagePost>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const mutationKey = ["deleteVillagePost"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteVillagePost>>,
+    { id: string }
+  > = (props) => {
+    const { id } = props ?? {};
+
+    return deleteVillagePost(id, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type DeleteVillagePostMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteVillagePost>>
+>;
+
+export type DeleteVillagePostMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Soft-delete an owned reply
+ */
+export const useDeleteVillagePost = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteVillagePost>>,
+    TError,
+    { id: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof deleteVillagePost>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  return useMutation(getDeleteVillagePostMutationOptions(options));
+};
+
+/**
+ * @summary Get a privacy-safe public operator profile
+ */
+export const getGetVillageOperatorUrl = (callsign: string) => {
+  return `/api/community/operators/${callsign}`;
+};
+
+export const getVillageOperator = async (
+  callsign: string,
+  options?: RequestInit,
+): Promise<VillageUserEnvelope> => {
+  return customFetch<VillageUserEnvelope>(getGetVillageOperatorUrl(callsign), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetVillageOperatorQueryKey = (callsign: string) => {
+  return [`/api/community/operators/${callsign}`] as const;
+};
+
+export const getGetVillageOperatorQueryOptions = <
+  TData = Awaited<ReturnType<typeof getVillageOperator>>,
+  TError = ErrorType<unknown>,
+>(
+  callsign: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getVillageOperator>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetVillageOperatorQueryKey(callsign);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getVillageOperator>>
+  > = ({ signal }) =>
+    getVillageOperator(callsign, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!callsign,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getVillageOperator>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetVillageOperatorQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getVillageOperator>>
+>;
+export type GetVillageOperatorQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Get a privacy-safe public operator profile
+ */
+
+export function useGetVillageOperator<
+  TData = Awaited<ReturnType<typeof getVillageOperator>>,
+  TError = ErrorType<unknown>,
+>(
+  callsign: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getVillageOperator>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetVillageOperatorQueryOptions(callsign, options);
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: QueryKey;

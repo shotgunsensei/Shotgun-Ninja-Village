@@ -40,3 +40,376 @@ export const CreateSignupResponse = zod.object({
 export const GetSignupsCountResponse = zod.object({
   count: zod.number(),
 });
+
+/**
+ * @summary Create a free Shotgun Ninja account
+ */
+export const registerVillageAccountBodyDisplayNameMin = 2;
+export const registerVillageAccountBodyDisplayNameMax = 80;
+
+export const registerVillageAccountBodyEmailMax = 320;
+
+export const registerVillageAccountBodyCallsignMin = 3;
+export const registerVillageAccountBodyCallsignMax = 24;
+
+export const registerVillageAccountBodyCallsignRegExp = new RegExp(
+  "^[a-zA-Z0-9][a-zA-Z0-9_-]\*$",
+);
+export const registerVillageAccountBodyPasswordMin = 10;
+export const registerVillageAccountBodyPasswordMax = 128;
+
+export const registerVillageAccountBodyNewsletterOptInDefault = false;
+export const registerVillageAccountBodyWatchedTransmissionsMax = 12;
+
+export const RegisterVillageAccountBody = zod.object({
+  displayName: zod
+    .string()
+    .min(registerVillageAccountBodyDisplayNameMin)
+    .max(registerVillageAccountBodyDisplayNameMax),
+  email: zod.string().email().max(registerVillageAccountBodyEmailMax),
+  callsign: zod
+    .string()
+    .min(registerVillageAccountBodyCallsignMin)
+    .max(registerVillageAccountBodyCallsignMax)
+    .regex(registerVillageAccountBodyCallsignRegExp),
+  password: zod
+    .string()
+    .min(registerVillageAccountBodyPasswordMin)
+    .max(registerVillageAccountBodyPasswordMax),
+  newsletterOptIn: zod
+    .boolean()
+    .default(registerVillageAccountBodyNewsletterOptInDefault),
+  termsAccepted: zod.boolean(),
+  archetype: zod.enum(["builder", "protector", "tracer", "breaker"]).optional(),
+  watchedTransmissions: zod
+    .array(zod.string())
+    .max(registerVillageAccountBodyWatchedTransmissionsMax)
+    .optional(),
+});
+
+/**
+ * @summary Start an account session
+ */
+export const loginVillageAccountBodyEmailMax = 320;
+
+export const loginVillageAccountBodyPasswordMax = 128;
+
+export const LoginVillageAccountBody = zod.object({
+  email: zod.string().email().max(loginVillageAccountBodyEmailMax),
+  password: zod.string().max(loginVillageAccountBodyPasswordMax),
+});
+
+export const LoginVillageAccountResponse = zod.object({
+  user: zod.object({
+    id: zod.string().uuid(),
+    displayName: zod.string(),
+    callsign: zod.string(),
+    bio: zod.string(),
+    avatarColor: zod.string(),
+    role: zod.string(),
+    tier: zod.string(),
+    archetype: zod
+      .enum(["builder", "protector", "tracer", "breaker"])
+      .optional(),
+    createdAt: zod.coerce.date(),
+    badges: zod.array(
+      zod.object({
+        id: zod.string(),
+        label: zod.string(),
+        description: zod.string(),
+        earned: zod.boolean(),
+      }),
+    ),
+  }),
+});
+
+/**
+ * @summary Get the current private account profile
+ */
+export const GetVillageAccountResponse = zod.object({
+  user: zod.object({
+    id: zod.string().uuid(),
+    displayName: zod.string(),
+    callsign: zod.string(),
+    bio: zod.string(),
+    avatarColor: zod.string(),
+    role: zod.string(),
+    tier: zod.string(),
+    archetype: zod
+      .enum(["builder", "protector", "tracer", "breaker"])
+      .optional(),
+    createdAt: zod.coerce.date(),
+    badges: zod.array(
+      zod.object({
+        id: zod.string(),
+        label: zod.string(),
+        description: zod.string(),
+        earned: zod.boolean(),
+      }),
+    ),
+  }),
+});
+
+/**
+ * @summary Update the current profile and notification consent
+ */
+export const updateVillageAccountBodyDisplayNameMin = 2;
+export const updateVillageAccountBodyDisplayNameMax = 80;
+
+export const updateVillageAccountBodyCallsignMin = 3;
+export const updateVillageAccountBodyCallsignMax = 24;
+
+export const updateVillageAccountBodyBioMax = 400;
+
+export const UpdateVillageAccountBody = zod.object({
+  displayName: zod
+    .string()
+    .min(updateVillageAccountBodyDisplayNameMin)
+    .max(updateVillageAccountBodyDisplayNameMax)
+    .optional(),
+  callsign: zod
+    .string()
+    .min(updateVillageAccountBodyCallsignMin)
+    .max(updateVillageAccountBodyCallsignMax)
+    .optional(),
+  bio: zod.string().max(updateVillageAccountBodyBioMax).optional(),
+  avatarColor: zod
+    .enum(["crimson", "cyan", "amber", "emerald", "violet"])
+    .optional(),
+  newsletterOptIn: zod.boolean().optional(),
+});
+
+export const UpdateVillageAccountResponse = zod.object({
+  user: zod.object({
+    id: zod.string().uuid(),
+    displayName: zod.string(),
+    callsign: zod.string(),
+    bio: zod.string(),
+    avatarColor: zod.string(),
+    role: zod.string(),
+    tier: zod.string(),
+    archetype: zod
+      .enum(["builder", "protector", "tracer", "breaker"])
+      .optional(),
+    createdAt: zod.coerce.date(),
+    badges: zod.array(
+      zod.object({
+        id: zod.string(),
+        label: zod.string(),
+        description: zod.string(),
+        earned: zod.boolean(),
+      }),
+    ),
+  }),
+});
+
+/**
+ * @summary Merge locally earned alignment and watch progress into the account
+ */
+export const syncVillageProgressBodyWatchedTransmissionsMax = 12;
+
+export const SyncVillageProgressBody = zod.object({
+  archetype: zod.enum(["builder", "protector", "tracer", "breaker"]).optional(),
+  watchedTransmissions: zod
+    .array(zod.string())
+    .max(syncVillageProgressBodyWatchedTransmissionsMax)
+    .optional(),
+});
+
+export const SyncVillageProgressResponse = zod.object({
+  user: zod.object({
+    id: zod.string().uuid(),
+    displayName: zod.string(),
+    callsign: zod.string(),
+    bio: zod.string(),
+    avatarColor: zod.string(),
+    role: zod.string(),
+    tier: zod.string(),
+    archetype: zod
+      .enum(["builder", "protector", "tracer", "breaker"])
+      .optional(),
+    createdAt: zod.coerce.date(),
+    badges: zod.array(
+      zod.object({
+        id: zod.string(),
+        label: zod.string(),
+        description: zod.string(),
+        earned: zod.boolean(),
+      }),
+    ),
+  }),
+});
+
+/**
+ * @summary List visible board metadata and access state
+ */
+export const ListVillageCategoriesResponse = zod.object({
+  categories: zod.array(zod.record(zod.string(), zod.unknown())),
+});
+
+/**
+ * @summary Get live community totals
+ */
+export const GetVillageStatsResponse = zod.object({
+  totalMembers: zod.number(),
+  onlineNow: zod.number(),
+  totalTopics: zod.number(),
+  totalPosts: zod.number(),
+  newestMember: zod.string().nullable(),
+});
+
+/**
+ * @summary List accessible topics with optional board and title search filters
+ */
+export const listVillageTopicsQueryQMax = 100;
+
+export const listVillageTopicsQueryPageDefault = 1;
+
+export const ListVillageTopicsQueryParams = zod.object({
+  category: zod.coerce.string().optional(),
+  q: zod.coerce.string().max(listVillageTopicsQueryQMax).optional(),
+  page: zod.coerce.number().min(1).default(listVillageTopicsQueryPageDefault),
+});
+
+export const ListVillageTopicsResponse = zod.object({
+  topics: zod.array(zod.record(zod.string(), zod.unknown())),
+  page: zod.number(),
+  hasMore: zod.boolean(),
+});
+
+/**
+ * @summary Create a topic in an authorized board
+ */
+export const createVillageTopicBodyCategorySlugMax = 64;
+
+export const createVillageTopicBodyTitleMin = 6;
+export const createVillageTopicBodyTitleMax = 140;
+
+export const createVillageTopicBodyBodyMin = 10;
+export const createVillageTopicBodyBodyMax = 10000;
+
+export const CreateVillageTopicBody = zod.object({
+  categorySlug: zod.string().max(createVillageTopicBodyCategorySlugMax),
+  title: zod
+    .string()
+    .min(createVillageTopicBodyTitleMin)
+    .max(createVillageTopicBodyTitleMax),
+  body: zod
+    .string()
+    .min(createVillageTopicBodyBodyMin)
+    .max(createVillageTopicBodyBodyMax),
+});
+
+/**
+ * @summary Read an accessible topic and every current post
+ */
+export const GetVillageTopicParams = zod.object({
+  id: zod.coerce.string().uuid(),
+});
+
+export const GetVillageTopicResponse = zod.object({
+  topic: zod.record(zod.string(), zod.unknown()),
+  posts: zod.array(zod.record(zod.string(), zod.unknown())),
+});
+
+/**
+ * @summary Edit an owned topic title
+ */
+export const UpdateVillageTopicParams = zod.object({
+  id: zod.coerce.string().uuid(),
+});
+
+export const updateVillageTopicBodyTitleMin = 6;
+export const updateVillageTopicBodyTitleMax = 140;
+
+export const UpdateVillageTopicBody = zod.object({
+  title: zod
+    .string()
+    .min(updateVillageTopicBodyTitleMin)
+    .max(updateVillageTopicBodyTitleMax),
+});
+
+/**
+ * @summary Soft-delete an owned topic
+ */
+export const DeleteVillageTopicParams = zod.object({
+  id: zod.coerce.string().uuid(),
+});
+
+/**
+ * @summary Reply to an accessible unlocked topic
+ */
+export const CreateVillageReplyParams = zod.object({
+  id: zod.coerce.string().uuid(),
+});
+
+export const createVillageReplyBodyBodyMin = 2;
+export const createVillageReplyBodyBodyMax = 10000;
+
+export const CreateVillageReplyBody = zod.object({
+  body: zod
+    .string()
+    .min(createVillageReplyBodyBodyMin)
+    .max(createVillageReplyBodyBodyMax),
+});
+
+/**
+ * @summary Edit an owned post
+ */
+export const UpdateVillagePostParams = zod.object({
+  id: zod.coerce.string().uuid(),
+});
+
+export const updateVillagePostBodyBodyMin = 2;
+export const updateVillagePostBodyBodyMax = 10000;
+
+export const UpdateVillagePostBody = zod.object({
+  body: zod
+    .string()
+    .min(updateVillagePostBodyBodyMin)
+    .max(updateVillagePostBodyBodyMax),
+});
+
+/**
+ * @summary Soft-delete an owned reply
+ */
+export const DeleteVillagePostParams = zod.object({
+  id: zod.coerce.string().uuid(),
+});
+
+/**
+ * @summary Get a privacy-safe public operator profile
+ */
+export const getVillageOperatorPathCallsignMin = 3;
+export const getVillageOperatorPathCallsignMax = 24;
+
+export const GetVillageOperatorParams = zod.object({
+  callsign: zod.coerce
+    .string()
+    .min(getVillageOperatorPathCallsignMin)
+    .max(getVillageOperatorPathCallsignMax),
+});
+
+export const GetVillageOperatorResponse = zod.object({
+  user: zod.object({
+    id: zod.string().uuid(),
+    displayName: zod.string(),
+    callsign: zod.string(),
+    bio: zod.string(),
+    avatarColor: zod.string(),
+    role: zod.string(),
+    tier: zod.string(),
+    archetype: zod
+      .enum(["builder", "protector", "tracer", "breaker"])
+      .optional(),
+    createdAt: zod.coerce.date(),
+    badges: zod.array(
+      zod.object({
+        id: zod.string(),
+        label: zod.string(),
+        description: zod.string(),
+        earned: zod.boolean(),
+      }),
+    ),
+  }),
+});
