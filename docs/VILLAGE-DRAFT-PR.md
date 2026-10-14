@@ -5,4 +5,3 @@ Product records, prices, SKUs, variants, community behavior and shared ecosystem
 Validation: 65 passing unit/component tests; 26 desktop/mobile Chromium checks; zero automated WCAG A/AA violations on the tested pages/dialogs; no runtime errors, broken images or horizontal overflow. Observed local home transfer fell from 7.61 MB to 1.17 MB. See docs/VILLAGE-REDESIGN-REVIEW.md, docs/VILLAGE-BRAND-DIRECTION.md and docs/MERCH-PRODUCTION-HANDOFF.md.
 
 Keep this PR as a draft. Generated garment images are concept previews, not manufacturing print masters. Physical templates, artwork exports, samples, real Shopify checkout and wholesale deployment require owner review. No orders, fulfillment changes or deployment were performed.
-
