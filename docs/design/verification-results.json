@@ -1,0 +1,346 @@
+{
+  "date": "2026-10-14",
+  "unitTests": {
+    "failed": 0,
+    "passed": 65,
+    "total": 65
+  },
+  "browserChecks": [
+    {
+      "route": "/",
+      "viewport": "desktop",
+      "heading": "THE SIGNALSURVIVES.",
+      "status": "pass"
+    },
+    {
+      "route": "/merch",
+      "viewport": "desktop",
+      "heading": "RONINSUPPLY.",
+      "status": "pass"
+    },
+    {
+      "route": "/codex",
+      "viewport": "desktop",
+      "heading": "One village.Four ways to fight the noise.",
+      "status": "pass"
+    },
+    {
+      "route": "/operators",
+      "viewport": "desktop",
+      "heading": "OPERATOR FILES",
+      "status": "pass"
+    },
+    {
+      "route": "/grid",
+      "viewport": "desktop",
+      "heading": "THE GRID MAP",
+      "status": "pass"
+    },
+    {
+      "route": "/arsenal",
+      "viewport": "desktop",
+      "heading": "THE ARSENAL",
+      "status": "pass"
+    },
+    {
+      "route": "/archive",
+      "viewport": "desktop",
+      "heading": "THE ARCHIVE",
+      "status": "pass"
+    },
+    {
+      "route": "/intel",
+      "viewport": "desktop",
+      "heading": "FORGE INTEL",
+      "status": "pass"
+    },
+    {
+      "route": "/alignment",
+      "viewport": "desktop",
+      "heading": "OPERATOR ALIGNMENT",
+      "status": "pass"
+    },
+    {
+      "route": "/community",
+      "viewport": "desktop",
+      "heading": "TheVillage",
+      "status": "pass"
+    },
+    {
+      "route": "/account",
+      "viewport": "desktop",
+      "heading": "Claim yourcallsign.",
+      "status": "pass"
+    },
+    {
+      "route": "/legal/refunds",
+      "viewport": "desktop",
+      "heading": "Refunds, Returns & Shipping",
+      "status": "pass"
+    },
+    {
+      "viewport": "desktop",
+      "flow": "Product options, closed concept checkout, Escape/focus, collection filters, codex and mobile navigation",
+      "status": "pass"
+    },
+    {
+      "route": "/",
+      "viewport": "mobile",
+      "heading": "THE SIGNALSURVIVES.",
+      "status": "pass"
+    },
+    {
+      "route": "/merch",
+      "viewport": "mobile",
+      "heading": "RONINSUPPLY.",
+      "status": "pass"
+    },
+    {
+      "route": "/codex",
+      "viewport": "mobile",
+      "heading": "One village.Four ways to fight the noise.",
+      "status": "pass"
+    },
+    {
+      "route": "/operators",
+      "viewport": "mobile",
+      "heading": "OPERATOR FILES",
+      "status": "pass"
+    },
+    {
+      "route": "/grid",
+      "viewport": "mobile",
+      "heading": "THE GRID MAP",
+      "status": "pass"
+    },
+    {
+      "route": "/arsenal",
+      "viewport": "mobile",
+      "heading": "THE ARSENAL",
+      "status": "pass"
+    },
+    {
+      "route": "/archive",
+      "viewport": "mobile",
+      "heading": "THE ARCHIVE",
+      "status": "pass"
+    },
+    {
+      "route": "/intel",
+      "viewport": "mobile",
+      "heading": "FORGE INTEL",
+      "status": "pass"
+    },
+    {
+      "route": "/alignment",
+      "viewport": "mobile",
+      "heading": "OPERATOR ALIGNMENT",
+      "status": "pass"
+    },
+    {
+      "route": "/community",
+      "viewport": "mobile",
+      "heading": "TheVillage",
+      "status": "pass"
+    },
+    {
+      "route": "/account",
+      "viewport": "mobile",
+      "heading": "Claim yourcallsign.",
+      "status": "pass"
+    },
+    {
+      "route": "/legal/refunds",
+      "viewport": "mobile",
+      "heading": "Refunds, Returns & Shipping",
+      "status": "pass"
+    },
+    {
+      "viewport": "mobile",
+      "flow": "Product options, closed concept checkout, Escape/focus, collection filters, codex and mobile navigation",
+      "status": "pass"
+    }
+  ],
+  "accessibility": [
+    {
+      "route": "/",
+      "viewport": "desktop",
+      "violations": []
+    },
+    {
+      "route": "/merch",
+      "viewport": "desktop",
+      "violations": []
+    },
+    {
+      "route": "/codex",
+      "viewport": "desktop",
+      "violations": []
+    },
+    {
+      "route": "/alignment",
+      "viewport": "desktop",
+      "violations": []
+    },
+    {
+      "route": "/account",
+      "viewport": "desktop",
+      "violations": []
+    },
+    {
+      "route": "/merch/dialog",
+      "viewport": "desktop",
+      "violations": []
+    },
+    {
+      "route": "/",
+      "viewport": "mobile",
+      "violations": []
+    },
+    {
+      "route": "/merch",
+      "viewport": "mobile",
+      "violations": []
+    },
+    {
+      "route": "/codex",
+      "viewport": "mobile",
+      "violations": []
+    },
+    {
+      "route": "/alignment",
+      "viewport": "mobile",
+      "violations": []
+    },
+    {
+      "route": "/account",
+      "viewport": "mobile",
+      "violations": []
+    },
+    {
+      "route": "/merch/dialog",
+      "viewport": "mobile",
+      "violations": []
+    }
+  ],
+  "runtimeErrors": [],
+  "performance": [
+    {
+      "route": "/",
+      "viewport": "desktop",
+      "domContentLoadedMs": 233,
+      "totalTransferBytes": 1167680,
+      "requests": 28,
+      "largestResources": [
+        {
+          "name": "village-key-art.webp",
+          "bytes": 317826
+        },
+        {
+          "name": "ep1.webp",
+          "bytes": 221008
+        },
+        {
+          "name": "ep2.webp",
+          "bytes": 196760
+        },
+        {
+          "name": "ep3.webp",
+          "bytes": 139806
+        },
+        {
+          "name": "index-DevE_e9E.js",
+          "bytes": 138477
+        }
+      ]
+    },
+    {
+      "route": "/merch",
+      "viewport": "desktop",
+      "domContentLoadedMs": 78.69999998807907,
+      "totalTransferBytes": 1467809,
+      "requests": 21,
+      "largestResources": [
+        {
+          "name": "village-key-art.webp",
+          "bytes": 317826
+        },
+        {
+          "name": "noise-sector-poster.webp",
+          "bytes": 180466
+        },
+        {
+          "name": "fracture-scan-drop-tee.webp",
+          "bytes": 148862
+        },
+        {
+          "name": "village-signal-cap.webp",
+          "bytes": 147900
+        },
+        {
+          "name": "index-DevE_e9E.js",
+          "bytes": 138477
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "viewport": "mobile",
+      "domContentLoadedMs": 133.89999997615814,
+      "totalTransferBytes": 1167680,
+      "requests": 28,
+      "largestResources": [
+        {
+          "name": "village-key-art.webp",
+          "bytes": 317826
+        },
+        {
+          "name": "ep1.webp",
+          "bytes": 221008
+        },
+        {
+          "name": "ep2.webp",
+          "bytes": 196760
+        },
+        {
+          "name": "ep3.webp",
+          "bytes": 139806
+        },
+        {
+          "name": "index-DevE_e9E.js",
+          "bytes": 138477
+        }
+      ]
+    },
+    {
+      "route": "/merch",
+      "viewport": "mobile",
+      "domContentLoadedMs": 82.89999997615814,
+      "totalTransferBytes": 1467809,
+      "requests": 21,
+      "largestResources": [
+        {
+          "name": "village-key-art.webp",
+          "bytes": 317826
+        },
+        {
+          "name": "noise-sector-poster.webp",
+          "bytes": 180466
+        },
+        {
+          "name": "fracture-scan-drop-tee.webp",
+          "bytes": 148862
+        },
+        {
+          "name": "village-signal-cap.webp",
+          "bytes": 147900
+        },
+        {
+          "name": "index-DevE_e9E.js",
+          "bytes": 138477
+        }
+      ]
+    }
+  ],
+  "limitations": "Static preview and isolated API fixtures; no real checkout, fulfillment, authenticated community writes or physical production."
+}

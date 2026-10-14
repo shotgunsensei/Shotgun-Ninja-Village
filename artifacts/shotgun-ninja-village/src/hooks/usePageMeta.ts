@@ -9,9 +9,13 @@ interface PageMeta {
 const SITE_NAME = "Shotgun Ninja Village";
 const DEFAULT_DESCRIPTION =
   "The tactical command hub of the Shotgun Ninjas universe. Watch transmissions, access operator intel, explore recovered systems, and join the village.";
-const DEFAULT_OG_IMAGE = "/opengraph.jpg";
+const DEFAULT_OG_IMAGE = `${import.meta.env.BASE_URL}brand/village-social.jpg`;
 
-function setMeta(name: string, content: string, attr: "name" | "property" = "name") {
+function setMeta(
+  name: string,
+  content: string,
+  attr: "name" | "property" = "name",
+) {
   let el = document.querySelector<HTMLMetaElement>(`meta[${attr}="${name}"]`);
   if (!el) {
     el = document.createElement("meta");

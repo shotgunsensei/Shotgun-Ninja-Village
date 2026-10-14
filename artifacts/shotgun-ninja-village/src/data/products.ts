@@ -3,6 +3,7 @@ export interface ProductVariant {
   title: string;
   sku: string;
   price: number;
+  currencyCode?: string;
   compareAtPrice?: number;
   available: boolean;
   options: Record<string, string>;

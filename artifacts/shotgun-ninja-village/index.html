@@ -1,38 +1,86 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Shotgun Ninjas — Command Hub</title>
-    <meta name="description" content="Shotgun Ninja Village — the tactical command hub of the Shotgun Ninjas universe. Watch transmissions, access operator intel, and explore recovered systems. Part of the Shotgun Ninjas network at shotgunninjas.com." />
+    <meta
+      name="description"
+      content="Shotgun Ninja Village — the tactical command hub of the Shotgun Ninjas universe. Watch transmissions, access operator intel, and explore recovered systems. Part of the Shotgun Ninjas network at shotgunninjas.com."
+    />
     <meta name="theme-color" content="#B91C1C" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Shotgun Ninja Village — Command Hub" />
-    <meta property="og:description" content="The tactical command hub of the Shotgun Ninjas universe. Transmissions, operator intel, recovered systems, and classified drops." />
+    <meta
+      property="og:description"
+      content="The tactical command hub of the Shotgun Ninjas universe. Transmissions, operator intel, recovered systems, and classified drops."
+    />
     <meta property="og:site_name" content="Shotgun Ninjas" />
     <meta property="og:url" content="https://shotgunninjavillage.com" />
-    <meta property="og:image" content="https://shotgunninjavillage.com/icon-512.png" />
+    <meta
+      property="og:image"
+      content="https://shotgunninjavillage.com/brand/village-social.jpg"
+    />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="Shotgun Ninja Village — Command Hub" />
-    <meta name="twitter:description" content="The tactical command hub of the Shotgun Ninjas universe. Part of the ShotgunNinjas.com network." />
+    <meta
+      name="twitter:description"
+      content="The tactical command hub of the Shotgun Ninjas universe. Part of the ShotgunNinjas.com network."
+    />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
     <meta name="apple-mobile-web-app-title" content="SN Command" />
     <link rel="manifest" href="manifest.json" />
     <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
     <link rel="apple-touch-icon" href="icon-192.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="dns-prefetch" href="https://shotgunninjas.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://shotgunninjas.com" />
   </head>
   <body>
     <div id="root"></div>
     <noscript>
-      <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0A0A0F;color:#fff;font-family:system-ui,-apple-system,sans-serif;padding:2rem;text-align:center;">
-        <div style="max-width:480px;">
-          <h1 style="color:#DC2626;font-size:1.75rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1rem;">Signal Requires JavaScript</h1>
-          <p style="color:#9CA3AF;line-height:1.6;margin-bottom:1.5rem;">The Shotgun Ninja Village command hub runs on JavaScript. Enable scripts to receive the transmission.</p>
-          <p style="color:#9CA3AF;line-height:1.6;">Or visit the main hub at <a href="https://shotgunninjas.com" style="color:#3B82F6;">shotgunninjas.com</a>.</p>
+      <div
+        style="
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: #0a0a0f;
+          color: #fff;
+          font-family:
+            system-ui,
+            -apple-system,
+            sans-serif;
+          padding: 2rem;
+          text-align: center;
+        "
+      >
+        <div style="max-width: 480px">
+          <h1
+            style="
+              color: #dc2626;
+              font-size: 1.75rem;
+              letter-spacing: 0.1em;
+              text-transform: uppercase;
+              margin-bottom: 1rem;
+            "
+          >
+            Signal Requires JavaScript
+          </h1>
+          <p style="color: #9ca3af; line-height: 1.6; margin-bottom: 1.5rem">
+            The Shotgun Ninja Village command hub runs on JavaScript. Enable
+            scripts to receive the transmission.
+          </p>
+          <p style="color: #9ca3af; line-height: 1.6">
+            Or visit the main hub at
+            <a href="https://shotgunninjas.com" style="color: #3b82f6"
+              >shotgunninjas.com</a
+            >.
+          </p>
         </div>
       </div>
     </noscript>
@@ -40,8 +88,12 @@
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {
-          const base = document.querySelector('base')?.href || new URL('./', location.href).href;
-          navigator.serviceWorker.register(new URL('sw.js', base).href).catch(() => {});
+          const base =
+            document.querySelector("base")?.href ||
+            new URL("./", location.href).href;
+          navigator.serviceWorker
+            .register(new URL("sw.js", base).href)
+            .catch(() => {});
         });
       }
     </script>

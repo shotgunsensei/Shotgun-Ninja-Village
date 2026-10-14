@@ -1,6 +1,21 @@
+import { brandAsset } from "@/data/brand";
 import React, { useEffect, useState } from "react";
 import { Link } from "wouter";
-import { ChevronRight, PlayCircle, UserSquare, Mail, Radio, Globe, ArrowUpRight, Users, ShoppingBag, Database, Code, Activity } from "lucide-react";
+import {
+  ArrowRight,
+  ChevronRight,
+  PlayCircle,
+  UserSquare,
+  Mail,
+  Radio,
+  Globe,
+  ArrowUpRight,
+  Users,
+  ShoppingBag,
+  Database,
+  Code,
+  Activity,
+} from "lucide-react";
 import { motion } from "framer-motion";
 import { transmissions } from "@/data/transmissions";
 import { usePageMeta } from "@/hooks/usePageMeta";
@@ -38,13 +53,18 @@ function TypewriterText({ text }: { text: string }) {
   }, []);
   useEffect(() => {
     if (!visible || count >= text.length) return;
-    const t = setTimeout(() => setCount(c => c + 1), 20);
+    const t = setTimeout(() => setCount((c) => c + 1), 20);
     return () => clearTimeout(t);
   }, [count, text.length, visible]);
   return (
     <span>
       {text.slice(0, count)}
-      {count < text.length && <span className="inline-block w-2 h-5 bg-primary animate-pulse ml-0.5 align-middle" aria-hidden="true" />}
+      {count < text.length && (
+        <span
+          className="inline-block w-2 h-5 bg-primary animate-pulse ml-0.5 align-middle"
+          aria-hidden="true"
+        />
+      )}
     </span>
   );
 }
@@ -53,7 +73,7 @@ const fadeUp = {
   initial: { opacity: 0, y: 24 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true },
-  transition: { duration: 0.5 }
+  transition: { duration: 0.5 },
 };
 
 function isAdminView() {
@@ -66,7 +86,9 @@ function isAdminView() {
 }
 
 function SignalForm() {
-  const [status, setStatus] = useState<"idle" | "submitting" | "ok" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "submitting" | "ok" | "error">(
+    "idle",
+  );
   const [message, setMessage] = useState("");
   const [queuedCount, setQueuedCount] = useState(0);
   const [admin] = useState(isAdminView);
@@ -88,7 +110,9 @@ function SignalForm() {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
-    const email = (form.elements.namedItem("email") as HTMLInputElement)?.value.trim();
+    const email = (
+      form.elements.namedItem("email") as HTMLInputElement
+    )?.value.trim();
     const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     if (!valid) {
       setStatus("error");
@@ -127,7 +151,9 @@ function SignalForm() {
       setQueuedCount(getQueuedSignals().length);
       if (queued) {
         setStatus("ok");
-        setMessage("Uplink unavailable. Signal queued locally — we'll retry on your next visit.");
+        setMessage(
+          "Uplink unavailable. Signal queued locally — we'll retry on your next visit.",
+        );
         form.reset();
       } else {
         setStatus("error");
@@ -153,7 +179,10 @@ function SignalForm() {
 
   return (
     <>
-      <form onSubmit={onSubmit} className="flex flex-col sm:flex-row items-stretch gap-3 max-w-lg mx-auto mb-3">
+      <form
+        onSubmit={onSubmit}
+        className="flex flex-col sm:flex-row items-stretch gap-3 max-w-lg mx-auto mb-3"
+      >
         <input
           type="email"
           name="email"
@@ -167,18 +196,26 @@ function SignalForm() {
           disabled={status === "submitting"}
           className="clip-diagonal bg-primary hover:bg-primary/90 disabled:opacity-60 text-white px-6 py-3 font-display text-lg uppercase tracking-widest transition-all inline-flex items-center justify-center gap-2 whitespace-nowrap"
         >
-          {status === "submitting" ? "Locking..." : "Lock In"} <ChevronRight size={18} />
+          {status === "submitting" ? "Locking..." : "Lock In"}{" "}
+          <ChevronRight size={18} />
         </button>
       </form>
       {status === "ok" && (
-        <p role="status" className="font-mono text-xs text-secondary mb-3">{message}</p>
+        <p role="status" className="font-mono text-xs text-secondary mb-3">
+          {message}
+        </p>
       )}
       {status === "error" && (
-        <p role="alert" className="font-mono text-xs text-primary mb-3">{message}</p>
+        <p role="alert" className="font-mono text-xs text-primary mb-3">
+          {message}
+        </p>
       )}
       {admin && queuedCount > 0 && (
         <div className="font-mono text-xs text-muted-foreground mb-3 flex flex-col sm:flex-row items-center justify-center gap-2">
-          <span>{queuedCount} signal{queuedCount === 1 ? "" : "s"} queued locally (uplink failed).</span>
+          <span>
+            {queuedCount} signal{queuedCount === 1 ? "" : "s"} queued locally
+            (uplink failed).
+          </span>
           <button
             type="button"
             onClick={downloadCsv}
@@ -207,84 +244,98 @@ import { NextWaypoint } from "@/components/shared/NextWaypoint";
 export default function Home() {
   usePageMeta({
     title: "Command Hub",
-    description: "Enter the Shotgun Ninjas universe. Watch transmissions, meet Kage-9, and join the village. Three episodes, two recovered systems, one expanding network.",
+    description:
+      "Enter the Shotgun Ninjas universe. Watch transmissions, meet Kage-9, and join the village. Three episodes, two recovered systems, one expanding network.",
   });
 
   const watched = getWatched();
-  const nextTx = getNextUnwatched(transmissions.map(t => t.num));
-  const continueTx = nextTx ? transmissions.find(t => t.num === nextTx) : null;
+  const nextTx = getNextUnwatched(transmissions.map((t) => t.num));
+  const continueTx = nextTx
+    ? transmissions.find((t) => t.num === nextTx)
+    : null;
 
   return (
     <div className="relative w-full min-h-[100dvh] flex flex-col">
-
       {/* ── HERO ── */}
-      <section className="relative w-full min-h-[70vh] md:min-h-[85vh] flex items-center justify-center overflow-hidden border-b border-primary/20">
-        <div className="absolute inset-0 z-0">
-          <img src={asset("images/hero.png")} alt="" aria-hidden="true" role="presentation" fetchPriority="high" decoding="async" width="1920" height="1080" className="w-full h-full object-cover opacity-30 mix-blend-luminosity" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/40" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-transparent to-background/80" />
-        </div>
-
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
-
-        <div className="relative z-10 container px-4 md:px-6 mx-auto max-w-5xl">
-          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
-            <div className="flex-1 text-center md:text-left">
-              <div className="inline-flex items-center gap-2 px-3 py-1 mb-6 border border-secondary/30 bg-secondary/10 text-secondary text-xs font-mono uppercase tracking-widest backdrop-blur-sm">
-                <Radio size={14} className="animate-pulse" />
-                Network Waking
-              </div>
-
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-bold text-white uppercase tracking-tighter mb-4 leading-[0.9] glitch-text" data-text="THE NETWORK IS WAKING">
-                THE NETWORK IS WAKING
-              </h1>
-
-              <p className="text-lg md:text-xl text-muted-foreground font-mono max-w-xl mb-8 border-l-2 border-primary pl-4 text-left">
-                <TypewriterText text="Kage-9 moves through a signal war no one else can see. Three transmissions recovered. Two systems online. The network remembers." />
-              </p>
-
-              <div className="flex flex-wrap items-center gap-4 mb-6">
-                <a
-                  href={continueTx ? continueTx.href : transmissions[0].href}
-                  onClick={() => continueTx && markWatched(continueTx.num)}
-                  className="clip-diagonal bg-primary hover:bg-primary/90 text-white px-8 py-3 font-display text-xl uppercase tracking-widest transition-all inline-flex items-center gap-2"
-                >
-                  <PlayCircle size={20} /> {continueTx ? `Continue: Transmission ${continueTx.num}` : "Watch Transmission 01"}
-                </a>
-                <a
-                  href="#join-archive"
-                  className="clip-diagonal border border-primary/50 hover:bg-primary/10 text-primary px-8 py-3 font-display text-xl uppercase tracking-widest transition-all inline-flex items-center gap-2 bg-background/50 backdrop-blur"
-                >
-                  Join the Archive <ChevronRight size={20} />
-                </a>
-              </div>
-              
-              <ShareButton title="The Network is Waking — Enter the Shotgun Ninjas Command Hub." />
-            </div>
-
-            <div className="hidden md:block w-64 lg:w-72 flex-shrink-0">
-              <div className="relative">
-                <div className="absolute -inset-4 bg-gradient-to-b from-primary/20 via-transparent to-secondary/20 blur-2xl" />
-                <img
-                  src={asset("images/kage-9-operator.png")}
-                  alt="Kage-9"
-                  width="288"
-                  height="384"
-                  decoding="async"
-                  className="relative w-full aspect-[3/4] object-cover object-top drop-shadow-[0_0_20px_rgba(220,38,38,0.4)]"
-                />
-                <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-background to-transparent" />
-              </div>
-            </div>
+      <section className="village-hero">
+        <img
+          className="village-hero-art"
+          src={brandAsset("village-key-art.webp")}
+          alt=""
+          aria-hidden="true"
+          fetchPriority="high"
+          width="1536"
+          height="1024"
+          decoding="async"
+        />
+        <div className="village-hero-copy">
+          <p className="eyebrow">Shotgun Ninjas / The original universe</p>
+          <h1>
+            THE SIGNAL
+            <br />
+            <span>SURVIVES.</span>
+          </h1>
+          <p className="hero-deck">
+            A broken network.
+            <br />A village that refuses to disappear.
+          </p>
+          <p className="hero-story">
+            Follow Kage-9 through the noise. Recover the transmissions. Find
+            your place among the operators.
+          </p>
+          <div className="hero-actions">
+            <a
+              href={continueTx ? continueTx.href : transmissions[0].href}
+              onClick={() => continueTx && markWatched(continueTx.num)}
+              className="brand-button"
+            >
+              <PlayCircle size={18} />{" "}
+              {continueTx
+                ? `Continue transmission ${continueTx.num}`
+                : "Watch transmission 01"}
+            </a>
+            <Link href="/merch" className="brand-button brand-button--outline">
+              Explore Ronin Supply <ArrowUpRight size={18} />
+            </Link>
           </div>
+          <Link href="/codex" className="hero-codex-link">
+            Enter the village codex <ArrowRight size={16} />
+          </Link>
         </div>
+        <div className="hero-coordinate">
+          <span>KAGE-9 / SIGNAL HUNTER</span>
+          <span>THE VILLAGE / FIELD RECORD 001</span>
+        </div>
+      </section>
+      <section className="home-pathways" aria-label="Explore the village">
+        <Link href="/archive">
+          <span>01 / Watch</span>
+          <h2>The transmissions</h2>
+          <p>Recover the story, one operation at a time.</p>
+          <ArrowUpRight size={20} />
+        </Link>
+        <Link href="/codex">
+          <span>02 / Explore</span>
+          <h2>The world & its marks</h2>
+          <p>Four archetypes. One shared signal.</p>
+          <ArrowUpRight size={20} />
+        </Link>
+        <Link href="/merch">
+          <span>03 / Wear</span>
+          <h2>Ronin Supply</h2>
+          <p>Original operator studies and village gear.</p>
+          <ArrowUpRight size={20} />
+        </Link>
       </section>
 
       {/* ── TRILOGY: RECOVERED TRANSMISSIONS ── */}
       <section className="container mx-auto px-4 py-16 md:py-20 max-w-6xl">
         <motion.div {...fadeUp}>
           <div className="mb-10">
-            <h2 className="text-4xl md:text-5xl font-display text-white uppercase tracking-widest mb-2 glitch-text" data-text="RECOVERED TRANSMISSIONS">
+            <h2
+              className="text-4xl md:text-5xl font-display text-white uppercase tracking-widest mb-2 glitch-text"
+              data-text="RECOVERED TRANSMISSIONS"
+            >
               RECOVERED TRANSMISSIONS
             </h2>
             <p className="text-muted-foreground font-mono text-sm border-l-2 border-primary pl-4 max-w-lg">
@@ -297,63 +348,67 @@ export default function Home() {
           {transmissions.map((tx, i) => {
             const isWatched = watched.includes(tx.num);
             return (
-            <motion.a
-              key={tx.num}
-              href={tx.href}
-              onClick={() => markWatched(tx.num)}
-              className={`group tactical-border bg-card overflow-hidden flex flex-col md:flex-row transition-all hover:border-primary block ${isWatched ? 'border-primary/30' : ''}`}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.1 }}
-            >
-              <div className="w-full md:w-2/5 aspect-video relative overflow-hidden">
-                <img
-                  src={asset(tx.img)}
-                  alt={tx.title}
-                  loading="lazy"
-                  decoding="async"
-                  width="640"
-                  height="360"
-                  className={`w-full h-full object-cover filter brightness-75 contrast-125 group-hover:scale-105 transition-transform duration-700 ${isWatched ? 'grayscale opacity-80' : ''}`}
-                />
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent to-background/60" />
-                <div className="absolute top-3 left-3 px-2 py-1 bg-background/80 backdrop-blur border border-primary/40 font-mono text-[10px] text-primary uppercase tracking-widest">
-                  Transmission {tx.num}
-                </div>
-                {isWatched && (
-                  <div className="absolute top-3 right-3 px-2 py-1 bg-primary/20 backdrop-blur border border-primary/40 font-mono text-[10px] text-white uppercase tracking-widest flex items-center gap-1.5">
-                    <Radio size={10} /> Signal Received / Watched
+              <motion.a
+                key={tx.num}
+                href={tx.href}
+                onClick={() => markWatched(tx.num)}
+                className={`group tactical-border bg-card overflow-hidden flex flex-col md:flex-row transition-all hover:border-primary block ${isWatched ? "border-primary/30" : ""}`}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.1 }}
+              >
+                <div className="w-full md:w-2/5 aspect-video relative overflow-hidden">
+                  <img
+                    src={asset(tx.img)}
+                    alt={tx.title}
+                    loading="lazy"
+                    decoding="async"
+                    width="640"
+                    height="360"
+                    className={`w-full h-full object-cover filter brightness-75 contrast-125 group-hover:scale-105 transition-transform duration-700 ${isWatched ? "grayscale opacity-80" : ""}`}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-background/60" />
+                  <div className="absolute top-3 left-3 px-2 py-1 bg-background/80 backdrop-blur border border-primary/40 font-mono text-[10px] text-primary uppercase tracking-widest">
+                    Transmission {tx.num}
                   </div>
-                )}
-              </div>
-
-              <div className="w-full md:w-3/5 p-6 md:p-8 flex flex-col justify-center">
-                <h3 className="text-3xl md:text-4xl font-display text-white uppercase tracking-widest mb-3 group-hover:text-primary transition-colors">
-                  {tx.title}
-                </h3>
-                <p className="text-muted-foreground font-mono text-sm leading-relaxed mb-3 max-w-xl">
-                  {tx.brief}
-                </p>
-                <div className="border-l-2 border-border pl-3 mb-4">
-                  <p className="font-mono text-sm italic text-white/70">"{tx.quote}"</p>
-                </div>
-                <div className="flex flex-wrap items-center gap-4 mb-4">
-                  <span className="text-xs font-mono uppercase tracking-widest text-secondary bg-secondary/10 px-2 py-1 border border-secondary/20">
-                    {tx.system}
-                  </span>
-                  {tx.next && (
-                    <span className="text-xs font-mono text-muted-foreground">
-                      {tx.next}
-                    </span>
+                  {isWatched && (
+                    <div className="absolute top-3 right-3 px-2 py-1 bg-primary/20 backdrop-blur border border-primary/40 font-mono text-[10px] text-white uppercase tracking-widest flex items-center gap-1.5">
+                      <Radio size={10} /> Signal Received / Watched
+                    </div>
                   )}
                 </div>
-                <div className="clip-diagonal bg-primary/20 border border-primary/40 text-primary px-4 py-2 font-display text-sm uppercase tracking-widest inline-flex items-center gap-2 self-start group-hover:bg-primary group-hover:text-white transition-all">
-                  <PlayCircle size={16} /> {isWatched ? "Rewatch Transmission" : "Watch Transmission"}
+
+                <div className="w-full md:w-3/5 p-6 md:p-8 flex flex-col justify-center">
+                  <h3 className="text-3xl md:text-4xl font-display text-white uppercase tracking-widest mb-3 group-hover:text-primary transition-colors">
+                    {tx.title}
+                  </h3>
+                  <p className="text-muted-foreground font-mono text-sm leading-relaxed mb-3 max-w-xl">
+                    {tx.brief}
+                  </p>
+                  <div className="border-l-2 border-border pl-3 mb-4">
+                    <p className="font-mono text-sm italic text-white/70">
+                      "{tx.quote}"
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-4 mb-4">
+                    <span className="text-xs font-mono uppercase tracking-widest text-secondary bg-secondary/10 px-2 py-1 border border-secondary/20">
+                      {tx.system}
+                    </span>
+                    {tx.next && (
+                      <span className="text-xs font-mono text-muted-foreground">
+                        {tx.next}
+                      </span>
+                    )}
+                  </div>
+                  <div className="clip-diagonal bg-primary/20 border border-primary/40 text-primary px-4 py-2 font-display text-sm uppercase tracking-widest inline-flex items-center gap-2 self-start group-hover:bg-primary group-hover:text-white transition-all">
+                    <PlayCircle size={16} />{" "}
+                    {isWatched ? "Rewatch Transmission" : "Watch Transmission"}
+                  </div>
                 </div>
-              </div>
-            </motion.a>
-          )})}
+              </motion.a>
+            );
+          })}
         </div>
 
         <OperatorRecord className="mt-8" />
@@ -367,7 +422,7 @@ export default function Home() {
               <div className="w-48 md:w-56 flex-shrink-0">
                 <div className="tactical-border bg-card p-1 relative overflow-hidden">
                   <img
-                    src={asset("images/kage-9-operator.png")}
+                    src={asset("images/kage-9-operator.webp")}
                     alt="Kage-9"
                     loading="lazy"
                     decoding="async"
@@ -380,7 +435,9 @@ export default function Home() {
               </div>
 
               <div className="flex-1 text-center md:text-left">
-                <div className="text-xs font-mono text-primary uppercase tracking-widest mb-2">Operator Dossier</div>
+                <div className="text-xs font-mono text-primary uppercase tracking-widest mb-2">
+                  Operator Dossier
+                </div>
                 <h2 className="text-4xl md:text-5xl font-display text-white uppercase tracking-widest mb-1">
                   Kage-9
                 </h2>
@@ -388,7 +445,11 @@ export default function Home() {
                   Hayaku Kageru
                 </p>
                 <p className="text-muted-foreground font-mono text-sm leading-relaxed mb-6 max-w-2xl">
-                  Systems warrior. Precision builder. Covert guardian. He emerged from the collapse of a network that protected creative and technical knowledge. Survived because he learned how systems fail. Now recovers and reforges them — one mission at a time.
+                  Systems warrior. Precision builder. Covert guardian. He
+                  emerged from the collapse of a network that protected creative
+                  and technical knowledge. Survived because he learned how
+                  systems fail. Now recovers and reforges them — one mission at
+                  a time.
                 </p>
                 <div className="bg-muted/50 border-l-2 border-secondary p-4 font-mono text-sm italic text-white/80 mb-6 max-w-lg">
                   "Noise spreads fastest where no one checks the signal."
@@ -397,7 +458,8 @@ export default function Home() {
                   href="/operators"
                   className="clip-diagonal border border-primary/50 hover:bg-primary/10 text-primary px-6 py-2 font-display text-lg uppercase tracking-widest transition-all inline-flex items-center gap-2"
                 >
-                  <UserSquare size={18} /> View Operator Dossier <ChevronRight size={18} />
+                  <UserSquare size={18} /> View Operator Dossier{" "}
+                  <ChevronRight size={18} />
                 </Link>
               </div>
             </div>
@@ -413,7 +475,8 @@ export default function Home() {
               RECOVERED SYSTEMS
             </h2>
             <p className="text-muted-foreground font-mono text-sm border-l-2 border-primary pl-4 max-w-lg">
-              Command platforms pulled from the field. Each one recovered during a mission. Each one operational.
+              Command platforms pulled from the field. Each one recovered during
+              a mission. Each one operational.
             </p>
           </div>
         </motion.div>
@@ -461,14 +524,18 @@ export default function Home() {
                 href="/alignment"
                 className="inline-flex items-center gap-2 border border-blue-400/30 bg-blue-400/10 text-blue-400 hover:bg-blue-400 hover:text-white px-4 py-1.5 font-mono text-xs uppercase tracking-widest transition-all"
               >
-                <Activity size={14} className="animate-pulse" /> Take the Operator Alignment Quiz
+                <Activity size={14} className="animate-pulse" /> Take the
+                Operator Alignment Quiz
               </Link>
             </div>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <motion.div {...fadeUp}>
-              <Link href="/archive" className="tactical-border bg-card p-5 group hover:border-primary transition-all block h-full">
+              <Link
+                href="/archive"
+                className="tactical-border bg-card p-5 group hover:border-primary transition-all block h-full"
+              >
                 <div className="p-2.5 border border-primary/30 bg-background inline-block mb-3">
                   <Database size={20} className="text-primary" />
                 </div>
@@ -476,7 +543,8 @@ export default function Home() {
                   Mission Archive
                 </h3>
                 <p className="text-muted-foreground font-mono text-xs leading-relaxed mb-3">
-                  Three recovered transmissions. The full trilogy — from signal breach to system recovery.
+                  Three recovered transmissions. The full trilogy — from signal
+                  breach to system recovery.
                 </p>
                 <span className="clip-diagonal bg-primary/20 border border-primary/40 text-primary px-3 py-1 font-display text-sm uppercase tracking-widest inline-flex items-center gap-1.5 group-hover:bg-primary group-hover:text-white transition-all">
                   Watch Now <ChevronRight size={12} />
@@ -485,7 +553,10 @@ export default function Home() {
             </motion.div>
 
             <motion.div {...fadeUp}>
-              <Link href="/community" className="tactical-border bg-card p-5 group hover:border-secondary transition-all block h-full">
+              <Link
+                href="/community"
+                className="tactical-border bg-card p-5 group hover:border-secondary transition-all block h-full"
+              >
                 <div className="p-2.5 border border-secondary/30 bg-background inline-block mb-3">
                   <Users size={20} className="text-secondary" />
                 </div>
@@ -493,7 +564,8 @@ export default function Home() {
                   The Village
                 </h3>
                 <p className="text-muted-foreground font-mono text-xs leading-relaxed mb-3">
-                  Discuss lore, share builds, and shape the future of the Shotgun Ninjas network.
+                  Discuss lore, share builds, and shape the future of the
+                  Shotgun Ninjas network.
                 </p>
                 <span className="clip-diagonal bg-secondary/20 border border-secondary/40 text-secondary px-3 py-1 font-display text-sm uppercase tracking-widest inline-flex items-center gap-1.5 group-hover:bg-secondary group-hover:text-white transition-all">
                   Enter Community <ChevronRight size={12} />
@@ -502,7 +574,10 @@ export default function Home() {
             </motion.div>
 
             <motion.div {...fadeUp}>
-              <Link href="/merch" className="tactical-border bg-card p-5 group hover:border-orange-500 transition-all block h-full">
+              <Link
+                href="/merch"
+                className="tactical-border bg-card p-5 group hover:border-orange-500 transition-all block h-full"
+              >
                 <div className="p-2.5 border border-orange-500/30 bg-background inline-block mb-3">
                   <ShoppingBag size={20} className="text-orange-500" />
                 </div>
@@ -510,7 +585,8 @@ export default function Home() {
                   Merch
                 </h3>
                 <p className="text-muted-foreground font-mono text-xs leading-relaxed mb-3">
-                  Operator-grade gear. The Ronin Supply line. Every purchase directly funds the next transmission.
+                  Operator-grade gear. The Ronin Supply line. Every purchase
+                  directly funds the next transmission.
                 </p>
                 <span className="clip-diagonal bg-orange-500/20 border border-orange-500/40 text-orange-500 px-3 py-1 font-display text-sm uppercase tracking-widest inline-flex items-center gap-1.5 group-hover:bg-orange-500 group-hover:text-white transition-all">
                   Browse Merch <ChevronRight size={12} />
@@ -529,12 +605,17 @@ export default function Home() {
               <Mail size={14} /> Classified Channel
             </div>
 
-            <h2 className="text-4xl md:text-5xl font-display text-white uppercase tracking-widest mb-4 glitch-text" data-text="JOIN THE ARCHIVE">
+            <h2
+              className="text-4xl md:text-5xl font-display text-white uppercase tracking-widest mb-4 glitch-text"
+              data-text="JOIN THE ARCHIVE"
+            >
               JOIN THE ARCHIVE
             </h2>
 
             <p className="text-muted-foreground font-mono text-sm leading-relaxed max-w-xl mx-auto mb-8">
-              New transmissions incoming. Recovered systems deploying. Enter your signal address for mission briefings, early access, and classified drops before they reach the public feed.
+              New transmissions incoming. Recovered systems deploying. Enter
+              your signal address for mission briefings, early access, and
+              classified drops before they reach the public feed.
             </p>
 
             <SignalForm />
@@ -560,12 +641,18 @@ export default function Home() {
                 <Globe size={14} /> Network Hub
               </div>
 
-              <h2 className="text-4xl md:text-5xl font-display text-white uppercase tracking-widest mb-4 glitch-text" data-text="THE SHOTGUN NINJAS UNIVERSE">
+              <h2
+                className="text-4xl md:text-5xl font-display text-white uppercase tracking-widest mb-4 glitch-text"
+                data-text="THE SHOTGUN NINJAS UNIVERSE"
+              >
                 THE SHOTGUN NINJAS UNIVERSE
               </h2>
 
               <p className="text-muted-foreground font-mono text-sm leading-relaxed max-w-2xl mx-auto mb-8">
-                This command hub is one node in a larger network. The full Shotgun Ninjas universe — expanded lore, future transmissions, operator briefings, and platform access — lives at the main site. Everything connects back to one signal.
+                This command hub is one node in a larger network. The full
+                Shotgun Ninjas universe — expanded lore, future transmissions,
+                operator briefings, and platform access — lives at the main
+                site. Everything connects back to one signal.
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
@@ -575,7 +662,8 @@ export default function Home() {
                   rel="noopener noreferrer"
                   className="clip-diagonal bg-primary hover:bg-primary/90 text-white px-8 py-3 font-display text-lg uppercase tracking-widest transition-all inline-flex items-center gap-2"
                 >
-                  <Globe size={20} /> Enter ShotgunNinjas.com <ArrowUpRight size={18} />
+                  <Globe size={20} /> Enter ShotgunNinjas.com{" "}
+                  <ArrowUpRight size={18} />
                 </a>
                 <a
                   href="https://www.operatoros.net"
@@ -583,7 +671,8 @@ export default function Home() {
                   rel="noopener noreferrer"
                   className="clip-diagonal bg-secondary hover:bg-secondary/90 text-white px-8 py-3 font-display text-lg uppercase tracking-widest transition-all inline-flex items-center gap-2"
                 >
-                  <Code size={20} /> Access OperatorOS <ArrowUpRight size={18} />
+                  <Code size={20} /> Access OperatorOS{" "}
+                  <ArrowUpRight size={18} />
                 </a>
               </div>
 
@@ -599,7 +688,9 @@ export default function Home() {
                     <span className="block font-display text-sm text-white uppercase tracking-widest transition-colors group-hover:text-primary">
                       {p.name}
                     </span>
-                    <span className="block font-mono text-[10px] text-muted-foreground mt-1">{p.urlLabel}</span>
+                    <span className="block font-mono text-[10px] text-muted-foreground mt-1">
+                      {p.urlLabel}
+                    </span>
                   </a>
                 ))}
               </div>
@@ -608,7 +699,17 @@ export default function Home() {
         </div>
       </section>
 
-      <NextWaypoint waypoints={[{ href: "/shotgun-ninjas-ep1/", title: "Transmission 01", desc: "Watch the first episode now.", cta: "Watch", isExternal: true }]} />
+      <NextWaypoint
+        waypoints={[
+          {
+            href: "/shotgun-ninjas-ep1/",
+            title: "Transmission 01",
+            desc: "Watch the first episode now.",
+            cta: "Watch",
+            isExternal: true,
+          },
+        ]}
+      />
       <UniverseFooter LinkComponent={Link} />
     </div>
   );

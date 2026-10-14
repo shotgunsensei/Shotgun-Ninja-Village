@@ -9,6 +9,7 @@ const basePath = process.env.BASE_PATH || "/";
 
 export default defineConfig({
   base: basePath,
+  cacheDir: ".cache/vite",
   plugins: [
     react(),
     tailwindcss(),

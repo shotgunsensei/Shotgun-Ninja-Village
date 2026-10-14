@@ -1,0 +1,111 @@
+{
+  "date": "2026-10-14",
+  "assets": [
+    {
+      "handle": "signal-hunter-tee",
+      "source": "docs/design/raster-source/signal-hunter-tee.png",
+      "web": "artifacts/shotgun-ninja-village/public/brand/merch/signal-hunter-tee.webp",
+      "width": 1254,
+      "height": 1254,
+      "sourceBytes": 2094013,
+      "sha256": "35c36b5dca2a4c9ef7a611f3fcbcf9050b24007a1e320574dc455314b3e78240",
+      "classification": "AI-generated original design concept; not a final product photo or print file",
+      "generator": "Built-in image_gen",
+      "dpiStatus": "No print readiness established"
+    },
+    {
+      "handle": "kage-9-operator-hoodie",
+      "source": "docs/design/raster-source/kage-9-operator-hoodie.png",
+      "web": "artifacts/shotgun-ninja-village/public/brand/merch/kage-9-operator-hoodie.webp",
+      "width": 1254,
+      "height": 1254,
+      "sourceBytes": 2365172,
+      "sha256": "8c8753ee36168db8cce4a0038a51cdee82410f89947fd7f50c25d718e0ed7a73",
+      "classification": "AI-generated original design concept; not a final product photo or print file",
+      "generator": "Built-in image_gen",
+      "dpiStatus": "No print readiness established"
+    },
+    {
+      "handle": "fracture-scan-drop-tee",
+      "source": "docs/design/raster-source/fracture-scan-drop-tee.png",
+      "web": "artifacts/shotgun-ninja-village/public/brand/merch/fracture-scan-drop-tee.webp",
+      "width": 1254,
+      "height": 1254,
+      "sourceBytes": 2394191,
+      "sha256": "6bcb7fadca0828ee9a793ac33b57f5bf831d16ebf7c8d2fa29c362ef8312901f",
+      "classification": "AI-generated original design concept; not a final product photo or print file",
+      "generator": "Built-in image_gen",
+      "dpiStatus": "No print readiness established"
+    },
+    {
+      "handle": "village-signal-cap",
+      "source": "docs/design/raster-source/village-signal-cap.png",
+      "web": "artifacts/shotgun-ninja-village/public/brand/merch/village-signal-cap.webp",
+      "width": 1254,
+      "height": 1254,
+      "sourceBytes": 2597138,
+      "sha256": "32f3ce5aafffc79f12afe721b14f727240f4724670cec5ebc86f16926cf59133",
+      "classification": "AI-generated original design concept; not a final product photo or print file",
+      "generator": "Built-in image_gen",
+      "dpiStatus": "No print readiness established"
+    },
+    {
+      "handle": "tactical-sticker-pack",
+      "source": "docs/design/raster-source/tactical-sticker-pack.png",
+      "web": "artifacts/shotgun-ninja-village/public/brand/merch/tactical-sticker-pack.webp",
+      "width": 1254,
+      "height": 1254,
+      "sourceBytes": 2122051,
+      "sha256": "40a729ce629a1661fb8e34a6a5c19582535d8aa2f8a8de7249a8babf8ead8696",
+      "classification": "AI-generated original design concept; not a final product photo or print file",
+      "generator": "Built-in image_gen",
+      "dpiStatus": "No print readiness established"
+    },
+    {
+      "handle": "founding-ninja-tee",
+      "source": "docs/design/raster-source/founding-ninja-tee.png",
+      "web": "artifacts/shotgun-ninja-village/public/brand/merch/founding-ninja-tee.webp",
+      "width": 1254,
+      "height": 1254,
+      "sourceBytes": 2231106,
+      "sha256": "bb1827e2fafbf0f8c127078113b66df02d4f5a79d482e649884f8555887b55c5",
+      "classification": "AI-generated original design concept; not a final product photo or print file",
+      "generator": "Built-in image_gen",
+      "dpiStatus": "No print readiness established"
+    },
+    {
+      "handle": "forge-protocol-long-sleeve",
+      "source": "docs/design/raster-source/forge-protocol-long-sleeve.png",
+      "web": "artifacts/shotgun-ninja-village/public/brand/merch/forge-protocol-long-sleeve.webp",
+      "width": 1254,
+      "height": 1254,
+      "sourceBytes": 2067697,
+      "sha256": "ce847d17aedc1060b33c6a4dbd9f3ea3e67a0e561091b5063dab7205a810a82c",
+      "classification": "AI-generated original design concept; not a final product photo or print file",
+      "generator": "Built-in image_gen",
+      "dpiStatus": "No print readiness established"
+    },
+    {
+      "handle": "noise-sector-poster",
+      "source": "docs/design/raster-source/noise-sector-poster.png",
+      "web": "artifacts/shotgun-ninja-village/public/brand/merch/noise-sector-poster.webp",
+      "width": 1254,
+      "height": 1254,
+      "sourceBytes": 2495628,
+      "sha256": "5fa3121af35c911401956cdbe27df7633fe76a205f7eca2fedf907128f6c0d8a",
+      "classification": "AI-generated original design concept; not a final product photo or print file",
+      "generator": "Built-in image_gen",
+      "dpiStatus": "No print readiness established"
+    },
+    {
+      "name": "village-key-art",
+      "source": "docs/design/raster-source/village-key-art-v2.png",
+      "web": "artifacts/shotgun-ninja-village/public/brand/village-key-art.webp",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "649ed54f826e15a2b432b056abad1387c651958c6ce0bdea538c53a1b12fae6d",
+      "generator": "Built-in image_gen; revised with canonical Kage-9 reference",
+      "classification": "Original atmospheric web concept; not a rigged character or print master"
+    }
+  ]
+}
