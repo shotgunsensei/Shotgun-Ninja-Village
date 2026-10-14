@@ -12,6 +12,7 @@ import {
 import { UniverseFooter } from "@workspace/sn-ecosystem";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { NextWaypoint } from "@/components/shared/NextWaypoint";
+import { isLiveStore } from "@/config/integrations";
 
 type SectionKey = "terms" | "privacy" | "refunds" | "contact";
 
@@ -175,12 +176,16 @@ function TermsBody() {
         for harassment, spam, or violations of community guidelines.
       </p>
       <H>3. Purchases</H>
-      <p>
-        Merchandise is fulfilled through our partner storefront. Pricing,
-        availability, and shipping are governed by that provider and our Refunds
-        policy. Limited drops are made-to-order and may be non-refundable once
-        production begins.
-      </p>
+      {isLiveStore() ? (
+        <p>
+          Merchandise is fulfilled through our partner storefront. Pricing,
+          availability, and shipping are governed by that provider and our
+          Refunds policy. Limited drops are made-to-order and may be
+          non-refundable once production begins.
+        </p>
+      ) : (
+        <PreviewStoreNotice />
+      )}
       <H>4. Intellectual Property</H>
       <p>
         All characters, transmissions, artwork, music, and brand assets
@@ -292,7 +297,26 @@ function PrivacyBody() {
   );
 }
 
+function PreviewStoreNotice() {
+  return (
+    <>
+      <H>Merch is not open for orders</H>
+      <p>
+        Ronin Supply is currently a concept catalog and is not accepting orders.
+        Garment images and artwork are design previews. Final products,
+        fulfillment, shipping, and returns information will be confirmed before
+        ordering opens.
+      </p>
+      <p>
+        For an existing purchase from another Shotgun Ninjas storefront, use the
+        support details on your order receipt.
+      </p>
+    </>
+  );
+}
+
 function RefundsBody() {
+  if (!isLiveStore()) return <PreviewStoreNotice />;
   return (
     <>
       <H>Made-to-Order Items</H>

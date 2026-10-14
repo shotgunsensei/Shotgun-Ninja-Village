@@ -1,50 +1,101 @@
+import { brandAsset } from "@/data/brand";
 import React, { useState } from "react";
 import { saveQuizResult, getQuizResult } from "@/lib/operatorRecord";
 import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
-import { Target, Activity, ShieldAlert, Cpu, ArrowRight, Share2, ShoppingBag, Users, Globe } from "lucide-react";
+import {
+  Target,
+  Activity,
+  ShieldAlert,
+  Cpu,
+  ArrowRight,
+  Share2,
+  ShoppingBag,
+  Users,
+  Globe,
+} from "lucide-react";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { UniverseFooter } from "@workspace/sn-ecosystem";
 import { ShareButton } from "@/components/shared/ShareButton";
-import { EMPTY_SCORES, applyOptionScores, computeTopArchetype, type Archetype } from "@/lib/quizScoring";
+import {
+  EMPTY_SCORES,
+  applyOptionScores,
+  computeTopArchetype,
+  type Archetype,
+} from "@/lib/quizScoring";
 
 const QUESTIONS: {
   id: number;
   text: string;
   options: {
     text: string;
-    score: Partial<Record<"builder" | "protector" | "tracer" | "breaker", number>>;
+    score: Partial<
+      Record<"builder" | "protector" | "tracer" | "breaker", number>
+    >;
   }[];
 }[] = [
   {
     id: 1,
     text: "When a critical system fails in the field, what is your immediate protocol?",
     options: [
-      { text: "Analyze the failure points and map the decay.", score: { builder: 2, tracer: 1 } },
-      { text: "Lock down the perimeter. Nothing else gets in.", score: { protector: 2, breaker: 0 } },
-      { text: "Exploit the breach before the system recovers.", score: { breaker: 2, tracer: 1 } },
-      { text: "Salvage the core components and rebuild instantly.", score: { builder: 2, protector: 1 } },
-    ]
+      {
+        text: "Analyze the failure points and map the decay.",
+        score: { builder: 2, tracer: 1 },
+      },
+      {
+        text: "Lock down the perimeter. Nothing else gets in.",
+        score: { protector: 2, breaker: 0 },
+      },
+      {
+        text: "Exploit the breach before the system recovers.",
+        score: { breaker: 2, tracer: 1 },
+      },
+      {
+        text: "Salvage the core components and rebuild instantly.",
+        score: { builder: 2, protector: 1 },
+      },
+    ],
   },
   {
     id: 2,
     text: "Select your preferred tactical loadout for a blind drop.",
     options: [
-      { text: "High-yield ordnance. Make an impact.", score: { protector: 2, breaker: 1 } },
-      { text: "Precision energy blade. Clean cuts.", score: { builder: 1, tracer: 2 } },
-      { text: "Stealth lattice and signal jammers.", score: { breaker: 2, tracer: 1 } },
-      { text: "A blank slate. Improvise with what's there.", score: { builder: 2, protector: 0 } },
-    ]
+      {
+        text: "High-yield ordnance. Make an impact.",
+        score: { protector: 2, breaker: 1 },
+      },
+      {
+        text: "Precision energy blade. Clean cuts.",
+        score: { builder: 1, tracer: 2 },
+      },
+      {
+        text: "Stealth lattice and signal jammers.",
+        score: { breaker: 2, tracer: 1 },
+      },
+      {
+        text: "A blank slate. Improvise with what's there.",
+        score: { builder: 2, protector: 0 },
+      },
+    ],
   },
   {
     id: 3,
     text: "You intercept a heavily corrupted signal packet. Your move?",
     options: [
       { text: "Trace it back to the origin point.", score: { tracer: 3 } },
-      { text: "Purge it from the network completely.", score: { protector: 2, builder: 1 } },
-      { text: "Reverse-engineer the corruption.", score: { breaker: 2, builder: 1 } },
-      { text: "Store it in the archive for later study.", score: { builder: 2, tracer: 1 } },
-    ]
+      {
+        text: "Purge it from the network completely.",
+        score: { protector: 2, builder: 1 },
+      },
+      {
+        text: "Reverse-engineer the corruption.",
+        score: { breaker: 2, builder: 1 },
+      },
+      {
+        text: "Store it in the archive for later study.",
+        score: { builder: 2, tracer: 1 },
+      },
+    ],
   },
   {
     id: 4,
@@ -54,18 +105,27 @@ const QUESTIONS: {
       { text: "Verified truth.", score: { builder: 2, protector: 1 } },
       { text: "System dominance.", score: { breaker: 3 } },
       { text: "Structural integrity.", score: { protector: 3 } },
-    ]
+    ],
   },
   {
     id: 5,
     text: "How do you respond to counterfeit operators in your sector?",
     options: [
-      { text: "Expose their flaws to the network.", score: { tracer: 2, builder: 1 } },
-      { text: "Overwhelm them with authentic force.", score: { protector: 2, breaker: 1 } },
-      { text: "Hijack their frequency and lock them out.", score: { breaker: 2, tracer: 1 } },
+      {
+        text: "Expose their flaws to the network.",
+        score: { tracer: 2, builder: 1 },
+      },
+      {
+        text: "Overwhelm them with authentic force.",
+        score: { protector: 2, breaker: 1 },
+      },
+      {
+        text: "Hijack their frequency and lock them out.",
+        score: { breaker: 2, tracer: 1 },
+      },
       { text: "Ignore them. Build something better.", score: { builder: 3 } },
-    ]
-  }
+    ],
+  },
 ];
 
 const ARCHETYPES = {
@@ -75,7 +135,7 @@ const ARCHETYPES = {
     color: "text-blue-400",
     border: "border-blue-400",
     bg: "bg-blue-400/10",
-    desc: "You see the grid as raw material. Where others see noise and collapse, you see architecture waiting to be recovered. Your strength is precision, patience, and the ability to rebuild what the static destroyed."
+    desc: "You see the grid as raw material. Where others see noise and collapse, you see architecture waiting to be recovered. Your strength is precision, patience, and the ability to rebuild what the static destroyed.",
   },
   protector: {
     name: "The Heavy Vanguard",
@@ -83,7 +143,7 @@ const ARCHETYPES = {
     color: "text-red-500",
     border: "border-red-500",
     bg: "bg-red-500/10",
-    desc: "You are the shield wall. You rely on heavy ordnance and structural integrity to hold the line against corruption. When the signal gets chaotic, you are the anchor that keeps the mission from falling apart."
+    desc: "You are the shield wall. You rely on heavy ordnance and structural integrity to hold the line against corruption. When the signal gets chaotic, you are the anchor that keeps the mission from falling apart.",
   },
   tracer: {
     name: "The Signal Hunter",
@@ -91,7 +151,7 @@ const ARCHETYPES = {
     color: "text-green-400",
     border: "border-green-400",
     bg: "bg-green-400/10",
-    desc: "Speed and clarity define you. You move through the noise to find the origin point. You don't waste time on static; you trace the real signal, expose the truth, and cut through the counterfeits with surgical precision."
+    desc: "Speed and clarity define you. You move through the noise to find the origin point. You don't waste time on static; you trace the real signal, expose the truth, and cut through the counterfeits with surgical precision.",
   },
   breaker: {
     name: "The System Breaker",
@@ -99,24 +159,32 @@ const ARCHETYPES = {
     color: "text-orange-500",
     border: "border-orange-500",
     bg: "bg-orange-500/10",
-    desc: "You use the grid's flaws as weapons. You exploit breaches, jam counterfeit signals, and turn the network's corruption against itself. You don't play by the rules of the architecture—you rewrite them."
-  }
+    desc: "You use the grid's flaws as weapons. You exploit breaches, jam counterfeit signals, and turn the network's corruption against itself. You don't play by the rules of the architecture—you rewrite them.",
+  },
 };
 
 export default function Alignment() {
-  usePageMeta({ title: "Operator Alignment", description: "Tactical calibration sequence. Discover your operator archetype." });
-  
+  usePageMeta({
+    title: "Operator Alignment",
+    description:
+      "Tactical calibration sequence. Discover your operator archetype.",
+  });
+
   const [currentStep, setCurrentStep] = useState(0);
   const [scores, setScores] = useState(EMPTY_SCORES);
   // Restore a previously calibrated archetype so returning fans land on their result.
-  const [result, setResult] = useState<Archetype | null>(() => getQuizResult()?.archetype ?? null);
+  const [result, setResult] = useState<Archetype | null>(
+    () => getQuizResult()?.archetype ?? null,
+  );
 
-  const handleOptionSelect = (optionScores: Partial<Record<Archetype, number>>) => {
+  const handleOptionSelect = (
+    optionScores: Partial<Record<Archetype, number>>,
+  ) => {
     const newScores = applyOptionScores(scores, optionScores);
     setScores(newScores);
 
     if (currentStep < QUESTIONS.length - 1) {
-      setCurrentStep(prev => prev + 1);
+      setCurrentStep((prev) => prev + 1);
     } else {
       const topArchetype = computeTopArchetype(newScores);
       saveQuizResult(topArchetype, ARCHETYPES[topArchetype].name);
@@ -133,33 +201,43 @@ export default function Alignment() {
   return (
     <div className="flex flex-col min-h-[100dvh]">
       <div className="flex-1 flex flex-col items-center justify-center container mx-auto px-4 py-12 md:py-20 max-w-3xl">
-        
         {!result ? (
           <div className="w-full">
             <div className="mb-10 text-center">
               <div>
                 <div className="inline-flex items-center gap-2 px-3 py-1 mb-4 border border-secondary/30 bg-secondary/10 text-secondary text-xs font-mono uppercase tracking-widest">
-                  <Activity size={14} className="animate-pulse" /> Calibration Sequence
+                  <Activity size={14} className="animate-pulse" /> Calibration
+                  Sequence
                 </div>
               </div>
-              <h1 className="text-4xl md:text-5xl font-display font-bold text-white uppercase tracking-widest mb-2 glitch-text" data-text="OPERATOR ALIGNMENT">
+              <h1
+                className="text-4xl md:text-5xl font-display font-bold text-white uppercase tracking-widest mb-2 glitch-text"
+                data-text="OPERATOR ALIGNMENT"
+              >
                 OPERATOR ALIGNMENT
               </h1>
               <p className="text-muted-foreground font-mono text-sm max-w-lg mx-auto">
-                Identify your tactical archetype. Which path through the grid do you take?
+                Identify your tactical archetype. Which path through the grid do
+                you take?
               </p>
             </div>
 
             <div className="mb-6 flex justify-between items-center text-xs font-mono text-muted-foreground uppercase tracking-widest">
-              <span>Diagnostic {currentStep + 1} // {QUESTIONS.length}</span>
-              <span>{Math.round(((currentStep) / QUESTIONS.length) * 100)}% Synced</span>
+              <span>
+                Diagnostic {currentStep + 1} // {QUESTIONS.length}
+              </span>
+              <span>
+                {Math.round((currentStep / QUESTIONS.length) * 100)}% Synced
+              </span>
             </div>
-            
+
             <div className="h-1 bg-card border border-border w-full mb-8 relative overflow-hidden">
-              <motion.div 
+              <motion.div
                 className="absolute top-0 left-0 bottom-0 bg-primary"
                 initial={{ width: 0 }}
-                animate={{ width: `${((currentStep) / QUESTIONS.length) * 100}%` }}
+                animate={{
+                  width: `${(currentStep / QUESTIONS.length) * 100}%`,
+                }}
                 transition={{ duration: 0.3 }}
               />
             </div>
@@ -215,59 +293,98 @@ export default function Alignment() {
               </h2>
             </div>
 
-            <div className={`tactical-border bg-card p-8 md:p-12 text-center mb-8 border-t-4 ${ARCHETYPES[result].border} relative overflow-hidden`}>
-              <div className={`absolute inset-0 bg-gradient-to-b ${ARCHETYPES[result].bg} to-transparent opacity-50`} />
+            <div
+              className={`tactical-border bg-card p-8 md:p-12 text-center mb-8 border-t-4 ${ARCHETYPES[result].border} relative overflow-hidden`}
+            >
+              <div
+                className={`absolute inset-0 bg-gradient-to-b ${ARCHETYPES[result].bg} to-transparent opacity-50`}
+              />
               <div className="absolute inset-0 scanlines opacity-20" />
-              
+
               <div className="relative z-10">
-                {React.createElement(ARCHETYPES[result].icon, { 
-                  size: 64, 
-                  className: `mx-auto mb-6 ${ARCHETYPES[result].color} drop-shadow-[0_0_15px_rgba(currentColor,0.5)]`
-                })}
-                <h1 className={`text-5xl md:text-7xl font-display font-bold uppercase tracking-widest mb-4 ${ARCHETYPES[result].color}`}>
+                <img
+                  src={brandAsset(`factions/${result}.svg`)}
+                  alt={`${ARCHETYPES[result].name} emblem`}
+                  width="128"
+                  height="128"
+                  className="mx-auto mb-6"
+                />
+                <h1
+                  className={`text-5xl md:text-7xl font-display font-bold uppercase tracking-widest mb-4 ${ARCHETYPES[result].color}`}
+                >
                   {ARCHETYPES[result].name}
                 </h1>
                 <p className="font-mono text-base md:text-lg text-white/90 leading-relaxed max-w-xl mx-auto mb-8">
                   {ARCHETYPES[result].desc}
                 </p>
 
-                <ShareButton 
-                  title={`I am ${ARCHETYPES[result].name} in the Shotgun Ninjas universe. What's your alignment?`} 
+                <ShareButton
+                  title={`I am ${ARCHETYPES[result].name} in the Shotgun Ninjas universe. What's your alignment?`}
                   className="mx-auto"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-              <Link href="/community" className="border border-border bg-card/40 p-4 hover:border-secondary hover:bg-card transition-all text-center group">
-                <Users size={20} className="mx-auto mb-2 text-secondary group-hover:scale-110 transition-transform" />
-                <span className="block font-display text-lg text-white uppercase tracking-widest mb-1">Join The Village</span>
-                <span className="block font-mono text-[10px] text-muted-foreground">Find other operators</span>
+              <Link
+                href="/community"
+                className="border border-border bg-card/40 p-4 hover:border-secondary hover:bg-card transition-all text-center group"
+              >
+                <Users
+                  size={20}
+                  className="mx-auto mb-2 text-secondary group-hover:scale-110 transition-transform"
+                />
+                <span className="block font-display text-lg text-white uppercase tracking-widest mb-1">
+                  Join The Village
+                </span>
+                <span className="block font-mono text-[10px] text-muted-foreground">
+                  Find other operators
+                </span>
               </Link>
-              <Link href="/merch" className="border border-border bg-card/40 p-4 hover:border-primary hover:bg-card transition-all text-center group">
-                <ShoppingBag size={20} className="mx-auto mb-2 text-primary group-hover:scale-110 transition-transform" />
-                <span className="block font-display text-lg text-white uppercase tracking-widest mb-1">Gear Up</span>
-                <span className="block font-mono text-[10px] text-muted-foreground">Get operator apparel</span>
+              <Link
+                href="/merch"
+                className="border border-border bg-card/40 p-4 hover:border-primary hover:bg-card transition-all text-center group"
+              >
+                <ShoppingBag
+                  size={20}
+                  className="mx-auto mb-2 text-primary group-hover:scale-110 transition-transform"
+                />
+                <span className="block font-display text-lg text-white uppercase tracking-widest mb-1">
+                  Gear Up
+                </span>
+                <span className="block font-mono text-[10px] text-muted-foreground">
+                  Get operator apparel
+                </span>
               </Link>
-              <a href="https://shotgunninjas.com" target="_blank" rel="noopener noreferrer" className="border border-border bg-card/40 p-4 hover:border-blue-400 hover:bg-card transition-all text-center group">
-                <Globe size={20} className="mx-auto mb-2 text-blue-400 group-hover:scale-110 transition-transform" />
-                <span className="block font-display text-lg text-white uppercase tracking-widest mb-1">Main Hub</span>
-                <span className="block font-mono text-[10px] text-muted-foreground">Return to central</span>
+              <a
+                href="https://shotgunninjas.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="border border-border bg-card/40 p-4 hover:border-blue-400 hover:bg-card transition-all text-center group"
+              >
+                <Globe
+                  size={20}
+                  className="mx-auto mb-2 text-blue-400 group-hover:scale-110 transition-transform"
+                />
+                <span className="block font-display text-lg text-white uppercase tracking-widest mb-1">
+                  Main Hub
+                </span>
+                <span className="block font-mono text-[10px] text-muted-foreground">
+                  Return to central
+                </span>
               </a>
             </div>
 
             <div className="text-center">
-              <button 
+              <button
                 onClick={resetQuiz}
                 className="font-mono text-xs text-muted-foreground hover:text-white underline decoration-muted-foreground/30 hover:decoration-white transition-all"
               >
                 Recalibrate (Retake Quiz)
               </button>
             </div>
-
           </motion.div>
         )}
-        
       </div>
       <UniverseFooter LinkComponent={Link} />
     </div>

@@ -7,6 +7,7 @@ import {
   Download,
   FileText,
   Globe,
+  Gamepad2,
   Map,
   Menu,
   MessageSquare,
@@ -21,10 +22,12 @@ import {
 import { useAuth } from "@/auth/AuthContext";
 import { OperatorAvatar } from "@/components/community/OperatorAvatar";
 import { useInstallPrompt } from "@/hooks/useInstallPrompt";
+import { brandAsset } from "@/data/brand";
+import { GameLink } from "@/components/shared/GameLink";
 import { cn } from "@/lib/utils";
 
 const storyLinks = [
-  { href: "/", label: "Signal Feed", sublabel: "Start here", icon: Shield },
+  { href: "/", label: "The Village", sublabel: "Start here", icon: Shield },
   {
     href: "/archive",
     label: "Archive",
@@ -58,6 +61,12 @@ const storyLinks = [
 ];
 
 const villageLinks = [
+  {
+    href: "/codex",
+    label: "Village Codex",
+    sublabel: "Archetypes & insignia",
+    icon: Shield,
+  },
   {
     href: "/community",
     label: "Message Boards",
@@ -146,13 +155,19 @@ function Navigation({
         <Link
           href="/"
           onClick={onNavigate}
-          className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          className="village-wordmark block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
         >
+          <img
+            src={brandAsset("signal-crest.svg")}
+            alt=""
+            width="42"
+            height="42"
+          />
           <span className="block font-display text-2xl font-bold uppercase text-primary">
             Shotgun Ninjas
           </span>
           <span className="mt-0.5 block font-mono text-[9px] uppercase text-muted-foreground">
-            Village Network // Online
+            Original world / Shared signal
           </span>
         </Link>
       </div>
@@ -174,6 +189,13 @@ function Navigation({
           onNavigate={onNavigate}
           className="mt-5 border-t border-border/70 pt-4"
         />
+        <GameLink className="village-game-nav" onClick={onNavigate}>
+          <Gamepad2 size={18} aria-hidden="true" />
+          <span>
+            <span className="game-nav-title">Shotgun Ninjas Game</span>
+            <span className="game-nav-status">Kage-9 / Launch pending</span>
+          </span>
+        </GameLink>
         <div className="mt-5 border-t border-border/70 pt-4">
           <p className="mb-2 px-3 font-mono text-[9px] uppercase text-slate-500">
             Network
@@ -319,7 +341,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           href="/"
           className="font-display text-xl font-bold uppercase text-primary"
         >
-          SN // Village
+          Shotgun Ninjas
         </Link>
         <div className="flex items-center gap-2">
           <Link
@@ -370,7 +392,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </div>
       </header>
 
-      <aside className="sticky top-0 hidden h-[100dvh] w-64 shrink-0 border-r border-border md:block">
+      <aside className="village-sidebar sticky top-0 hidden h-[100dvh] w-64 shrink-0 border-r border-border md:block">
         <Navigation location={location} />
       </aside>
       <main

@@ -1,8 +1,15 @@
-import { products as mockProducts, collections as mockCollections, type Product, type Collection } from "@/data/products";
+import {
+  products as mockProducts,
+  collections as mockCollections,
+  type Product,
+  type Collection,
+} from "@/data/products";
 import { storeConfig, isLiveStore } from "@/config/integrations";
 
-export async function getProducts(collectionHandle?: string): Promise<Product[]> {
-  if (isLiveStore()) {
+export async function getProducts(
+  collectionHandle?: string,
+): Promise<Product[]> {
+  if (storeConfig.mode === "live") {
     return fetchShopifyProducts(collectionHandle);
   }
   if (collectionHandle) {
@@ -12,63 +19,124 @@ export async function getProducts(collectionHandle?: string): Promise<Product[]>
 }
 
 export async function getProduct(handle: string): Promise<Product | null> {
-  if (isLiveStore()) {
+  if (storeConfig.mode === "live") {
     return fetchShopifyProduct(handle);
   }
   return mockProducts.find((p) => p.handle === handle) || null;
 }
 
 export async function getCollections(): Promise<Collection[]> {
-  if (isLiveStore()) {
+  if (storeConfig.mode === "live") {
     return fetchShopifyCollections();
   }
   return mockCollections;
 }
 
 export async function getFeaturedProducts(): Promise<Product[]> {
-  if (isLiveStore()) {
+  if (storeConfig.mode === "live") {
     return fetchShopifyProducts().then((ps) => ps.filter((p) => p.featured));
   }
   return mockProducts.filter((p) => p.featured);
 }
 
 export async function getLimitedDrops(): Promise<Product[]> {
-  if (isLiveStore()) {
+  if (storeConfig.mode === "live") {
     return fetchShopifyProducts().then((ps) => ps.filter((p) => p.limitedDrop));
   }
   return mockProducts.filter((p) => p.limitedDrop);
 }
 
+export type CheckoutLine = { variantId: string; quantity: number };
+
+function checkoutBase(): string | null {
+  if (!isLiveStore()) return null;
+  try {
+    const configured =
+      storeConfig.shopify.checkoutBaseUrl ||
+      `https://${storeConfig.shopify.domain}`;
+    const url = new URL(configured);
+    if (
+      url.protocol !== "https:" ||
+      url.username ||
+      url.password ||
+      url.search ||
+      url.hash
+    )
+      return null;
+    if (!storeConfig.shopify.checkoutBaseUrl && url.pathname !== "/")
+      return null;
+    return url.toString().replace(/\/$/, "");
+  } catch {
+    return null;
+  }
+}
+
+export function getCartCheckoutUrl(lines: CheckoutLine[]): string {
+  const base = checkoutBase();
+  if (!base || !lines.length) return "#store-coming-soon";
+  const normalized = lines.map((line) => {
+    const id = line.variantId.replace(/^gid:\/\/shopify\/ProductVariant\//, "");
+    if (
+      !/^\d+$/.test(id) ||
+      !Number.isInteger(line.quantity) ||
+      line.quantity < 1 ||
+      line.quantity > 99
+    )
+      return null;
+    return `${id}:${line.quantity}`;
+  });
+  return normalized.some((line) => line === null)
+    ? "#store-coming-soon"
+    : `${base}/cart/${normalized.join(",")}`;
+}
+
 export function getCheckoutUrl(variantId: string, quantity = 1): string {
-  if (isLiveStore() && storeConfig.shopify.checkoutBaseUrl) {
-    return `${storeConfig.shopify.checkoutBaseUrl}/cart/${variantId}:${quantity}`;
-  }
-  if (isLiveStore() && storeConfig.shopify.domain) {
-    return `https://${storeConfig.shopify.domain}/cart/${variantId}:${quantity}`;
-  }
-  return "#store-coming-soon";
+  return getCartCheckoutUrl([{ variantId, quantity }]);
 }
 
 export function getProductUrl(handle: string): string {
-  if (isLiveStore() && storeConfig.shopify.domain) {
-    return `https://${storeConfig.shopify.domain}/products/${handle}`;
+  if (!isLiveStore()) return "#store-coming-soon";
+  try {
+    const url = new URL(`https://${storeConfig.shopify.domain}`);
+    if (
+      url.pathname !== "/" ||
+      url.search ||
+      url.hash ||
+      url.username ||
+      url.password
+    )
+      return "#store-coming-soon";
+    return `${url.origin}/products/${encodeURIComponent(handle)}`;
+  } catch {
+    return "#store-coming-soon";
   }
-  return "#store-coming-soon";
 }
 
-export function formatPrice(amount: number): string {
-  return `$${amount.toFixed(2)}`;
+export function formatPrice(amount: number, currencyCode = "USD"): string {
+  return currencyCode === "USD"
+    ? `$${amount.toFixed(2)}`
+    : new Intl.NumberFormat("en", {
+        style: "currency",
+        currency: currencyCode,
+      }).format(amount);
 }
 
 export function isLive(): boolean {
   return isLiveStore();
 }
 
-const STOREFRONT_API_VERSION = "2024-01";
-
-interface ShopifyMoney { amount: string; currencyCode: string }
-interface ShopifySelectedOption { name: string; value: string }
-interface ShopifyImageNode { url: string; altText?: string | null }
+interface ShopifyMoney {
+  amount: string;
+  currencyCode: string;
+}
+interface ShopifySelectedOption {
+  name: string;
+  value: string;
+}
+interface ShopifyImageNode {
+  url: string;
+  altText?: string | null;
+}
 interface ShopifyVariantNode {
   id: string;
   title: string;
@@ -78,7 +146,9 @@ interface ShopifyVariantNode {
   availableForSale?: boolean;
   selectedOptions?: ShopifySelectedOption[];
 }
-interface ShopifyCollectionRef { handle: string }
+interface ShopifyCollectionRef {
+  handle: string;
+}
 interface ShopifyProductNode {
   id: string;
   handle: string;
@@ -96,24 +166,52 @@ interface ShopifyCollectionNode {
   description?: string;
   productsCount?: { count: number };
 }
-interface StorefrontResponse<T> { data?: T; errors?: unknown }
+interface StorefrontResponse<T> {
+  data?: T;
+  errors?: unknown;
+}
 
 function storefrontFetch<T = unknown>(
   query: string,
-  variables: Record<string, unknown> = {}
+  variables: Record<string, unknown> = {},
 ): Promise<StorefrontResponse<T>> {
-  const { domain, storefrontToken } = storeConfig.shopify;
-  return fetch(`https://${domain}/api/${STOREFRONT_API_VERSION}/graphql.json`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Shopify-Storefront-Access-Token": storefrontToken,
-    },
-    body: JSON.stringify({ query, variables }),
-  }).then((r) => r.json());
+  const { domain, storefrontToken, apiVersion } = storeConfig.shopify;
+  if (!isLiveStore())
+    return Promise.reject(new Error("The live catalog is not configured."));
+  try {
+    const url = new URL(`https://${domain}`);
+    if (
+      url.pathname !== "/" ||
+      url.search ||
+      url.hash ||
+      url.username ||
+      url.password
+    )
+      throw new Error("Invalid store domain.");
+    if (!/^\d{4}-(01|04|07|10)$/.test(apiVersion))
+      throw new Error("Invalid Storefront API version.");
+    return fetch(`${url.origin}/api/${apiVersion}/graphql.json`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Storefront-Access-Token": storefrontToken,
+      },
+      body: JSON.stringify({ query, variables }),
+    }).then(async (response) => {
+      if (!response.ok) throw new Error("The store catalog request failed.");
+      const result = (await response.json()) as StorefrontResponse<T>;
+      if (result.errors || !result.data)
+        throw new Error("The store catalog is unavailable.");
+      return result;
+    });
+  } catch (error) {
+    return Promise.reject(error);
+  }
 }
 
-async function fetchShopifyProducts(collectionHandle?: string): Promise<Product[]> {
+async function fetchShopifyProducts(
+  collectionHandle?: string,
+): Promise<Product[]> {
   try {
     const query = collectionHandle
       ? `query ($handle: String!) {
@@ -124,14 +222,17 @@ async function fetchShopifyProducts(collectionHandle?: string): Promise<Product[
       : `query { products(first: 50) { edges { node { ${PRODUCT_FIELDS} } } } }`;
 
     const variables = collectionHandle ? { handle: collectionHandle } : {};
-    type ListResp = { products?: { edges: { node: ShopifyProductNode }[] }; collection?: { products: { edges: { node: ShopifyProductNode }[] } } };
+    type ListResp = {
+      products?: { edges: { node: ShopifyProductNode }[] };
+      collection?: { products: { edges: { node: ShopifyProductNode }[] } };
+    };
     const data = await storefrontFetch<ListResp>(query, variables);
     const edges = collectionHandle
       ? data.data?.collection?.products?.edges
       : data.data?.products?.edges;
     return (edges ?? []).map((e) => mapShopifyProduct(e.node));
-  } catch {
-    return mockProducts;
+  } catch (error) {
+    throw error;
   }
 }
 
@@ -139,20 +240,22 @@ async function fetchShopifyProduct(handle: string): Promise<Product | null> {
   try {
     const data = await storefrontFetch<{ product?: ShopifyProductNode | null }>(
       `query ($handle: String!) { product(handle: $handle) { ${PRODUCT_FIELDS} } }`,
-      { handle }
+      { handle },
     );
     const node = data.data?.product;
     return node ? mapShopifyProduct(node) : null;
-  } catch {
-    return mockProducts.find((p) => p.handle === handle) || null;
+  } catch (error) {
+    throw error;
   }
 }
 
 async function fetchShopifyCollections(): Promise<Collection[]> {
   try {
-    const data = await storefrontFetch<{ collections: { edges: { node: ShopifyCollectionNode }[] } }>(`query {
+    const data = await storefrontFetch<{
+      collections: { edges: { node: ShopifyCollectionNode }[] };
+    }>(`query {
       collections(first: 20) {
-        edges { node { id handle title description productsCount { count } } }
+        edges { node { id handle title description } }
       }
     }`);
     return (data.data?.collections?.edges ?? []).map((e) => ({
@@ -163,8 +266,8 @@ async function fetchShopifyCollections(): Promise<Collection[]> {
       icon: mapCollectionIcon(e.node.handle),
       productCount: e.node.productsCount?.count ?? 0,
     }));
-  } catch {
-    return mockCollections;
+  } catch (error) {
+    throw error;
   }
 }
 
@@ -200,22 +303,33 @@ export function mapShopifyProduct(node: ShopifyProductNode): Product {
       title: e.node.title,
       sku: e.node.sku || "",
       price: parseFloat(e.node.price?.amount ?? "0"),
-      compareAtPrice: e.node.compareAtPrice ? parseFloat(e.node.compareAtPrice.amount) : undefined,
+      currencyCode: e.node.price?.currencyCode || "USD",
+      compareAtPrice: e.node.compareAtPrice
+        ? parseFloat(e.node.compareAtPrice.amount)
+        : undefined,
       available: e.node.availableForSale ?? true,
       options: Object.fromEntries(
-        (e.node.selectedOptions ?? []).map((o) => [o.name.toLowerCase(), o.value])
+        (e.node.selectedOptions ?? []).map((o) => [
+          o.name.toLowerCase(),
+          o.value,
+        ]),
       ),
     })),
     collections,
     tags,
     featured: tags.includes("featured"),
     limitedDrop: tags.includes("limited") || tags.includes("limited-drop"),
-    badge: tags.includes("limited") ? "limited"
-      : tags.includes("bestseller") ? "bestseller"
-      : tags.includes("new") ? "new"
-      : tags.includes("supporters-only") ? "supporters-only"
-      : undefined,
-    madeToOrder: tags.includes("made-to-order") || !tags.includes("ready-to-ship"),
+    badge: tags.includes("limited")
+      ? "limited"
+      : tags.includes("bestseller")
+        ? "bestseller"
+        : tags.includes("new")
+          ? "new"
+          : tags.includes("supporters-only")
+            ? "supporters-only"
+            : undefined,
+    madeToOrder:
+      tags.includes("made-to-order") || !tags.includes("ready-to-ship"),
   };
 }
 

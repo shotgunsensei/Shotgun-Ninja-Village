@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Layout } from "@/components/layout/Layout";
 import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
 
+const Codex = lazy(() => import("@/pages/Codex"));
 const Home = lazy(() => import("@/pages/Home"));
 const Archive = lazy(() => import("@/pages/Archive"));
 const Operators = lazy(() => import("@/pages/Operators"));
@@ -145,6 +146,13 @@ function Router() {
                 {() => (
                   <AnimatedPage>
                     <Account />
+                  </AnimatedPage>
+                )}
+              </Route>
+              <Route path="/codex">
+                {() => (
+                  <AnimatedPage>
+                    <Codex />
                   </AnimatedPage>
                 )}
               </Route>
