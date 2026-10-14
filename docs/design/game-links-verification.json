@@ -1,0 +1,77 @@
+{
+  "date": "2026-10-14",
+  "legalTests": {
+    "total": 4,
+    "passed": 4
+  },
+  "gameTests": {
+    "passed": 3,
+    "total": 3,
+    "failed": 0
+  },
+  "browser": {
+    "checks": [
+      {
+        "viewport": "desktop",
+        "gameImage": {
+          "width": 473.59375,
+          "height": 590,
+          "parentHeight": 590,
+          "naturalWidth": 896,
+          "opacity": "1"
+        }
+      },
+      {
+        "viewport": "desktop",
+        "route": "/",
+        "status": "pass"
+      },
+      {
+        "viewport": "desktop",
+        "route": "/codex",
+        "status": "pass"
+      },
+      {
+        "viewport": "desktop",
+        "route": "/legal/refunds",
+        "status": "pass"
+      },
+      {
+        "viewport": "mobile",
+        "gameImage": {
+          "width": 390,
+          "height": 350,
+          "parentHeight": 350,
+          "naturalWidth": 896,
+          "opacity": "1"
+        }
+      },
+      {
+        "viewport": "mobile",
+        "route": "/",
+        "status": "pass"
+      },
+      {
+        "viewport": "mobile",
+        "route": "/codex",
+        "status": "pass"
+      },
+      {
+        "viewport": "mobile",
+        "route": "/legal/refunds",
+        "status": "pass"
+      },
+      {
+        "viewport": "mobile",
+        "flow": "Mobile game navigation closes drawer and opens separate target",
+        "status": "pass"
+      }
+    ],
+    "violations": [],
+    "errors": []
+  },
+  "liveGameVerified": false,
+  "sharedBrowserUsed": false,
+  "pricesChanged": false,
+  "published": false
+}

@@ -1,6 +1,7 @@
 import { readdirSync, readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { resolve, extname } from "node:path";
 import { createRequire } from "node:module";
+import { execFileSync } from "node:child_process";
 const require = createRequire(import.meta.url);
 const root = resolve(import.meta.dirname, "..");
 const sharp = require(
@@ -20,13 +21,14 @@ function update(directory) {
     const path = resolve(directory, file.name);
     if (file.isDirectory()) update(path);
     else if ([".ts", ".tsx"].includes(extname(path))) {
-      let content = readFileSync(path, "utf8");
+      const original = readFileSync(path, "utf8");
+      let content = original;
       for (const name of names)
         content = content.replaceAll(
           "images/" + name,
           "images/" + name.replace(".png", ".webp"),
         );
-      writeFileSync(path, content);
+      if (content !== original) writeFileSync(path, content);
     }
   }
 }
@@ -35,9 +37,10 @@ await sharp(resolve(root, "docs/design/raster-source/village-key-art-v2.png"))
   .resize(1200, 630, { fit: "cover" })
   .jpeg({ quality: 90 })
   .toFile(resolve(app, "public/brand/village-social.jpg"));
-const preserved = readFileSync(
-  "C:/Dev/Shotgun-Ninja-Village/artifacts/shotgun-ninja-village/src/data/products.ts",
-  "utf8",
+const preserved = execFileSync(
+  "git",
+  ["show", "785788f:artifacts/shotgun-ninja-village/src/data/products.ts"],
+  { cwd: root, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] },
 )
   .split("export const collections:")[1]
   .replaceAll("\r\n", "\n");

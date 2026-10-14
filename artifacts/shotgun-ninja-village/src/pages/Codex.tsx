@@ -3,6 +3,7 @@ import { ArrowUpRight, ArrowRight } from "lucide-react";
 import { UniverseFooter } from "@workspace/sn-ecosystem";
 import { brandAsset, factions } from "@/data/brand";
 import { usePageMeta } from "@/hooks/usePageMeta";
+import { GameLink } from "@/components/shared/GameLink";
 
 export default function Codex() {
   usePageMeta({
@@ -26,6 +27,9 @@ export default function Codex() {
         <Link href="/alignment" className="brand-button">
           Find your alignment <ArrowRight size={18} />
         </Link>
+        <GameLink className="brand-button brand-button--outline codex-game-link">
+          Visit game launch site <ArrowUpRight size={18} aria-hidden="true" />
+        </GameLink>
       </section>
       <section className="faction-grid" aria-label="Operator archetypes">
         {factions.map((faction, i) => (

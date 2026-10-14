@@ -7,6 +7,7 @@ import {
   Download,
   FileText,
   Globe,
+  Gamepad2,
   Map,
   Menu,
   MessageSquare,
@@ -22,6 +23,7 @@ import { useAuth } from "@/auth/AuthContext";
 import { OperatorAvatar } from "@/components/community/OperatorAvatar";
 import { useInstallPrompt } from "@/hooks/useInstallPrompt";
 import { brandAsset } from "@/data/brand";
+import { GameLink } from "@/components/shared/GameLink";
 import { cn } from "@/lib/utils";
 
 const storyLinks = [
@@ -187,6 +189,13 @@ function Navigation({
           onNavigate={onNavigate}
           className="mt-5 border-t border-border/70 pt-4"
         />
+        <GameLink className="village-game-nav" onClick={onNavigate}>
+          <Gamepad2 size={18} aria-hidden="true" />
+          <span>
+            <span className="game-nav-title">Shotgun Ninjas Game</span>
+            <span className="game-nav-status">Kage-9 / Launch pending</span>
+          </span>
+        </GameLink>
         <div className="mt-5 border-t border-border/70 pt-4">
           <p className="mb-2 px-3 font-mono text-[9px] uppercase text-slate-500">
             Network

@@ -1,4 +1,6 @@
 import { brandAsset } from "@/data/brand";
+import { GameLink } from "@/components/shared/GameLink";
+import { GameSection } from "@/components/shared/GameSection";
 import React, { useEffect, useState } from "react";
 import { Link } from "wouter";
 import {
@@ -297,6 +299,9 @@ export default function Home() {
             <Link href="/merch" className="brand-button brand-button--outline">
               Explore Ronin Supply <ArrowUpRight size={18} />
             </Link>
+            <GameLink className="brand-button brand-button--outline">
+              Game launch site <ArrowUpRight size={18} aria-hidden="true" />
+            </GameLink>
           </div>
           <Link href="/codex" className="hero-codex-link">
             Enter the village codex <ArrowRight size={16} />
@@ -329,6 +334,7 @@ export default function Home() {
       </section>
 
       {/* ── TRILOGY: RECOVERED TRANSMISSIONS ── */}
+      <GameSection />
       <section className="container mx-auto px-4 py-16 md:py-20 max-w-6xl">
         <motion.div {...fadeUp}>
           <div className="mb-10">
