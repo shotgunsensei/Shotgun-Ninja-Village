@@ -40,7 +40,9 @@ that source/deployment coupling separately before release.
    `pnpm --filter @workspace/db run migrate` against that confirmed target.
    A source merge or dependency setup is not approval to alter a database. Check
    the resulting schema and readiness before resuming writes or promoting the app.
-3. Run `pnpm run build`; the API artifact builds and serves the Village SPA from the same origin.
+3. Run `pnpm run build`; the API artifact builds and serves the Village SPA and
+   all three episodes from the same origin. The API-only release command
+   `pnpm --filter @workspace/api-server run build` also builds all four frontends.
 4. Smoke test visitor board reads, signup, login, topic creation, reply, edit/remove, public profile, badge sync, logout, and gated-room denial.
 5. Connect the opted-in `signups` list to the approved mailing provider before scheduling transmission campaigns.
 
@@ -60,3 +62,33 @@ pnpm --filter @workspace/api-server operator:access -- --callsign kage-9 --role 
 - Supporter/founder tier changes are not exposed to client APIs.
 - Admin/moderator privileges are never derived from client claims.
 - Missing database or provider configuration produces errors, never fake success.
+
+## Same-origin episode releases
+
+The API release builds Village at `/` and Episodes 1–3 at
+`/shotgun-ninjas-ep1/`, `/shotgun-ninjas-ep2/` and `/shotgun-ninjas-ep3/`.
+The release script explicitly supplies each child build's `BASE_PATH`, including
+when the API environment inherits `BASE_PATH=/`. Keep the sibling frontend
+`dist/public` directories beside the API artifact in the deployed workspace;
+shipping only `api-server/dist` omits the web outputs. The root build still
+produces all six configured entries, including the separate mockup artifact.
+
+Episode directories are mounted before Village's SPA fallback. Bare episode
+URLs redirect to a trailing slash; valid HTML, JS, CSS and public scene assets
+support GET/HEAD. Unknown episode paths and absent episode outputs return 404
+instead of Village HTML, including requests accepting HTML. `/api` JSON errors,
+authentication, session and paid-room policies keep their existing precedence.
+No database migration, Replit router setting or publication is part of this change.
+
+Direct standalone episode commands retain their existing `BASE_PATH` behavior;
+their Vite configuration and base-aware scene-image references are unchanged.
+The integrated API serves Village at the root. Hosting the entire Village under
+another prefix is outside this topology: its transmission links remain root paths.
+
+Before publication, run the canonical build and
+`node scripts/verify-build-outputs.mjs`, then exercise each episode URL, its
+emitted JS/CSS/favicon and every public scene image at the intended API origin.
+Verify missing episode assets return 404, `/archive` still loads Village, and
+`/api` errors stay JSON. Local loopback acceptance with external fonts blocked
+establishes serving and initial rendering; it does not certify live routing,
+external fonts, full playback timing, audio or production visual acceptance.
