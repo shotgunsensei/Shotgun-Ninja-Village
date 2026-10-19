@@ -32,34 +32,62 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const syncedUserId = useRef<string | null>(null);
+  const mounted = useRef(true);
+  const sessionEpoch = useRef(0);
+  const currentUser = useRef<VillageUser | null>(null);
+
+  // Background responses belong to the account lifetime that started them.
+  // Explicit account actions remain authoritative, including a new login to
+  // the same account. A same-account refresh must not cancel a pending import.
+  const commitUser = (next: VillageUser | null, newLifetime = false) => {
+    if (newLifetime || currentUser.current?.id !== next?.id)
+      sessionEpoch.current++;
+    currentUser.current = next;
+    setUser(next);
+  };
+  const isCurrentSession = (epoch: number) =>
+    mounted.current && sessionEpoch.current === epoch;
 
   const refresh = async () => {
+    const epoch = sessionEpoch.current;
     try {
       const result = await accountApi.me();
-      setUser(result.user);
+      if (!isCurrentSession(epoch)) return;
+      commitUser(result.user);
       setError(null);
     } catch (requestError) {
+      if (!isCurrentSession(epoch)) return;
       if (
         requestError &&
         typeof requestError === "object" &&
         "status" in requestError &&
         requestError.status === 401
       ) {
-        setUser(null);
+        commitUser(null, true);
       } else {
         setError("Account status could not be loaded");
       }
     } finally {
-      setLoading(false);
+      if (mounted.current) setLoading(false);
     }
   };
 
   useEffect(() => {
+    mounted.current = true;
     void refresh();
+    return () => {
+      mounted.current = false;
+      sessionEpoch.current++;
+    };
   }, []);
 
   useEffect(() => {
-    if (!user || syncedUserId.current === user.id) return;
+    if (
+      !user ||
+      currentUser.current !== user ||
+      syncedUserId.current === user.id
+    )
+      return;
     syncedUserId.current = user.id;
     const quiz = getQuizResult();
     const watched = getWatched();
@@ -68,24 +96,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       (transmission) => !user.watchedTransmissions.includes(transmission),
     );
     if (!needsArchetype && !needsWatched) return;
+    const epoch = sessionEpoch.current;
 
     accountApi
       .syncProgress({
         ...(needsArchetype ? { archetype: quiz.archetype } : {}),
         ...(needsWatched ? { watchedTransmissions: watched } : {}),
       })
-      .then((result) => setUser(result.user))
-      .catch(() => setError("Local badge progress could not be synced yet"));
+      .then((result) => {
+        if (isCurrentSession(epoch) && result.user.id === user.id) {
+          commitUser(result.user);
+        }
+      })
+      .catch(() => {
+        if (isCurrentSession(epoch)) {
+          setError("Local badge progress could not be synced yet");
+        }
+      });
   }, [user]);
 
   useEffect(() => {
     if (!user) return;
     const syncCurrentProgress = () => {
+      // A listener awaiting React's cleanup can still serve the current
+      // account, but must never dispatch from its obsolete render snapshot.
+      const account = currentUser.current;
+      if (!mounted.current || !account) return;
+      const epoch = sessionEpoch.current;
       const quiz = getQuizResult();
       const watched = getWatched();
-      const needsArchetype = quiz && quiz.archetype !== user.archetype;
+      const needsArchetype = quiz && quiz.archetype !== account.archetype;
       const needsWatched = watched.some(
-        (transmission) => !user.watchedTransmissions.includes(transmission),
+        (transmission) => !account.watchedTransmissions.includes(transmission),
       );
       if (!needsArchetype && !needsWatched) return;
       accountApi
@@ -93,8 +135,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           ...(needsArchetype ? { archetype: quiz.archetype } : {}),
           ...(needsWatched ? { watchedTransmissions: watched } : {}),
         })
-        .then((result) => setUser(result.user))
-        .catch(() => setError("Badge progress could not be synced yet"));
+        .then((result) => {
+          if (isCurrentSession(epoch) && result.user.id === account.id) {
+            commitUser(result.user);
+          }
+        })
+        .catch(() => {
+          if (isCurrentSession(epoch)) {
+            setError("Badge progress could not be synced yet");
+          }
+        });
     };
     window.addEventListener("sn:progress", syncCurrentProgress);
     return () => window.removeEventListener("sn:progress", syncCurrentProgress);
@@ -107,23 +157,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       error,
       async register(input) {
         const result = await accountApi.register(input);
-        setUser(result.user);
+        commitUser(result.user, true);
         syncedUserId.current = result.user.id;
         return result.user;
       },
       async login(input) {
         const result = await accountApi.login(input);
-        setUser(result.user);
+        commitUser(result.user, true);
         syncedUserId.current = null;
         return result.user;
       },
       async logout() {
         await accountApi.logout();
-        setUser(null);
+        commitUser(null, true);
         syncedUserId.current = null;
       },
       refresh,
-      updateUser: setUser,
+      updateUser: (next) => commitUser(next, true),
     }),
     [user, loading, error],
   );
