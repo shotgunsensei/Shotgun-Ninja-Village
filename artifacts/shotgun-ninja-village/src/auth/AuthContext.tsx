@@ -23,6 +23,10 @@ interface AuthContextValue {
   logout: () => Promise<void>;
   refresh: () => Promise<void>;
   updateUser: (user: VillageUser) => void;
+  beginUserUpdate: (renderedUser: VillageUser) => {
+    isCurrent: () => boolean;
+    commit: (user: VillageUser) => boolean;
+  };
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -150,6 +154,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener("sn:progress", syncCurrentProgress);
   }, [user]);
 
+  const renderedEpoch = sessionEpoch.current;
   const value = useMemo<AuthContextValue>(
     () => ({
       user,
@@ -174,8 +179,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       },
       refresh,
       updateUser: (next) => commitUser(next, true),
+      beginUserUpdate(renderedUser) {
+        let epoch = sessionEpoch.current;
+        const userId = currentUser.current?.id;
+        const ownsForm =
+          currentUser.current === renderedUser ||
+          (user === renderedUser && isCurrentSession(renderedEpoch));
+        let committed = false;
+        const isCurrent = () =>
+          ownsForm &&
+          Boolean(userId) &&
+          isCurrentSession(epoch) &&
+          currentUser.current?.id === userId;
+        return {
+          isCurrent,
+          commit(next) {
+            if (committed || !isCurrent() || next.id !== userId) return false;
+            commitUser(next, true);
+            // The accepted save invalidates older background work, while its
+            // own success feedback still belongs to this account lifetime.
+            epoch = sessionEpoch.current;
+            committed = true;
+            return true;
+          },
+        };
+      },
     }),
-    [user, loading, error],
+    [user, loading, error, renderedEpoch],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

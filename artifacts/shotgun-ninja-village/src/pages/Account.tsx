@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "wouter";
 import {
   Award,
@@ -54,7 +54,11 @@ export default function Account() {
     );
   }
 
-  return auth.user ? <AccountDashboard user={auth.user} /> : <AuthGateway />;
+  return auth.user ? (
+    <AccountDashboard key={auth.user.id} user={auth.user} />
+  ) : (
+    <AuthGateway />
+  );
 }
 
 function AuthGateway() {
@@ -375,11 +379,39 @@ function AccountDashboard({ user }: { user: VillageUser }) {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const mounted = useRef(true);
+  const activeSave = useRef<ReturnType<typeof auth.beginUserUpdate> | null>(
+    null,
+  );
   const earnedCount = user.badges.filter((badge) => badge.earned).length;
+  const feedbackIsCurrent =
+    !activeSave.current || activeSave.current.isCurrent();
+  const isSaving = saving && feedbackIsCurrent;
+
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+      activeSave.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (activeSave.current && !activeSave.current.isCurrent()) {
+      activeSave.current = null;
+      setSaving(false);
+      setMessage("");
+      setError("");
+    }
+  }, [user]);
 
   const saveProfile = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    const update = auth.beginUserUpdate(user);
+    if (!update.isCurrent()) return;
+    activeSave.current = update;
+    const ownsRequest = () => mounted.current && activeSave.current === update;
     setSaving(true);
     setMessage("");
     setError("");
@@ -393,16 +425,21 @@ function AccountDashboard({ user }: { user: VillageUser }) {
         ) as VillageUser["avatarColor"],
         newsletterOptIn: data.get("newsletterOptIn") === "on",
       });
-      auth.updateUser(result.user);
+      if (!ownsRequest() || !update.isCurrent()) return;
+      if (!update.commit(result.user)) {
+        setError("Profile could not be updated");
+        return;
+      }
       setMessage("Operator profile updated");
     } catch (requestError) {
+      if (!ownsRequest() || !update.isCurrent()) return;
       setError(
         requestError instanceof VillageApiError
           ? requestError.message
           : "Profile could not be updated",
       );
     } finally {
-      setSaving(false);
+      if (ownsRequest()) setSaving(false);
     }
   };
 
@@ -459,7 +496,7 @@ function AccountDashboard({ user }: { user: VillageUser }) {
             This name, callsign, bio, and badge flair appear with your Village
             posts.
           </p>
-          {message && (
+          {message && feedbackIsCurrent && (
             <p
               role="status"
               className="mt-4 flex items-center gap-2 border border-emerald-400/30 bg-emerald-400/10 px-3 py-2 font-mono text-xs text-emerald-200"
@@ -468,7 +505,7 @@ function AccountDashboard({ user }: { user: VillageUser }) {
               {message}
             </p>
           )}
-          {error && (
+          {error && feedbackIsCurrent && (
             <p
               role="alert"
               className="mt-4 border border-primary/40 bg-primary/10 px-3 py-2 font-mono text-xs text-red-200"
@@ -530,11 +567,11 @@ function AccountDashboard({ user }: { user: VillageUser }) {
               </span>
             </label>
             <button
-              disabled={saving}
+              disabled={isSaving}
               className="flex w-full items-center justify-center gap-2 bg-primary px-4 py-2.5 font-mono text-xs uppercase text-white hover:bg-primary/90 disabled:opacity-60"
             >
               <Save size={14} aria-hidden="true" />{" "}
-              {saving ? "Saving…" : "Save profile"}
+              {isSaving ? "Saving…" : "Save profile"}
             </button>
           </form>
         </section>
