@@ -16,7 +16,7 @@ export function Scene3() {
   return (
     <motion.div 
       className="absolute inset-0 flex items-center justify-center bg-[#0A0A0F]"
-      {...sceneTransitions.wipeLeft}
+      {...sceneTransitions.wipe}
     >
       <div className="absolute inset-0 flex items-center justify-center">
         {/* Rhythmic beacon pulse */}

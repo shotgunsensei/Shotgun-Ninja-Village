@@ -1,4 +1,4 @@
-import { Router, type IRouter } from "express";
+import { Router, type IRouter, type Response } from "express";
 import { z } from "zod/v4";
 import {
   CreateReplyBody,
@@ -13,7 +13,7 @@ import {
   forumTopicsTable,
   villageUsersTable,
 } from "@workspace/db";
-import { currentUser, requireAuth } from "../auth/session";
+import { currentUser, requireAuth, type SessionUser } from "../auth/session";
 import {
   canAccessCategory,
   canCreateTopic,
@@ -44,6 +44,36 @@ function firstIssue(error: { issues: Array<{ message: string }> }): string {
 
 function routeParam(value: string | string[] | undefined): string {
   return Array.isArray(value) ? (value[0] ?? "") : (value ?? "");
+}
+
+async function loadAccessibleTopic(
+  topicId: string,
+  user: SessionUser,
+  res: Response,
+) {
+  const [topic] = await db
+    .select()
+    .from(forumTopicsTable)
+    .where(
+      and(eq(forumTopicsTable.id, topicId), isNull(forumTopicsTable.deletedAt)),
+    )
+    .limit(1);
+  if (!topic) {
+    res.status(404).json({ message: "Topic not found" });
+    return null;
+  }
+  const category = getCategory(topic.categorySlug);
+  if (!category) {
+    res.status(404).json({ message: "Channel not found" });
+    return null;
+  }
+  if (!canAccessCategory(category, user)) {
+    res
+      .status(403)
+      .json({ message: "This channel requires a higher access tier" });
+    return null;
+  }
+  return topic;
 }
 
 router.get("/community/categories", async (_req, res) => {
@@ -382,17 +412,8 @@ router.patch(
     if (!parsed.success)
       return res.status(400).json({ message: firstIssue(parsed.error) });
     const user = currentUser(res)!;
-    const [topic] = await db
-      .select()
-      .from(forumTopicsTable)
-      .where(
-        and(
-          eq(forumTopicsTable.id, topicId),
-          isNull(forumTopicsTable.deletedAt),
-        ),
-      )
-      .limit(1);
-    if (!topic) return res.status(404).json({ message: "Topic not found" });
+    const topic = await loadAccessibleTopic(topicId, user, res);
+    if (!topic) return;
     if (topic.authorId !== user.id && !isModerator(user.role))
       return res
         .status(403)
@@ -414,17 +435,8 @@ router.delete(
     if (!uuidSchema.safeParse(topicId).success)
       return res.status(404).json({ message: "Topic not found" });
     const user = currentUser(res)!;
-    const [topic] = await db
-      .select()
-      .from(forumTopicsTable)
-      .where(
-        and(
-          eq(forumTopicsTable.id, topicId),
-          isNull(forumTopicsTable.deletedAt),
-        ),
-      )
-      .limit(1);
-    if (!topic) return res.status(404).json({ message: "Topic not found" });
+    const topic = await loadAccessibleTopic(topicId, user, res);
+    if (!topic) return;
     if (topic.authorId !== user.id && !isModerator(user.role))
       return res
         .status(403)
@@ -507,6 +519,7 @@ router.patch(
       )
       .limit(1);
     if (!post) return res.status(404).json({ message: "Post not found" });
+    if (!(await loadAccessibleTopic(post.topicId, user, res))) return;
     if (post.authorId !== user.id && !isModerator(user.role))
       return res
         .status(403)
@@ -542,6 +555,7 @@ router.delete(
       )
       .limit(1);
     if (!post) return res.status(404).json({ message: "Post not found" });
+    if (!(await loadAccessibleTopic(post.topicId, user, res))) return;
     if (post.isOriginal)
       return res
         .status(400)
