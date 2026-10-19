@@ -10,17 +10,24 @@ export interface QueuedSignal {
 function readQueue(): QueuedSignal[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? (JSON.parse(raw) as QueuedSignal[]) : [];
+    const parsed: unknown = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed.filter(
+      (item): item is QueuedSignal =>
+        item !== null && typeof item === "object" &&
+        typeof item.email === "string" && typeof item.ts === "number" &&
+        Number.isFinite(item.ts),
+    ) : [];
   } catch {
     return [];
   }
 }
 
-function writeQueue(list: QueuedSignal[]) {
+function writeQueue(list: QueuedSignal[]): boolean {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(list.slice(-50)));
+    return true;
   } catch {
-    /* noop */
+    return false;
   }
 }
 
@@ -29,8 +36,7 @@ export function queueSignal(email: string): boolean {
     const list = readQueue();
     if (list.some((s) => s.email === email)) return true;
     list.push({ email, ts: Date.now() });
-    writeQueue(list);
-    return true;
+    return writeQueue(list);
   } catch {
     return false;
   }
@@ -48,27 +54,50 @@ export function clearQueuedSignals() {
   }
 }
 
-export async function flushQueuedSignals(source = "queue-flush"): Promise<{
+type FlushResult = {
   flushed: number;
   remaining: number;
-}> {
+};
+
+let flushInFlight: Promise<FlushResult> | null = null;
+
+async function flushSnapshot(source: string): Promise<FlushResult> {
   const list = readQueue();
   if (list.length === 0) return { flushed: 0, remaining: 0 };
 
-  const remaining: QueuedSignal[] = [];
+  const delivered = new Set<QueuedSignal>();
   let flushed = 0;
 
   for (const item of list) {
     try {
       await createSignup({ email: item.email, source });
       flushed += 1;
+      delivered.add(item);
     } catch {
-      remaining.push(item);
+      // Keep failed entries available for the next retry.
     }
   }
 
+  // A signup can be queued while the requests above are pending. Reconcile
+  // against current storage, removing only the snapshot entries delivered.
+  const remaining = readQueue().filter(
+    (current) => ![...delivered].some(
+      (item) => item.email === current.email && item.ts === current.ts,
+    ),
+  );
   writeQueue(remaining);
-  return { flushed, remaining: remaining.length };
+  return { flushed, remaining: readQueue().length };
+}
+
+export function flushQueuedSignals(source = "queue-flush"): Promise<FlushResult> {
+  if (flushInFlight) return flushInFlight;
+  const operation = flushSnapshot(source);
+  flushInFlight = operation;
+  const clear = () => {
+    if (flushInFlight === operation) flushInFlight = null;
+  };
+  void operation.then(clear, clear);
+  return operation;
 }
 
 export function exportQueuedSignalsAsCsv(): string {
