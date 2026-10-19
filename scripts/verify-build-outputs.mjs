@@ -20,10 +20,17 @@ for (const [name, relativePath] of outputs) {
   assert(stat.mtimeMs >= started, `Stale ${name} entry`);
   const bytes = readFileSync(file);
   if (file.endsWith(".html")) {
-    const references = [...bytes.toString("utf8").matchAll(/(?:src|href)="(\/assets\/[^"?#]+)[^"]*"/g)];
+    const prefix = name.startsWith("episode")
+      ? `/shotgun-ninjas-ep${name.slice("episode".length)}/`
+      : "/";
+    const references = [...bytes.toString("utf8").matchAll(/(?:src|href)="([^"?#]+)[^"]*"/g)]
+      .map((match) => match[1])
+      .filter((reference) => reference.startsWith("/") && !reference.startsWith("//"));
     assert(references.length > 0, `No built assets referenced by ${name}`);
-    for (const [, asset] of references) {
-      assert(existsSync(path.join(path.dirname(file), asset)), `Missing ${name} asset ${asset}`);
+    assert(references.some((reference) => reference.startsWith(`${prefix}assets/`)), `No correctly prefixed built assets referenced by ${name}`);
+    for (const asset of references) {
+      assert(asset.startsWith(prefix), `Incorrect ${name} prefix: ${asset}`);
+      assert(existsSync(path.join(path.dirname(file), asset.slice(prefix.length))), `Missing ${name} asset ${asset}`);
     }
   }
   console.log(JSON.stringify({ name, path: relativePath, bytes: stat.size, sha256: createHash("sha256").update(bytes).digest("hex") }));

@@ -1,12 +1,12 @@
 import express, { type Express } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { existsSync } from "node:fs";
 import path from "node:path";
 import pinoHttp from "pino-http";
 import router from "./routes";
 import { logger } from "./lib/logger";
 import { loadSession } from "./auth/session";
+import { mountWebArtifacts } from "./web-artifacts";
 
 const app: Express = express();
 app.disable("x-powered-by");
@@ -86,26 +86,7 @@ app.use("/api", (_req, res) =>
   res.status(404).json({ message: "API route not found" }),
 );
 
-const villagePublicDir = path.resolve(
-  import.meta.dirname,
-  "..",
-  "..",
-  "shotgun-ninja-village",
-  "dist",
-  "public",
-);
-if (existsSync(villagePublicDir)) {
-  app.use(
-    express.static(villagePublicDir, {
-      index: false,
-      maxAge: process.env.NODE_ENV === "production" ? "1h" : 0,
-    }),
-  );
-  app.use((req, res, next) => {
-    if (req.method !== "GET" || !req.accepts("html")) return next();
-    return res.sendFile(path.join(villagePublicDir, "index.html"));
-  });
-}
+mountWebArtifacts(app, path.resolve(import.meta.dirname, "..", ".."));
 
 app.use(
   (
