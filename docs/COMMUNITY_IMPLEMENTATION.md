@@ -27,11 +27,25 @@ Migration: `lib/db/drizzle/0000_village-community.sql`
 
 ## Release sequence
 
+The configured Replit post-merge script only performs frozen dependency setup. It
+must not push schemas or apply migrations. Source configuration does not establish
+whether a GitHub merge invokes a particular deployed Replit environment; verify
+that source/deployment coupling separately before release.
+
 1. Configure `DATABASE_URL`, `APP_ORIGIN`, `PORT`, and secure production cookies.
-2. Run `pnpm --filter @workspace/db run migrate` once against the target database.
+2. Treat any database migration as a separate owner-controlled operation: review
+   the exact committed migration and target database identity, confirm a
+   recoverable backup and restoration plan, arrange a write pause when required,
+   and obtain explicit approval before running
+   `pnpm --filter @workspace/db run migrate` against that confirmed target.
+   A source merge or dependency setup is not approval to alter a database. Check
+   the resulting schema and readiness before resuming writes or promoting the app.
 3. Run `pnpm run build`; the API artifact builds and serves the Village SPA from the same origin.
 4. Smoke test visitor board reads, signup, login, topic creation, reply, edit/remove, public profile, badge sync, logout, and gated-room denial.
 5. Connect the opted-in `signups` list to the approved mailing provider before scheduling transmission campaigns.
+
+Run `node --test scripts/post-merge.test.mjs` to verify the hook with a disposable
+fake `pnpm`; this test performs no actual installation or database operation.
 
 Grant a verified operator moderation or paid access from a trusted server shell only:
 
