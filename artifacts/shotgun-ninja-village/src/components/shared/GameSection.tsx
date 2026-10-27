@@ -25,18 +25,16 @@ export function GameSection() {
           Kage-9's <br />
           <span>next chapter.</span>
         </h2>
-        <p className="game-launch-status">Launch pending</p>
+        <p className="game-launch-status">Game website</p>
         <p>
           Step beyond the transmissions. An original Shotgun Ninjas action game
-          is in development, with Kage-9 at its center.
+          follows Kage-9 into the next chapter of the village.
         </p>
         <GameLink className="brand-button">
-          Visit game launch site <ArrowUpRight size={18} aria-hidden="true" />
+          Visit game website <ArrowUpRight size={18} aria-hidden="true" />
         </GameLink>
         <p className="game-launch-note">
-          Planned game address: <span>kage.shotgunninjavillage.com</span>. This
-          link points to the launch destination; live gameplay has not yet been
-          confirmed.
+          Explore the game at <span>kage.operatoros.net</span>.
         </p>
       </div>
     </section>

@@ -6,16 +6,14 @@ import { GameSection } from "@/components/shared/GameSection";
 
 afterEach(() => cleanup());
 
-describe("pending game destination", () => {
-  it("uses the owner-specified address with safe external navigation and pending wording", () => {
+describe("approved game website destination", () => {
+  it("uses the owner-specified address with safe external navigation and honest wording", () => {
     render(<GameLink />);
-    const link = screen.getByRole("link", { name: /Visit game launch site/ });
-    expect(link.getAttribute("href")).toBe(
-      "https://kage.shotgunninjavillage.com",
-    );
+    const link = screen.getByRole("link", { name: /Visit game website/ });
+    expect(link.getAttribute("href")).toBe("https://kage.operatoros.net");
     expect(link.getAttribute("target")).toBe("_blank");
     expect(link.getAttribute("rel")).toBe("noopener noreferrer");
-    expect(link.textContent).toMatch(/launch pending; opens in a new tab/);
+    expect(link.textContent).toMatch(/game website; opens in a new tab/);
     expect(screen.queryByRole("link", { name: /play now/i })).toBeNull();
   });
 
@@ -31,17 +29,16 @@ describe("pending game destination", () => {
     expect(
       screen.getByRole("region", { name: /Kage-9's next chapter/ }),
     ).toBeTruthy();
-    expect(screen.getByText("Launch pending")).toBeTruthy();
-    expect(
-      screen.getByText(/live gameplay has not yet been confirmed/),
-    ).toBeTruthy();
+    expect(screen.getByText("Game website")).toBeTruthy();
+    expect(screen.queryByText(/launch pending/i)).toBeNull();
+    expect(screen.queryByText(/verified gameplay|fps/i)).toBeNull();
     expect(screen.getByRole("img").getAttribute("alt")).toMatch(
       /character concept/,
     );
     expect(
       screen
-        .getByRole("link", { name: /Visit game launch site/ })
+        .getByRole("link", { name: /Visit game website/ })
         .getAttribute("href"),
-    ).toBe("https://kage.shotgunninjavillage.com");
+    ).toBe("https://kage.operatoros.net");
   });
 });

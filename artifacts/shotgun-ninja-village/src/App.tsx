@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from "react";
 import { Switch, Route, Router as WouterRouter, useLocation } from "wouter";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, MotionConfig, motion } from "framer-motion";
 
 import { Layout } from "@/components/layout/Layout";
 import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
@@ -201,9 +201,11 @@ function Router() {
 
 function App() {
   return (
-    <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-      <Router />
-    </WouterRouter>
+    <MotionConfig reducedMotion="user">
+      <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+        <Router />
+      </WouterRouter>
+    </MotionConfig>
   );
 }
 

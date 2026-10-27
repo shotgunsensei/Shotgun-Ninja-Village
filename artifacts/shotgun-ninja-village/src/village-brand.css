@@ -87,7 +87,10 @@ button:disabled {
 }
 .eyebrow {
   font:
-    600 0.69rem/1.5 "Space Grotesk",
+    600 0.69rem/1.5 "Inter",
+    ui-sans-serif,
+    system-ui,
+    sans-serif,
     sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.16em;
@@ -104,7 +107,10 @@ button:disabled {
   color: #fff;
   border: 1px solid #c71b1b;
   font:
-    600 0.82rem/1.25 "Space Grotesk",
+    600 0.82rem/1.25 "Inter",
+    ui-sans-serif,
+    system-ui,
+    sans-serif,
     sans-serif;
   transition:
     background 0.18s,
@@ -181,7 +187,10 @@ button:disabled {
 }
 .village-hero h1 {
   font:
-    600 clamp(4rem, 7.2vw, 7.4rem)/0.84 "Teko",
+    600 clamp(4rem, 7.2vw, 7.4rem)/0.84 "Inter",
+    ui-sans-serif,
+    system-ui,
+    sans-serif,
     sans-serif;
   letter-spacing: -0.01em;
   margin: 0 0 1.6rem;
@@ -223,7 +232,11 @@ button:disabled {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-  font: 600 0.65rem/1.5 "Space Grotesk";
+  font:
+    600 0.65rem/1.5 "Inter",
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
   letter-spacing: 0.14em;
   color: #c9c9ca;
 }
@@ -251,7 +264,11 @@ button:disabled {
   color: #9edce6;
 }
 .home-pathways h2 {
-  font: 500 2rem/1 "Teko";
+  font:
+    500 2rem/1 "Inter",
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
   margin: 0.8rem 0 0.4rem;
   text-transform: uppercase;
 }
@@ -281,7 +298,11 @@ button:disabled {
   align-self: center;
 }
 .supply-hero-copy h1 {
-  font: 600 clamp(4.5rem, 7vw, 7.5rem)/0.8 "Teko";
+  font:
+    600 clamp(4.5rem, 7vw, 7.5rem)/0.8 "Inter",
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
   letter-spacing: -0.015em;
   margin: 1.5rem 0;
 }
@@ -363,7 +384,11 @@ button:disabled {
   margin-bottom: 1.7rem;
 }
 .supply-section-heading h2 {
-  font: 500 clamp(2.5rem, 4vw, 3.7rem)/1 "Teko";
+  font:
+    500 clamp(2.5rem, 4vw, 3.7rem)/1 "Inter",
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
   text-transform: uppercase;
   margin-top: 0.6rem;
 }
@@ -476,7 +501,11 @@ button:disabled {
 }
 .merch-product-card h3 {
   color: #f2eadc;
-  font: 500 1.9rem/1 "Teko";
+  font:
+    500 1.9rem/1 "Inter",
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
   margin: 0.8rem 0 1rem;
   text-transform: uppercase;
 }
@@ -504,7 +533,11 @@ button:disabled {
   line-height: 1.7;
 }
 .catalog-state h3 {
-  font: 500 2rem/1.2 "Teko";
+  font:
+    500 2rem/1.2 "Inter",
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
   text-transform: uppercase;
   color: #f2eadc;
 }
@@ -536,7 +569,11 @@ button:disabled {
 }
 .supply-world h2,
 .codex-story h2 {
-  font: 500 clamp(2.6rem, 4vw, 4rem)/0.95 "Teko";
+  font:
+    500 clamp(2.6rem, 4vw, 4rem)/0.95 "Inter",
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
   text-transform: uppercase;
   margin: 1rem 0;
 }
@@ -559,7 +596,11 @@ button:disabled {
   border-bottom: 1px solid #3b414a;
 }
 .supply-info h3 {
-  font: 500 2rem/1 "Teko";
+  font:
+    500 2rem/1 "Inter",
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
   text-transform: uppercase;
   margin: 0.7rem 0;
 }
@@ -622,7 +663,11 @@ button:disabled {
   padding: 3.5rem 2rem 2rem;
 }
 .product-detail-copy h2 {
-  font: 500 2.9rem/0.95 "Teko";
+  font:
+    500 2.9rem/0.95 "Inter",
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
   text-transform: uppercase;
   margin: 0.8rem 0 1rem;
 }
@@ -637,7 +682,11 @@ button:disabled {
   margin-top: 0.75rem;
 }
 .detail-price {
-  font: 500 2rem/1.2 "Teko";
+  font:
+    500 2rem/1.2 "Inter",
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
   margin: 1.5rem 0;
 }
 .variant-options {
@@ -722,7 +771,11 @@ button:disabled {
   padding: 2rem;
 }
 .cart-dialog h2 {
-  font: 500 3rem/1 "Teko";
+  font:
+    500 3rem/1 "Inter",
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
   margin: 0.8rem 0;
   text-transform: uppercase;
 }
@@ -744,7 +797,11 @@ button:disabled {
   min-width: 180px;
 }
 .cart-line h3 {
-  font: 500 1.65rem/1 "Teko";
+  font:
+    500 1.65rem/1 "Inter",
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
 }
 .cart-line p {
   font-size: 0.7rem;
@@ -786,7 +843,11 @@ button:disabled {
   max-width: 900px;
 }
 .codex-intro h1 {
-  font: 500 clamp(3.5rem, 5.5vw, 5.5rem)/0.95 "Teko";
+  font:
+    500 clamp(3.5rem, 5.5vw, 5.5rem)/0.95 "Inter",
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
   text-transform: uppercase;
   margin: 1.5rem 0;
 }
@@ -828,7 +889,11 @@ button:disabled {
   height: 160px;
 }
 .faction-card h2 {
-  font: 500 2.8rem/1 "Teko";
+  font:
+    500 2.8rem/1 "Inter",
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
   text-transform: uppercase;
   margin: 0.8rem 0;
 }
