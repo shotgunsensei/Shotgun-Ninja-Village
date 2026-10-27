@@ -88,7 +88,7 @@ export default function Community() {
                 className="motion-safe:animate-pulse"
                 aria-hidden="true"
               />{" "}
-              Public network online
+              Public community
             </div>
             <h1 className="text-balance font-display text-6xl font-bold uppercase leading-[0.9] text-white md:text-8xl">
               The
@@ -125,13 +125,21 @@ export default function Community() {
             </div>
           </div>
 
-          <div className="border border-white/15 bg-background/80 p-5 shadow-2xl">
+          <div
+            role="group"
+            aria-label="Community activity"
+            className="border border-white/15 bg-background/80 p-5 shadow-2xl"
+          >
             <div className="mb-4 flex items-center justify-between">
               <span className="font-mono text-[10px] uppercase text-muted-foreground">
                 Network telemetry
               </span>
               <span className="flex items-center gap-1.5 font-mono text-[10px] uppercase text-emerald-300">
-                <span className="size-1.5 bg-emerald-400" /> Live data
+                {loading
+                  ? "Loading activity"
+                  : error
+                    ? "Activity unavailable"
+                    : "Current snapshot"}
               </span>
             </div>
             <div className="grid grid-cols-2 gap-px border border-border bg-border">
@@ -156,7 +164,7 @@ export default function Community() {
                     aria-hidden="true"
                   />
                   <strong className="block font-display text-2xl tabular-nums text-white">
-                    {Number(value).toLocaleString()}
+                    {loading || error ? "—" : Number(value).toLocaleString()}
                   </strong>
                   <span className="font-mono text-[9px] uppercase text-muted-foreground">
                     {label}

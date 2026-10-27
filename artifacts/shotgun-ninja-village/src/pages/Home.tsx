@@ -300,7 +300,7 @@ export default function Home() {
               Explore Ronin Supply <ArrowUpRight size={18} />
             </Link>
             <GameLink className="brand-button brand-button--outline">
-              Game launch site <ArrowUpRight size={18} aria-hidden="true" />
+              Game website <ArrowUpRight size={18} aria-hidden="true" />
             </GameLink>
           </div>
           <Link href="/codex" className="hero-codex-link">

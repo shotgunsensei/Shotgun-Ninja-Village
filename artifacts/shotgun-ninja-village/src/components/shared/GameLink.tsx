@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { gameDestination } from "@/data/game";
 
 export function GameLink({
-  children = "Visit game launch site",
+  children = "Visit game website",
   className,
   onClick,
 }: {
@@ -19,7 +19,7 @@ export function GameLink({
       onClick={onClick}
     >
       {children}
-      <span className="sr-only"> — launch pending; opens in a new tab</span>
+      <span className="sr-only"> - game website; opens in a new tab</span>
     </a>
   );
 }

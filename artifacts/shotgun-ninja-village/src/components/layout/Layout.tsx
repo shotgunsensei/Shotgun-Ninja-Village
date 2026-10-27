@@ -193,7 +193,7 @@ function Navigation({
           <Gamepad2 size={18} aria-hidden="true" />
           <span>
             <span className="game-nav-title">Shotgun Ninjas Game</span>
-            <span className="game-nav-status">Kage-9 / Launch pending</span>
+            <span className="game-nav-status">Kage-9 / Game website</span>
           </span>
         </GameLink>
         <div className="mt-5 border-t border-border/70 pt-4">
